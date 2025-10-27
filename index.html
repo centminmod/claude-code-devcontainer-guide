@@ -369,6 +369,7 @@
                         <li><a href="#prerequisites" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Prerequisites</a></li>
                         <li><a href="#architecture" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Architecture</a></li>
                         <li><a href="#security-firewall" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Security & Firewall</a></li>
+                        <li><a href="#claude-config" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Claude Code Configuration & MCP</a></li>
                         <li><a href="#react-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">React Project Setup</a></li>
                         <li><a href="#python-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Basic Python Setup</a></li>
                         <li><a href="#python-advanced-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Advanced Python Setup</a></li>
@@ -1050,6 +1051,241 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                     </div>
                 </section>
 
+                <!-- Claude Code Configuration & MCP -->
+                <section id="claude-config" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚙️ Claude Code Configuration & MCP</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        Automatically configure Claude Code settings and MCP (Model Context Protocol) servers on container startup. This provides enhanced functionality like library documentation lookup and Cloudflare-specific help.
+                    </p>
+
+                    <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 rounded-r-lg mb-6">
+                        <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">💡 What is MCP?</p>
+                        <p class="text-md-primary-800 dark:text-md-primary-300 text-sm mb-2">
+                            Model Context Protocol (MCP) extends Claude Code with specialized capabilities through remote servers. Think of it like installing plugins that give Claude instant access to documentation and APIs.
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm">
+                            <li><strong>context7</strong>: Look up up-to-date library documentation (React, Next.js, Supabase, MongoDB, etc.)</li>
+                            <li><strong>cf-docs</strong>: Search Cloudflare documentation (Workers, Pages, R2, D1, etc.)</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">The init-claude-config.sh Script</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        This script automatically sets up Claude Code configuration on container startup by:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-6">
+                        <li>Creating <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">.claude</code> directory if it doesn't exist</li>
+                        <li>Copying MCP server configuration for context7 and cf-docs</li>
+                        <li>Copying settings template with optimized environment variables</li>
+                        <li>Ensuring npm global directory structure exists (required for npx with MCP)</li>
+                        <li>Preserving user settings if they already exist (won't overwrite)</li>
+                    </ul>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">1. Create init-claude-config.sh</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Save this script in your <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">.devcontainer</code> directory:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+CLAUDE_HOME="/home/node/.claude"
+MCP_FILE="$CLAUDE_HOME/mcp.json"
+MCP_TEMPLATE="/usr/local/share/claude-defaults/mcp.json"
+SETTINGS_TEMPLATE="/usr/local/share/claude-defaults/settings.json"
+
+echo "Initializing Claude Code configuration..."
+
+# Create .claude directory if it doesn't exist
+if [ ! -d "$CLAUDE_HOME" ]; then
+    echo "Creating $CLAUDE_HOME directory..."
+    mkdir -p "$CLAUDE_HOME"
+    chown node:node "$CLAUDE_HOME"
+fi
+
+# Copy MCP configuration if it doesn't exist
+if [ ! -f "$MCP_FILE" ]; then
+    if [ -f "$MCP_TEMPLATE" ]; then
+        echo "Copying MCP server configuration..."
+        cp "$MCP_TEMPLATE" "$MCP_FILE"
+        chown node:node "$MCP_FILE"
+        echo "✓ MCP servers configured:"
+        echo "  - context7 (https://mcp.context7.com/sse)"
+        echo "  - cf-docs (https://docs.mcp.cloudflare.com/sse)"
+    else
+        echo "Warning: MCP template not found at $MCP_TEMPLATE"
+    fi
+else
+    echo "MCP configuration already exists, preserving user settings"
+fi
+
+# Copy settings.json template if it doesn't exist
+if [ ! -f "$CLAUDE_HOME/settings.json" ]; then
+    if [ -f "$SETTINGS_TEMPLATE" ]; then
+        echo "Copying Claude Code settings from template..."
+        cp "$SETTINGS_TEMPLATE" "$CLAUDE_HOME/settings.json"
+        chown node:node "$CLAUDE_HOME/settings.json"
+        echo "✓ Environment variables configured (MAX_MCP_OUTPUT_TOKENS, timeouts)"
+    fi
+else
+    echo "Settings already exist, preserving user settings"
+fi
+
+# Ensure npm global directory structure exists (required for npx with MCP servers)
+if [ ! -d "/home/node/.npm-global/lib" ]; then
+    echo "Creating npm global directory structure..."
+    mkdir -p /home/node/.npm-global/lib
+    chown -R node:node /home/node/.npm-global
+    echo "✓ npm global directory initialized"
+fi
+
+echo "Claude Code configuration complete"</code></pre>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">2. Create settings.json.template</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                This template configures Claude Code with optimized settings:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "dangerously_skip_permissions": true,
+  "verbose": true,
+  "env": {
+    "MAX_MCP_OUTPUT_TOKENS": "60000",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "600000",
+    "MAX_THINKING_TOKENS": "8192",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_LOG_USER_PROMPTS": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector:4317",
+    "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment=devcontainer,service.name=claude-code"
+  },
+  "includeCoAuthoredBy": false,
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.context7.com/mcp"],
+      "transport": {
+        "type": "stdio"
+      }
+    },
+    "cf-docs": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  }
+}</code></pre>
+                            </div>
+                            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">🔧 Key Settings Explained:</p>
+                                <ul class="list-disc list-inside space-y-1 text-purple-800 dark:text-purple-300 text-sm">
+                                    <li><strong>MAX_MCP_OUTPUT_TOKENS:</strong> Allows larger documentation responses (60,000 tokens)</li>
+                                    <li><strong>BASH_*_TIMEOUT_MS:</strong> Extended timeouts for long-running commands</li>
+                                    <li><strong>MAX_THINKING_TOKENS:</strong> Enables deeper reasoning (8,192 tokens)</li>
+                                    <li><strong>OTEL_* variables:</strong> OpenTelemetry configuration for observability (optional)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">3. Create mcp.json.template</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Alternative MCP configuration using SSE (Server-Sent Events) transport:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "mcpServers": {
+    "context7": {
+      "transport": {
+        "type": "sse",
+        "url": "https://mcp.context7.com/sse"
+      }
+    },
+    "cf-docs": {
+      "transport": {
+        "type": "sse",
+        "url": "https://docs.mcp.cloudflare.com/sse"
+      }
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">4. Integrate into Dockerfile</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Add these sections to your Dockerfile to enable automatic configuration:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Switch to root for setup
+USER root
+
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
+
+# Copy init script and templates
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+
+# Set permissions and configure sudoers
+RUN chmod +x /usr/local/bin/init-claude-config.sh && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-claude-config
+
+# Switch back to node user
+USER node</code></pre>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">5. Update devcontainer.json</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Run both initialization scripts on container startup:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh"
+}</code></pre>
+                            </div>
+                            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">📝 Note:</p>
+                                <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                                    The init-claude-config.sh script runs <strong>before</strong> the firewall to ensure npm/npx can download mcp-remote package if needed. Both scripts run automatically each time the container starts.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 rounded-r-lg">
+                        <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">✅ Benefits:</p>
+                        <ul class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                            <li><strong>Zero manual setup:</strong> MCP servers configured automatically on first run</li>
+                            <li><strong>Instant documentation access:</strong> Ask Claude about any library and get current docs</li>
+                            <li><strong>Preserves customization:</strong> Won't overwrite if you modify settings manually</li>
+                            <li><strong>Team consistency:</strong> Everyone gets the same optimized configuration</li>
+                            <li><strong>Extensible:</strong> Easy to add more MCP servers or environment variables</li>
+                        </ul>
+                    </div>
+                </section>
+
                 <!-- React Example -->
                 <section id="react-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
                     <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚛️ React Project Setup</h2>
@@ -1110,7 +1346,7 @@ cd .devcontainer</code></pre>
   ],
   "forwardPorts": [3000, 5173],
   "postCreateCommand": "npm install",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
@@ -1159,13 +1395,22 @@ RUN apt-get update && apt-get install -y \
 # Install Claude Code CLI globally
 RUN npm install -g @anthropic-ai/claude-code@latest
 
-# Copy firewall script
-COPY init-firewall.sh /usr/local/bin/
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
 
-# Set permissions and configure sudoers for firewall script
+# Copy initialization scripts and templates
+COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+
+# Set permissions and configure sudoers for both scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chmod +x /usr/local/bin/init-claude-config.sh && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-    chmod 0440 /etc/sudoers.d/node-firewall
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-firewall && \
+    chmod 0440 /etc/sudoers.d/node-claude-config
 
 # Set working directory
 WORKDIR /workspace
@@ -1311,7 +1556,7 @@ npm run dev  # or npm start</code></pre>
   ],
   "forwardPorts": [5000, 8000],
   "postCreateCommand": "pip install -r requirements.txt",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "vscode",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
@@ -1350,13 +1595,22 @@ RUN useradd -ms /bin/bash vscode
 # Install Claude Code CLI
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-# Copy firewall script
-COPY init-firewall.sh /usr/local/bin/
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
 
-# Set permissions and configure sudoers for firewall script
+# Copy initialization scripts and templates
+COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=vscode:vscode settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=vscode:vscode mcp.json.template /usr/local/share/claude-defaults/mcp.json
+
+# Set permissions and configure sudoers for both scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chmod +x /usr/local/bin/init-claude-config.sh && \
     echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/vscode-firewall && \
-    chmod 0440 /etc/sudoers.d/vscode-firewall
+    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/vscode-claude-config && \
+    chmod 0440 /etc/sudoers.d/vscode-firewall && \
+    chmod 0440 /etc/sudoers.d/vscode-claude-config
 
 # Set working directory
 WORKDIR /workspace
@@ -1504,7 +1758,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
   ],
   "forwardPorts": [5000, 8000, 8888],
   "postCreateCommand": "uv pip install -r requirements.txt",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "vscode",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
@@ -1602,13 +1856,22 @@ RUN useradd -ms /bin/bash vscode
 # Install Claude Code CLI
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-# Copy firewall script
-COPY init-firewall.sh /usr/local/bin/
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
 
-# Set permissions and configure sudoers for firewall script
+# Copy initialization scripts and templates
+COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=vscode:vscode settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=vscode:vscode mcp.json.template /usr/local/share/claude-defaults/mcp.json
+
+# Set permissions and configure sudoers for both scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chmod +x /usr/local/bin/init-claude-config.sh && \
     echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/vscode-firewall && \
-    chmod 0440 /etc/sudoers.d/vscode-firewall
+    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/vscode-claude-config && \
+    chmod 0440 /etc/sudoers.d/vscode-firewall && \
+    chmod 0440 /etc/sudoers.d/vscode-claude-config
 
 # Set working directory
 WORKDIR /workspace
@@ -1876,7 +2139,7 @@ touch devcontainer.json Dockerfile</code></pre>
   ],
   "forwardPorts": [3000],
   "postCreateCommand": "npm install",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
@@ -1926,13 +2189,22 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy firewall script
-COPY init-firewall.sh /usr/local/bin/
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
 
-# Set permissions and configure sudoers for firewall script
+# Copy initialization scripts and templates
+COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+
+# Set permissions and configure sudoers for both scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chmod +x /usr/local/bin/init-claude-config.sh && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-    chmod 0440 /etc/sudoers.d/node-firewall
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-firewall && \
+    chmod 0440 /etc/sudoers.d/node-claude-config
 
 # Set working directory
 WORKDIR /workspace
@@ -2064,7 +2336,7 @@ npm run dev</code></pre>
   ],
   "forwardPorts": [3000, 5000, 8000],
   "postCreateCommand": "npm install || pip install -r requirements.txt || echo 'No dependencies to install'",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
@@ -2099,40 +2371,169 @@ npm run dev</code></pre>
                                 <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
                                 <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile">FROM node:20
 
-# Install all three AI CLI tools globally
-RUN npm install -g \
-    @anthropic-ai/claude-code \
-    @openai/codex \
-    @google/gemini-cli
+ARG TZ
+ENV TZ="$TZ"
 
-# Install common development tools and firewall dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    vim \
-    python3 \
-    python3-pip \
-    iptables \
-    ipset \
-    dnsutils \
-    aggregate \
-    jq \
-    sudo \
-    && rm -rf /var/lib/apt/lists/*
+ARG CLAUDE_CODE_VERSION=latest
 
-# Copy firewall script
+# Upgrade npm to latest version (ensures security patches and latest features)
+RUN npm install -g npm@latest
+
+# Install development tools, compilers, and utilities with BuildKit cache mounts
+# BuildKit cache mounts provide 5-10x faster rebuilds
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+  --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+  apt-get update && apt-get install -y --no-install-recommends \
+  # Core utilities
+  less curl wget ca-certificates gnupg2 software-properties-common \
+  apt-transport-https lsb-release \
+  # Version control
+  git git-lfs gh \
+  # Shell and terminal tools
+  zsh fzf man-db \
+  # Process and system tools
+  procps htop tree sudo \
+  # Network tools
+  dnsutils net-tools iputils-ping telnet netcat-openbsd \
+  iptables ipset iproute2 aggregate \
+  # Archive and compression
+  unzip zip bzip2 xz-utils \
+  # Text processing and data
+  jq yq sed gawk \
+  # Fast search tools (modern replacements)
+  ripgrep fd-find \
+  # Build essentials (for native npm modules)
+  build-essential gcc g++ make cmake pkg-config \
+  # Python (for node-gyp and AI CLIs)
+  python3 python3-pip python3-venv python3-dev \
+  # Text editors
+  nano vim tmux \
+  # OpenSSL and crypto
+  openssl libssl-dev \
+  # Additional development libraries
+  libz-dev libffi-dev libbz2-dev libreadline-dev libsqlite3-dev \
+  libncurses5-dev libncursesw5-dev liblzma-dev \
+  # Locales for proper encoding
+  locales \
+  # Browser automation (Chromium for Chrome DevTools MCP)
+  chromium fonts-liberation libatk-bridge2.0-0 libatk1.0-0 \
+  libatspi2.0-0 libcups2 libdbus-1-3 libdrm2 libgbm1 libgtk-3-0 \
+  libnspr4 libnss3 libxcomposite1 libxdamage1 libxfixes3 \
+  libxkbcommon0 libxrandr2 xdg-utils \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set up locale (prevents encoding issues with AI CLIs)
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+  locale-gen
+ENV LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \
+  LC_ALL=en_US.UTF-8
+
+# Ensure default node user has access to /usr/local/share
+RUN mkdir -p /usr/local/share/npm-global && \
+  chown -R node:node /usr/local/share
+
+ARG USERNAME=node
+
+# Persist bash history and configure PATH for npm global packages
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  && mkdir /commandhistory \
+  && touch /commandhistory/.bash_history \
+  && chown -R $USERNAME /commandhistory \
+  && echo 'export PATH=$PATH:/home/node/.npm-global/bin' >> /home/node/.bashrc \
+  && chown node:node /home/node/.bashrc
+
+# Set `DEVCONTAINER` environment variable to help with orientation
+ENV DEVCONTAINER=true
+
+# Create config directories and set permissions
+RUN mkdir -p /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global/lib && \
+  chown -R node:node /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global
+
+# Default working directory
+WORKDIR /workspaces
+
+# Install git-delta for better diffs
+ARG GIT_DELTA_VERSION=0.18.2
+RUN ARCH=$(dpkg --print-architecture) && \
+  wget "https://github.com/dandavison/delta/releases/download/${GIT_DELTA_VERSION}/git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  dpkg -i "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb" && \
+  rm "git-delta_${GIT_DELTA_VERSION}_${ARCH}.deb"
+
+# Set up non-root user
+USER node
+
+# Install global packages
+ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
+ENV PATH=$PATH:/usr/local/share/npm-global/bin
+
+# Set the default shell to zsh rather than sh
+ENV SHELL=/bin/zsh
+
+# Set the default editor and visual
+ENV EDITOR=nano
+ENV VISUAL=nano
+
+# Install zsh with powerline10k theme
+ARG ZSH_IN_DOCKER_VERSION=1.2.0
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v${ZSH_IN_DOCKER_VERSION}/zsh-in-docker.sh)" -- \
+  -p git \
+  -p fzf \
+  -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
+  -a "source /usr/share/doc/fzf/examples/completion.zsh" \
+  -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+  -a "export PATH=\$PATH:/home/node/.npm-global/bin" \
+  -a "alias fd=fdfind" \
+  -a "alias rg='rg --smart-case'" \
+  -x
+
+# Install all three AI CLIs with version pinning for Claude Code
+RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
+    npm install -g @openai/codex && \
+    npm install -g @google/gemini-cli
+
+# Install uv (fast Python package manager - 10-100x faster than pip)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/node/.bashrc && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/node/.zshrc
+ENV PATH="/home/node/.cargo/bin:$PATH"
+
+# Install bun (fast JavaScript runtime for hybrid Python/JS projects)
+RUN curl -fsSL https://bun.sh/install | bash && \
+    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/node/.bashrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/node/.bashrc && \
+    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/node/.zshrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/node/.zshrc
+ENV BUN_INSTALL="/home/node/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
+
+# Configure git to ignore Claude's local settings (Anthropic best practice)
+RUN git config --global core.excludesfile ~/.gitignore_global && \
+  echo ".claude/settings.local.json" > /home/node/.gitignore_global && \
+  chown node:node /home/node/.gitignore_global
+
+# Switch to root for final setup (scripts, sudoers, templates)
+USER root
+
+# Create directory for Claude Code defaults
+RUN mkdir -p /usr/local/share/claude-defaults
+
+# Copy all scripts and templates
 COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
 
-# Set permissions and configure sudoers for firewall script
+# Set permissions and configure sudoers for both scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
-    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-    chmod 0440 /etc/sudoers.d/node-firewall
+  chmod +x /usr/local/bin/init-claude-config.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+  chmod 0440 /etc/sudoers.d/node-firewall && \
+  chmod 0440 /etc/sudoers.d/node-claude-config
 
-# Set working directory
-WORKDIR /workspace
-
-# Keep container running
-CMD ["sleep", "infinity"]</code></pre>
+# Switch back to node user for runtime
+USER node</code></pre>
                             </div>
                             <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mt-4 rounded-r-lg">
                                 <p class="text-md-error-900 dark:text-md-error-200 font-medium mb-2">⚠️ Important Notes:</p>
