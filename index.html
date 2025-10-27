@@ -327,6 +327,9 @@
                     </h1>
                 </div>
                 <div class="flex items-center gap-4">
+                    <a href="https://www.buymeacoffee.com/georgeliu" target="_blank" rel="noopener noreferrer" class="hidden sm:block hover:opacity-80 transition-opacity" aria-label="Buy me a coffee">
+                        <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 145px !important;" >
+                    </a>
                     <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
                         <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -2423,13 +2426,25 @@ docker system prune -a
 
                 <!-- Footer -->
                 <footer class="text-center text-gray-600 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700 pt-8 mt-12">
-                    <p>
-                        Created for Claude Code users • Last updated: October 2025
-                    </p>
-                    <p class="mt-2">
-                        Found an issue? <a href="https://github.com/anthropics/claude-code/issues" target="_blank" rel="noopener noreferrer"
-                        class="text-primary hover:text-secondary underline">Report it on GitHub</a>
-                    </p>
+                    <div class="flex flex-col items-center gap-6 mb-6">
+                        <div>
+                            <p class="text-base font-medium text-gray-700 dark:text-gray-300 mb-3">
+                                ☕ Enjoying this guide?
+                            </p>
+                            <a href="https://www.buymeacoffee.com/georgeliu" target="_blank" rel="noopener noreferrer" class="inline-block hover:scale-105 transition-transform" aria-label="Buy me a coffee">
+                                <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
+                            </a>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <p>
+                            Created for Claude Code users • Last updated: October 2025
+                        </p>
+                        <p class="mt-2">
+                            Found an issue? <a href="https://github.com/anthropics/claude-code/issues" target="_blank" rel="noopener noreferrer"
+                            class="text-primary hover:text-secondary underline">Report it on GitHub</a>
+                        </p>
+                    </div>
                 </footer>
 
             </main>
