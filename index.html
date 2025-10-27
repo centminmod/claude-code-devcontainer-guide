@@ -1251,9 +1251,14 @@ code --version</code></pre>
                 class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm"
               ><code>your-project/
 ├── .devcontainer/
-│   ├── devcontainer.json    # VS Code configuration
-│   ├── Dockerfile            # Container blueprint
-│   └── init-scripts/         # Optional automation
+│   ├── devcontainer.json       # VS Code configuration
+│   ├── Dockerfile              # Container blueprint
+│   ├── init-claude-config.sh   # Claude Code auto-config
+│   ├── init-codex-config.sh    # Codex CLI auto-config
+│   ├── init-firewall.sh        # Network security
+│   ├── settings.json.template  # Claude settings
+│   ├── mcp.json.template       # MCP servers
+│   └── config.toml.template    # Codex configuration
 ├── .gitignore
 ├── README.md
 └── [your project files]</code></pre>
@@ -2009,7 +2014,128 @@ echo "Claude Code configuration complete"</code></pre>
                 <h4
                   class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
                 >
-                  4. Integrate into Dockerfile
+                  4. Create config.toml.template (Codex CLI)
+                </h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  This template configures Codex CLI for Docker containers by disabling
+                  the Landlock sandbox (not supported in LinuxKit kernel):
+                </p>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-toml"># Codex CLI configuration template for Docker containers
+# Auto-copied to ~/.codex/config.toml by init-codex-config.sh
+
+model = "gpt-5"
+model_reasoning_effort = "medium"
+
+# CRITICAL: Disable Landlock sandbox (not supported in Docker's LinuxKit kernel)
+# OpenAI's official recommendation for containerized environments
+# Security is provided by Docker isolation, network firewall, and non-root user
+sandbox_mode = "danger-full-access"
+approval_policy = "never"</code></pre>
+                </div>
+                <div
+                  class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mt-4 rounded-r-lg"
+                >
+                  <p
+                    class="text-md-error-900 dark:text-md-error-200 font-medium mb-2"
+                  >
+                    🔒 Why Disable Sandbox?
+                  </p>
+                  <ul
+                    class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm"
+                  >
+                    <li>Docker's LinuxKit kernel doesn't support Landlock security module</li>
+                    <li>Container already provides isolation via Docker, firewall, non-root user</li>
+                    <li>OpenAI's official recommendation for containerized environments</li>
+                    <li>See <a href="#troubleshooting" class="underline hover:text-md-error-600">Troubleshooting → Codex CLI Landlock Error</a> for details</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div>
+                <h4
+                  class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+                >
+                  5. Create init-codex-config.sh
+                </h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  This script automatically configures Codex CLI on container startup:
+                </p>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-bash">#!/bin/bash
+set -euo pipefail
+
+CODEX_HOME="/home/node/.codex"
+CONFIG_FILE="$CODEX_HOME/config.toml"
+CONFIG_TEMPLATE="/usr/local/share/codex-defaults/config.toml"
+
+echo "Initializing Codex CLI configuration..."
+
+# Create .codex directory if it doesn't exist
+if [ ! -d "$CODEX_HOME" ]; then
+    echo "Creating $CODEX_HOME directory..."
+    mkdir -p "$CODEX_HOME"
+    chown node:node "$CODEX_HOME"
+fi
+
+# Copy config template if it doesn't exist
+if [ ! -f "$CONFIG_FILE" ]; then
+    if [ -f "$CONFIG_TEMPLATE" ]; then
+        echo "Copying Codex CLI configuration from template..."
+        cp "$CONFIG_TEMPLATE" "$CONFIG_FILE"
+        chown node:node "$CONFIG_FILE"
+        echo "✓ Codex sandbox disabled (Docker container isolation used instead)"
+        echo "  sandbox_mode: danger-full-access"
+        echo "  approval_policy: never"
+    else
+        echo "Warning: Codex config template not found at $CONFIG_TEMPLATE"
+    fi
+else
+    echo "Codex config already exists, preserving user settings"
+fi
+
+echo "Codex CLI configuration complete"</code></pre>
+                </div>
+                <div
+                  class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mt-4 rounded-r-lg"
+                >
+                  <p
+                    class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+                  >
+                    💡 Key Features:
+                  </p>
+                  <ul
+                    class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
+                  >
+                    <li><strong>Idempotent:</strong> Only creates config if it doesn't exist</li>
+                    <li><strong>Preserves user settings:</strong> Won't overwrite existing configuration</li>
+                    <li><strong>Proper ownership:</strong> Uses chown to ensure node user can access files</li>
+                    <li><strong>Informative output:</strong> Logs what it's doing for debugging</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div>
+                <h4
+                  class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+                >
+                  6. Integrate into Dockerfile
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Add these sections to your Dockerfile to enable automatic
@@ -2027,18 +2153,23 @@ echo "Claude Code configuration complete"</code></pre>
                   ><code class="language-dockerfile"># Switch to root for setup
 USER root
 
-# Create directory for Claude Code defaults
-RUN mkdir -p /usr/local/share/claude-defaults
+# Create directories for Claude Code and Codex defaults
+RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/codex-defaults
 
-# Copy init script and templates
+# Copy init scripts and templates
 COPY init-claude-config.sh /usr/local/bin/
+COPY init-codex-config.sh /usr/local/bin/
 COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
 COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY --chown=node:node config.toml.template /usr/local/share/codex-defaults/config.toml
 
-# Set permissions and configure sudoers
+# Set permissions and configure sudoers for all init scripts
 RUN chmod +x /usr/local/bin/init-claude-config.sh && \
+    chmod +x /usr/local/bin/init-codex-config.sh && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
-    chmod 0440 /etc/sudoers.d/node-claude-config
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
+    chmod 0440 /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-codex-config
 
 # Switch back to node user
 USER node</code></pre>
@@ -2049,10 +2180,10 @@ USER node</code></pre>
                 <h4
                   class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
                 >
-                  5. Update devcontainer.json
+                  7. Update devcontainer.json
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  Run both initialization scripts on container startup:
+                  Run all initialization scripts on container startup:
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -2064,7 +2195,7 @@ USER node</code></pre>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
                   ><code class="language-json">{
-  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh"
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-codex-config.sh && sudo /usr/local/bin/init-firewall.sh"
 }</code></pre>
                 </div>
                 <div
@@ -2073,15 +2204,19 @@ USER node</code></pre>
                   <p
                     class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
                   >
-                    📝 Note:
+                    📝 Init Script Order:
                   </p>
-                  <p
-                    class="text-md-primary-800 dark:text-md-primary-300 text-sm"
+                  <ol
+                    class="list-decimal list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm"
                   >
-                    The init-claude-config.sh script runs
-                    <strong>before</strong> the firewall to ensure npm/npx can
-                    download mcp-remote package if needed. Both scripts run
-                    automatically each time the container starts.
+                    <li><strong>init-claude-config.sh</strong> - Configure Claude Code & MCP servers</li>
+                    <li><strong>init-codex-config.sh</strong> - Configure Codex CLI (disable Landlock sandbox)</li>
+                    <li><strong>init-firewall.sh</strong> - Apply network security rules (runs last)</li>
+                  </ol>
+                  <p
+                    class="text-md-primary-800 dark:text-md-primary-300 text-sm mt-2"
+                  >
+                    Config scripts run before the firewall to ensure npm/npx can download packages if needed. All scripts run automatically each time the container starts.
                   </p>
                 </div>
               </div>
@@ -3836,7 +3971,7 @@ npm run dev</code></pre>
   ],
   "forwardPorts": [3000, 5000, 8000],
   "postCreateCommand": "npm install || pip install -r requirements.txt || echo 'No dependencies to install'",
-  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-codex-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
@@ -4047,22 +4182,27 @@ RUN git config --global core.excludesfile ~/.gitignore_global && \
 # Switch to root for final setup (scripts, sudoers, templates)
 USER root
 
-# Create directory for Claude Code defaults
-RUN mkdir -p /usr/local/share/claude-defaults
+# Create directories for Claude Code and Codex defaults
+RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/codex-defaults
 
 # Copy all scripts and templates
 COPY init-firewall.sh /usr/local/bin/
 COPY init-claude-config.sh /usr/local/bin/
+COPY init-codex-config.sh /usr/local/bin/
 COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
 COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY --chown=node:node config.toml.template /usr/local/share/codex-defaults/config.toml
 
-# Set permissions and configure sudoers for both scripts
+# Set permissions and configure sudoers for all init scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
   chmod +x /usr/local/bin/init-claude-config.sh && \
+  chmod +x /usr/local/bin/init-codex-config.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
   chmod 0440 /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-claude-config
+  chmod 0440 /etc/sudoers.d/node-claude-config && \
+  chmod 0440 /etc/sudoers.d/node-codex-config
 
 # Switch back to node user for runtime
 USER node</code></pre>
@@ -4395,6 +4535,61 @@ gemini auth status</code></pre>
                     Update forwardPorts in devcontainer.json to match new port
                   </li>
                 </ol>
+              </div>
+
+              <div
+                class="border border-purple-200 dark:border-purple-800 rounded-lg p-6 bg-purple-50 dark:bg-purple-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-purple-900 dark:text-purple-200"
+                >
+                  ❌ Codex CLI: Landlock Sandbox Error
+                </h3>
+
+                <div class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200">
+                  <p class="mb-1">thread 'main' panicked at linux-sandbox/src/linux_run_main.rs:30:9:</p>
+                  <p>error running landlock: Sandbox(LandlockRestrict)</p>
+                </div>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-3">
+                  <strong>Cause:</strong> Docker's LinuxKit kernel doesn't support Landlock (Linux security module). This is a known limitation of containerized environments.
+                </p>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-2">
+                  <strong>Solution:</strong> Disable Codex sandboxing (safe in containers):
+                </p>
+
+                <div class="bg-purple-100 dark:bg-purple-900/40 rounded-lg p-4 mb-3">
+                  <p class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold">
+                    ~/.codex/config.toml
+                  </p>
+                  <pre class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto"><code>sandbox_mode = "danger-full-access"
+approval_policy = "never"</code></pre>
+                </div>
+
+                <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-3 mb-3">
+                  <p class="text-sm text-green-800 dark:text-green-300 mb-2">
+                    <strong>✅ Why This Is Safe:</strong>
+                  </p>
+                  <ul class="list-disc list-inside text-xs text-green-700 dark:text-green-300 space-y-1">
+                    <li>Docker container provides process isolation</li>
+                    <li>Network firewall restricts connections</li>
+                    <li>Non-root user execution (node)</li>
+                    <li>OpenAI's official recommendation for Docker</li>
+                  </ul>
+                </div>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-2 text-sm">
+                  <strong>Verify it works:</strong>
+                </p>
+                <pre class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto mb-3"><code>codex --version
+codex exec "echo 'Hello from Codex'"</code></pre>
+
+                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r">
+                  <p class="text-xs text-blue-800 dark:text-blue-300">
+                    <strong>📝 Note:</strong> This repository's devcontainer automatically applies this fix via <code>init-codex-config.sh</code>. Configuration persists across container rebuilds.
+                  </p>
+                </div>
               </div>
 
               <div
