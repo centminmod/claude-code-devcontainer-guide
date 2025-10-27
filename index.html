@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Dev Containers - Complete Beginner's Guide</title>
+    <meta name="description" content="A comprehensive beginner-friendly guide to development containers for Claude Code with React and Python examples">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Claude Code Dev Containers - Complete Beginner's Guide">
+    <meta property="og:description" content="Learn everything about development containers for Claude Code with step-by-step React and Python examples">
+    <meta property="og:site_name" content="Claude Code Documentation">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Claude Code Dev Containers Guide">
+    <meta name="twitter:description" content="Master development containers with this beginner-friendly guide">
+
+    <!-- Theme Color - Material Design 3 -->
+    <meta name="theme-color" content="#1976D2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Material Design 3 (Material You) Color System
+                        // Primary - Blue (for informational content)
+                        'md-primary': {
+                            DEFAULT: '#1976D2',  // Blue 700
+                            50: '#E3F2FD',
+                            100: '#BBDEFB',
+                            200: '#90CAF9',
+                            300: '#64B5F6',
+                            400: '#42A5F5',
+                            500: '#2196F3',
+                            600: '#1E88E5',
+                            700: '#1976D2',
+                            800: '#1565C0',
+                            900: '#0D47A1',
+                            'dark': '#90CAF9',    // Blue 200 for dark mode
+                        },
+                        // Secondary - Purple (for features and highlights)
+                        'md-secondary': {
+                            DEFAULT: '#9C27B0',  // Purple 700
+                            50: '#F3E5F5',
+                            100: '#E1BEE7',
+                            200: '#CE93D8',
+                            300: '#BA68C8',
+                            400: '#AB47BC',
+                            500: '#9C27B0',
+                            600: '#8E24AA',
+                            700: '#7B1FA2',
+                            800: '#6A1B9A',
+                            900: '#4A148C',
+                            'dark': '#CE93D8',   // Purple 200 for dark mode
+                        },
+                        // Tertiary - Green (for success and positive states)
+                        'md-tertiary': {
+                            DEFAULT: '#2E7D32',  // Green 700
+                            50: '#E8F5E9',
+                            100: '#C8E6C9',
+                            200: '#A5D6A7',
+                            300: '#81C784',
+                            400: '#66BB6A',
+                            500: '#4CAF50',
+                            600: '#43A047',
+                            700: '#388E3C',
+                            800: '#2E7D32',
+                            900: '#1B5E20',
+                            'dark': '#81C784',   // Green 300 for dark mode
+                        },
+                        // Error/Warning - Orange (for warnings and cautions)
+                        'md-error': {
+                            DEFAULT: '#F57C00',  // Orange 700
+                            50: '#FFF3E0',
+                            100: '#FFE0B2',
+                            200: '#FFCC80',
+                            300: '#FFB74D',
+                            400: '#FFA726',
+                            500: '#FF9800',
+                            600: '#FB8C00',
+                            700: '#F57C00',
+                            800: '#EF6C00',
+                            900: '#E65100',
+                            'dark': '#FFB74D',   // Orange 300 for dark mode
+                        },
+                        // Surface - Neutral backgrounds and borders
+                        'md-surface': {
+                            DEFAULT: '#FFFFFF',
+                            50: '#FAFAFA',
+                            100: '#F5F5F5',
+                            200: '#EEEEEE',
+                            300: '#E0E0E0',
+                            400: '#BDBDBD',
+                            500: '#9E9E9E',
+                            600: '#757575',
+                            700: '#616161',
+                            800: '#424242',
+                            900: '#212121',
+                            'dark': '#121212',   // Dark surface
+                        },
+                        // Legacy compatibility
+                        primary: '#1976D2',
+                        secondary: '#9C27B0',
+                    }
+                }
+            }
+        };
+
+        // Initialize dark mode before page renders to avoid flash
+        (function() {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (theme === 'dark' || (!theme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .code-block-wrapper {
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 10;
+        }
+        .code-block-wrapper:hover .copy-button {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .copy-button:focus {
+            opacity: 1;
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+        }
+        .prose h2 { scroll-margin-top: 5rem; }
+        .prose h3 { scroll-margin-top: 5rem; }
+
+        /* Smooth transitions for dark mode */
+        * {
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* Back to top button */
+        #backToTop {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 40;
+        }
+        #backToTop.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll progress bar */
+        #scrollProgress {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            transform-origin: left;
+            z-index: 49;
+        }
+
+        /* Enhanced focus states */
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+            border-radius: 0.375rem;
+        }
+
+        /* Better link hover states */
+        a:hover {
+            text-decoration-thickness: 2px;
+        }
+
+        /* Skip to content link for accessibility */
+        #skip-to-content {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            background: #6366f1;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            z-index: 100;
+        }
+        #skip-to-content:focus {
+            top: 0;
+        }
+
+        /* Keyboard shortcuts help */
+        #keyboardHelp {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 40;
+            pointer-events: none;
+        }
+        #keyboardHelp.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .dark #keyboardHelp {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        /* Print styles */
+        @media print {
+            #skip-to-content,
+            #scrollProgress,
+            #backToTop,
+            #darkModeToggle,
+            #mobileMenuToggle,
+            #tocSidebar,
+            #keyboardHelp,
+            .copy-button {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            header {
+                position: relative !important;
+                background: white !important;
+                border-bottom: 2px solid black !important;
+            }
+
+            section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            pre, code {
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            a {
+                text-decoration: underline;
+            }
+
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+
+    <!-- Skip to Content Link for Accessibility -->
+    <a href="#main-content" id="skip-to-content">Skip to main content</a>
+
+    <!-- Scroll Progress Bar -->
+    <div id="scrollProgress" style="width: 0%;"></div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="bg-primary hover:bg-secondary text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl" aria-label="Back to top">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <!-- Keyboard Shortcuts Help Panel -->
+    <div id="keyboardHelp" class="text-sm" role="dialog" aria-label="Keyboard shortcuts">
+        <div class="font-semibold mb-2 text-gray-900 dark:text-white">Keyboard Shortcuts</div>
+        <div class="space-y-1 text-gray-700 dark:text-gray-300">
+            <div><kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">T</kbd> Toggle dark mode</div>
+            <div><kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">?</kbd> Show/hide this help</div>
+            <div><kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">Esc</kbd> Close mobile menu</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        Claude Code Dev Containers
+                    </h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                        <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="moonIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                    <button id="mobileMenuToggle" class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" aria-label="Toggle mobile menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+
+            <!-- Table of Contents Sidebar -->
+            <aside id="tocSidebar" class="hidden md:block md:w-64 flex-shrink-0">
+                <nav class="sticky top-24 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700" aria-label="Table of contents">
+                    <h2 class="font-semibold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">Table of Contents</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#introduction" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Introduction</a></li>
+                        <li><a href="#what-are-devcontainers" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">What Are Dev Containers?</a></li>
+                        <li><a href="#why-use-devcontainers" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Why Use Them?</a></li>
+                        <li><a href="#when-not-to-use" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">When NOT to Use</a></li>
+                        <li><a href="#prerequisites" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Prerequisites</a></li>
+                        <li><a href="#architecture" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Architecture</a></li>
+                        <li><a href="#react-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">React Project Setup</a></li>
+                        <li><a href="#python-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Basic Python Setup</a></li>
+                        <li><a href="#python-advanced-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Advanced Python Setup</a></li>
+                        <li><a href="#nextjs-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Next.js Project Setup</a></li>
+                        <li><a href="#multi-ai-example" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Multiple AI Assistants</a></li>
+                        <li><a href="#troubleshooting" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Troubleshooting</a></li>
+                        <li><a href="#resources" class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Resources</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main id="main-content" class="flex-1 min-w-0">
+
+                <!-- Hero Section -->
+                <div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 md:p-12 text-white shadow-xl mb-8 animate-fade-in">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Dev Containers Guide</h1>
+                    <p class="text-xl md:text-2xl text-purple-100 mb-6">
+                        Your complete beginner-friendly guide to development containers with Claude Code
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                            ⚡ Fast Setup
+                        </span>
+                        <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                            🔒 Isolated Environment
+                        </span>
+                        <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                            🔄 Reproducible
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Introduction -->
+                <section id="introduction" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">👋 Welcome!</h2>
+                    <div class="prose prose-lg dark:prose-invert max-w-none">
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            This guide will teach you everything you need to know about development containers (devcontainers)
+                            for Claude Code. Whether you're a complete beginner or looking to refine your setup, you're in the right place.
+                        </p>
+                        <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg">
+                            <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">📚 What You'll Learn:</p>
+                            <ul class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300">
+                                <li>What dev containers are and how they work</li>
+                                <li>Setting up a React project with dev containers</li>
+                                <li>Setting up a Python project with dev containers</li>
+                                <li>Setting up a Next.js application with dev containers</li>
+                                <li>Configuring multiple AI assistants in one container</li>
+                                <li>Troubleshooting common issues</li>
+                            </ul>
+                        </div>
+                        <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 my-6 rounded-r-lg">
+                            <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">💡 Pro Tip for AI Users:</p>
+                            <p class="text-md-tertiary-800 dark:text-md-tertiary-300">
+                                You can provide
+                                <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/llms.txt"
+                                   target="_blank" rel="noopener noreferrer"
+                                   class="underline hover:text-green-600 dark:hover:text-green-400">
+                                    this comprehensive llms.txt guide
+                                </a>
+                                to AI assistants like Claude to help with dev container creation and usage. It contains detailed examples and best practices!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What Are Dev Containers -->
+                <section id="what-are-devcontainers" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🤔 What Are Development Containers?</h2>
+                    <div class="prose prose-lg dark:prose-invert max-w-none">
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                            Think of a development container as a <strong>complete development workspace in a box</strong>.
+                            It's like having a fresh computer dedicated just for your project, but it runs inside your current computer!
+                        </p>
+
+                        <div class="bg-gradient-to-r from-md-secondary-50 to-md-primary-50 dark:from-md-secondary-900/20 dark:to-md-primary-900/20 rounded-xl p-6 mb-6">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">💡 Real-World Analogy</h3>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Imagine you're a chef. Instead of installing every cooking tool and ingredient in your home kitchen
+                                (which gets messy and cluttered), a dev container is like having a fully-equipped portable kitchen
+                                that appears ready to go whenever you need it, then disappears when you're done. Each recipe
+                                (project) gets its own kitchen setup!
+                            </p>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">How It Works</h3>
+                        <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 mb-6 font-mono text-sm overflow-x-auto">
+                            <pre class="text-gray-700 dark:text-gray-300">┌─────────────────────────────────────────┐
+│    Your Computer (Mac/Windows/Linux)   │
+│                                         │
+│  ┌───────────────────────────────────┐ │
+│  │         VS Code                   │ │
+│  │  (Your Editor on the outside)     │ │
+│  └───────────────┬───────────────────┘ │
+│                  │                     │
+│                  │ Connects to         │
+│                  ▼                     │
+│  ┌───────────────────────────────────┐ │
+│  │    🐳 Docker Container            │ │
+│  │    (Isolated workspace)           │ │
+│  │                                   │ │
+│  │  ✅ Node.js 20                    │ │
+│  │  ✅ Python 3.11                   │ │
+│  │  ✅ Git, Claude Code, tools       │ │
+│  │  ✅ Your project files            │ │
+│  └───────────────────────────────────┘ │
+└─────────────────────────────────────────┘</pre>
+                        </div>
+
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Key Benefits</h3>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl" aria-hidden="true">✨</span>
+                                    <div>
+                                        <h4 class="font-semibold text-md-tertiary-900 dark:text-md-tertiary-200 mb-1">Zero Setup</h4>
+                                        <p class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300">
+                                            No manual installation of Node.js, Python, or tools. It's all pre-installed!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl" aria-hidden="true">🔒</span>
+                                    <div>
+                                        <h4 class="font-semibold text-md-primary-900 dark:text-md-primary-200 mb-1">Isolated</h4>
+                                        <p class="text-sm text-md-primary-800 dark:text-md-primary-300">
+                                            Each project runs in its own container. No conflicts between projects!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl" aria-hidden="true">🔄</span>
+                                    <div>
+                                        <h4 class="font-semibold text-purple-900 dark:text-purple-200 mb-1">Reproducible</h4>
+                                        <p class="text-sm text-purple-800 dark:text-purple-300">
+                                            Same setup on every computer. "Works on my machine" problems disappear!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-2xl" aria-hidden="true">🗑️</span>
+                                    <div>
+                                        <h4 class="font-semibold text-orange-900 dark:text-orange-200 mb-1">Disposable</h4>
+                                        <p class="text-sm text-orange-800 dark:text-orange-300">
+                                            Delete and rebuild anytime without losing your configuration files.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why Use Dev Containers -->
+                <section id="why-use-devcontainers" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">✅ Why Use Development Containers?</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">For Individual Developers</h3>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-green-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Clean Host System:</strong> Your computer stays clean - no installing dozens of tools globally</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-green-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Multiple Environments:</strong> Work on Python 3.9 and Python 3.11 projects simultaneously without conflicts</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-green-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Consistency:</strong> Same setup works perfectly on Mac, Windows, and Linux</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">For Teams</h3>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-md-primary-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Fast Onboarding:</strong> New team members coding in minutes instead of hours/days</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-md-primary-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Standardization:</strong> Everyone uses the exact same tool versions</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-md-primary-500 text-xl" aria-hidden="true">✓</span>
+                                    <span class="text-gray-700 dark:text-gray-300"><strong>Documentation as Code:</strong> Setup is version-controlled and documented automatically</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- When NOT to Use -->
+                <section id="when-not-to-use" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚠️ When NOT to Use Dev Containers</h2>
+                    <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-6 rounded-r-lg mb-6">
+                        <p class="text-md-error-900 dark:text-md-error-200 mb-4">
+                            Dev containers aren't always the best solution. Here's when to skip them:
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-xl flex-shrink-0" aria-hidden="true">✗</span>
+                                <div>
+                                    <strong class="text-yellow-900 dark:text-yellow-100">Simple Scripts:</strong>
+                                    <span class="text-md-error-800 dark:text-md-error-300"> For a single Python script or small Node.js file, just run it locally</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-xl flex-shrink-0" aria-hidden="true">✗</span>
+                                <div>
+                                    <strong class="text-yellow-900 dark:text-yellow-100">GUI Applications:</strong>
+                                    <span class="text-md-error-800 dark:text-md-error-300"> Desktop apps requiring native UI don't work well in containers</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-xl flex-shrink-0" aria-hidden="true">✗</span>
+                                <div>
+                                    <strong class="text-yellow-900 dark:text-yellow-100">Hardware Access:</strong>
+                                    <span class="text-md-error-800 dark:text-md-error-300"> USB devices, GPUs, specialized hardware need complex setup</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-red-500 text-xl flex-shrink-0" aria-hidden="true">✗</span>
+                                <div>
+                                    <strong class="text-yellow-900 dark:text-yellow-100">Resource-Constrained Machines:</strong>
+                                    <span class="text-md-error-800 dark:text-md-error-300"> Docker overhead (1-2GB RAM) may be too much for older computers</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        <strong>Better alternatives:</strong> For simple projects, use <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">nvm</code>,
+                        <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">pyenv</code>, or
+                        <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">rbenv</code> for version management.
+                    </p>
+                </section>
+
+                <!-- Prerequisites -->
+                <section id="prerequisites" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">📋 Prerequisites</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">Before creating your first dev container, you'll need to install:</p>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold text-lg mb-2 text-gray-900 dark:text-white">1. VS Code</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">The editor that will connect to your containers.</p>
+                            <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer"
+                               class="text-primary hover:text-secondary underline">
+                                Download VS Code →
+                            </a>
+                        </div>
+
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold text-lg mb-2 text-gray-900 dark:text-white">2. Docker Desktop</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">The engine that runs containers.</p>
+                            <a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener noreferrer"
+                               class="text-primary hover:text-secondary underline">
+                                Download Docker Desktop →
+                            </a>
+                            <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                <strong>Note:</strong> Windows users need WSL2 enabled first.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                            <h3 class="font-semibold text-lg mb-2 text-gray-900 dark:text-white">3. Dev Containers Extension</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">VS Code extension to manage dev containers.</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Install from VS Code: Press <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Cmd+Shift+X</kbd> (Mac) or
+                                <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Ctrl+Shift+X</kbd> (Windows/Linux),
+                                search "Dev Containers", and click Install.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                        <h3 class="font-semibold mb-3 text-gray-900 dark:text-white">✓ Verify Installation</h3>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">Run these commands in your terminal:</p>
+                        <div class="code-block-wrapper">
+                            <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                            <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Docker is running
+docker --version
+docker ps
+
+# Check VS Code is installed
+code --version</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Architecture -->
+                <section id="architecture" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🏗️ Architecture Overview</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        A dev container consists of three main components working together:
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-primary pl-6">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">📄 devcontainer.json</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">
+                                The configuration file that tells VS Code how to connect to your container.
+                            </p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>Defines which extensions to install</li>
+                                <li>Sets environment variables</li>
+                                <li>Configures port forwarding</li>
+                                <li>Specifies post-creation commands</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-l-4 border-secondary pl-6">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">🐳 Dockerfile</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">
+                                The blueprint that defines what's installed inside your container.
+                            </p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>Specifies base image (e.g., Node.js 20, Python 3.11)</li>
+                                <li>Installs system packages and tools</li>
+                                <li>Sets up users and permissions</li>
+                                <li>Configures the shell environment</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-l-4 border-md-tertiary-500 pl-6">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">⚙️ Init Scripts (Optional)</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">
+                                Automation scripts that run after the container starts.
+                            </p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <li>Initialize tool configurations</li>
+                                <li>Set up security policies</li>
+                                <li>Prepare the development environment</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 mt-6">
+                        <h3 class="font-semibold mb-3 text-gray-900 dark:text-white">📁 File Structure Example</h3>
+                        <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm"><code>your-project/
+├── .devcontainer/
+│   ├── devcontainer.json    # VS Code configuration
+│   ├── Dockerfile            # Container blueprint
+│   └── init-scripts/         # Optional automation
+├── .gitignore
+├── README.md
+└── [your project files]</code></pre>
+                    </div>
+                </section>
+
+                <!-- React Example -->
+                <section id="react-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚛️ React Project Setup</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        Let's create a dev container for a React project. Follow these steps:
+                    </p>
+
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold" aria-hidden="true">1</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create the .devcontainer directory</h3>
+                            </div>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">mkdir -p .devcontainer
+cd .devcontainer</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold" aria-hidden="true">2</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create devcontainer.json</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                This file configures VS Code's connection to the container:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "name": "React Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  },
+  "forwardPorts": [3000, 5173],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
+  ]
+}</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4">
+                                <p class="text-sm text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">💡 What's happening here:</p>
+                                <ul class="text-sm text-md-primary-800 dark:text-md-primary-300 space-y-1">
+                                    <li><strong>extensions:</strong> Auto-installs Claude Code, ESLint, Prettier, and Tailwind CSS support</li>
+                                    <li><strong>forwardPorts:</strong> Makes ports 3000 and 5173 accessible on your host machine</li>
+                                    <li><strong>postCreateCommand:</strong> Runs <code>npm install</code> automatically after container creation</li>
+                                    <li><strong>mounts:</strong> Persists Claude Code settings between container rebuilds</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold" aria-hidden="true">3</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create Dockerfile</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                This defines what gets installed in your container:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Start from Node.js 20 base image
+FROM node:20
+
+# Install essential tools
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code CLI globally
+RUN npm install -g @anthropic-ai/claude-code@latest
+
+# Set working directory
+WORKDIR /workspace
+
+# Configure git (optional, for better commit messages)
+RUN git config --global init.defaultBranch main
+
+# Switch to non-root user for security
+USER node</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-4">
+                                <p class="text-sm text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">✅ What each line does:</p>
+                                <ul class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1">
+                                    <li><strong>FROM node:20:</strong> Uses official Node.js 20 as the base</li>
+                                    <li><strong>RUN apt-get:</strong> Installs Git and curl (common tools)</li>
+                                    <li><strong>npm install -g:</strong> Installs Claude Code globally in the container</li>
+                                    <li><strong>USER node:</strong> Runs as non-root user for better security</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold" aria-hidden="true">4</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Open in VS Code</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Now open your project in VS Code. You'll see a prompt:
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg p-4 mb-3">
+                                <p class="font-mono text-sm text-gray-900 dark:text-gray-100">
+                                    "Folder contains a Dev Container configuration file. Reopen folder to develop in a container?"
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Click <strong>"Reopen in Container"</strong>. VS Code will:
+                            </p>
+                            <ol class="list-decimal list-inside text-sm text-gray-700 dark:text-gray-300 space-y-1 mb-3">
+                                <li>Build the Docker image (takes 5-10 minutes first time)</li>
+                                <li>Start the container</li>
+                                <li>Install VS Code extensions</li>
+                                <li>Run <code>npm install</code></li>
+                                <li>Connect VS Code to the running container</li>
+                            </ol>
+                            <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 rounded-r-lg">
+                                <p class="text-sm text-md-error-900 dark:text-md-error-200">
+                                    <strong>⏱️ First Build:</strong> The first time takes longer (5-10 minutes) because Docker downloads
+                                    the base image and installs everything. Subsequent starts are much faster (~30 seconds).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold" aria-hidden="true">5</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Test Your Setup</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Once connected, open the integrated terminal and verify:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Node.js version
+node --version  # Should show v20.x.x
+
+# Check npm version
+npm --version
+
+# Check Claude Code is installed
+claude --version
+
+# Start your React dev server
+npm run dev  # or npm start</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                                🎉 Your React app should now be running at <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">http://localhost:3000</code> or
+                                <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">http://localhost:5173</code> (Vite)!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Python Example -->
+                <section id="python-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🐍 Basic Python Project Setup</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        Let's create a simple dev container for a Python project with Flask or FastAPI. This basic setup is perfect for learning, simple scripts, and lightweight projects.
+                    </p>
+                    <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg">
+                        <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">📌 Basic vs Advanced:</p>
+                        <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                            This basic setup uses standard pip and minimal dependencies. For production projects with advanced tooling (uv package manager, bun for hybrid apps, extended libraries), see the <strong>Advanced Python Setup</strong> below.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">1</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create devcontainer.json for Python</h3>
+                            </div>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "name": "Python Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "forwardPorts": [5000, 8000],
+  "postCreateCommand": "pip install -r requirements.txt",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+  ]
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">2</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create Dockerfile for Python</h3>
+                            </div>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Start from Python 3.11 slim image (smaller size)
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd -ms /bin/bash vscode
+
+# Install Claude Code CLI
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# Set working directory
+WORKDIR /workspace
+
+# Install Python dev tools globally
+RUN pip install --no-cache-dir \
+    black \
+    pylint \
+    pytest \
+    ipython
+
+# Switch to non-root user
+USER vscode
+
+# Set Python to unbuffered mode (better for logs)
+ENV PYTHONUNBUFFERED=1</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4">
+                                <p class="text-sm text-purple-900 dark:text-purple-200 font-medium mb-2">🔍 Key differences from React setup:</p>
+                                <ul class="text-sm text-purple-800 dark:text-purple-300 space-y-1">
+                                    <li><strong>python:3.11-slim:</strong> Smaller base image compared to full Python</li>
+                                    <li><strong>build-essential:</strong> Needed for packages that compile C extensions</li>
+                                    <li><strong>pip install:</strong> Pre-installs common Python dev tools</li>
+                                    <li><strong>PYTHONUNBUFFERED=1:</strong> Makes print() output appear immediately in logs</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">3</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create requirements.txt</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                List your Python dependencies (example for Flask):
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-text">flask==3.0.0
+python-dotenv==1.0.0
+requests==2.31.0</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                Or for FastAPI:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-text">fastapi==0.104.0
+uvicorn[standard]==0.24.0
+python-dotenv==1.0.0
+pydantic==2.5.0</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">4</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Test Your Python Setup</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                After reopening in container, test in the terminal:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Python version
+python --version  # Should show Python 3.11.x
+
+# Check pip version
+pip --version
+
+# Verify dependencies installed
+pip list
+
+# Run Flask app (example)
+python app.py
+
+# Or run FastAPI app (example)
+uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                                🎉 Your Python app should now be accessible at
+                                <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">http://localhost:5000</code> (Flask) or
+                                <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">http://localhost:8000</code> (FastAPI)!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Advanced Python Example -->
+                <section id="python-advanced-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚡ Advanced Python Project Setup</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        A production-ready Python dev container with modern tooling, extended libraries, and hybrid app support (Python + JavaScript frontends).
+                    </p>
+
+                    <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-6 rounded-r-lg">
+                        <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">⚡ What's Included:</p>
+                        <ul class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                            <li><strong>uv</strong>: Fast Python package manager (10-100x faster than pip) + version management</li>
+                            <li><strong>bun</strong>: JavaScript runtime for hybrid Python/JS projects (React, Vue, Svelte frontends)</li>
+                            <li><strong>Extended libraries</strong>: Development libraries for data science, web scraping, and native extensions</li>
+                            <li><strong>Modern tools</strong>: ripgrep, fd-find, jq, yq for faster development</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">1</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create devcontainer.json</h3>
+                            </div>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "name": "Advanced Python Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "forwardPorts": [5000, 8000, 8888],
+  "postCreateCommand": "uv pip install -r requirements.txt",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=cargo-${devcontainerId},target=/home/vscode/.cargo,type=volume",
+    "source=bun-${devcontainerId},target=/home/vscode/.bun,type=volume"
+  ]
+}</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4">
+                                <p class="text-sm text-purple-900 dark:text-purple-200 font-medium mb-2">💡 What's different:</p>
+                                <ul class="text-sm text-purple-800 dark:text-purple-300 space-y-1">
+                                    <li><strong>Port 8888</strong>: Added for Jupyter Lab/Notebook</li>
+                                    <li><strong>uv pip install</strong>: Uses uv for 10-100x faster package installation</li>
+                                    <li><strong>cargo volume</strong>: Persists uv installation and Python versions</li>
+                                    <li><strong>bun volume</strong>: Persists bun installation for hybrid projects</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">2</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create Dockerfile (Advanced)</h3>
+                            </div>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Start from Python 3.11 slim image
+FROM python:3.11-slim
+
+# Install extended system dependencies (organized by category)
+RUN apt-get update && apt-get install -y \
+    # Version control
+    git \
+    git-lfs \
+    # Core utilities
+    curl \
+    wget \
+    ca-certificates \
+    # Build tools for native extensions
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    pkg-config \
+    # Development libraries (for data science, web scraping, crypto)
+    libffi-dev \
+    libssl-dev \
+    libz-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    liblzma-dev \
+    # Text processing and data tools
+    jq \
+    yq \
+    sed \
+    gawk \
+    # Modern search tools (faster alternatives)
+    ripgrep \
+    fd-find \
+    # System utilities
+    htop \
+    tree \
+    procps \
+    # Network tools
+    net-tools \
+    iputils-ping \
+    dnsutils \
+    # Text editors
+    vim \
+    nano \
+    # Locales for proper encoding
+    locales \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up locale (prevents encoding issues)
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
+
+# Create non-root user
+RUN useradd -ms /bin/bash vscode
+
+# Install Claude Code CLI
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# Set working directory
+WORKDIR /workspace
+
+# Install Python dev tools globally
+RUN pip install --no-cache-dir \
+    black \
+    pylint \
+    pytest \
+    ipython \
+    jupyter \
+    jupyterlab
+
+# Switch to non-root user
+USER vscode
+
+# Install uv (fast Python package manager + version management)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/vscode/.bashrc
+ENV PATH="/home/vscode/.cargo/bin:$PATH"
+
+# Install bun (for Python projects with JS/TS frontends)
+RUN curl -fsSL https://bun.sh/install | bash && \
+    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/vscode/.bashrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/vscode/.bashrc
+ENV BUN_INSTALL="/home/vscode/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
+
+# Set Python to unbuffered mode (better for logs)
+ENV PYTHONUNBUFFERED=1</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4">
+                                <p class="text-sm text-purple-900 dark:text-purple-200 font-medium mb-2">🔍 Key additions:</p>
+                                <ul class="text-sm text-purple-800 dark:text-purple-300 space-y-1">
+                                    <li><strong>Extended libraries</strong>: Support SQLite, compression (lzma), SSL, foreign function interface</li>
+                                    <li><strong>Modern tools</strong>: ripgrep (rg) and fd-find for faster code/file search than grep/find</li>
+                                    <li><strong>uv</strong>: Installed as non-root user, 10-100x faster than pip</li>
+                                    <li><strong>bun</strong>: For hybrid Python/JavaScript projects (Django + React, Flask + Vue, etc.)</li>
+                                    <li><strong>Jupyter/JupyterLab</strong>: For data science and interactive development</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">3</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Install Dependencies</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                You can use either traditional pip OR modern uv. Both work with the same requirements.txt:
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                <strong>Using traditional pip:</strong>
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">pip install -r requirements.txt
+pip list</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 mb-2">
+                                <strong>Using uv (10-100x faster):</strong>
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">uv pip install -r requirements.txt
+uv pip list</code></pre>
+                            </div>
+                            <div class="mt-4 bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4">
+                                <p class="text-sm text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">⚡ Why uv is faster:</p>
+                                <ul class="text-sm text-md-primary-800 dark:text-md-primary-300 space-y-1">
+                                    <li>Written in Rust (compiled language vs Python)</li>
+                                    <li>Parallel package downloads and installations</li>
+                                    <li>Better dependency resolution algorithm</li>
+                                    <li>Drop-in replacement for pip - same commands, faster execution</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white font-bold" aria-hidden="true">4</span>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Verify Installation</h3>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Test all installed tools:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Verify Python
+python --version  # Should show Python 3.11.x
+
+# Verify pip
+pip --version
+
+# Verify uv
+uv --version
+
+# Verify bun (for hybrid projects)
+bun --version
+
+# Verify modern tools
+rg --version    # ripgrep (fast search)
+fdfind --version # fd (fast find)
+jq --version    # JSON processor
+
+# Test your Flask/FastAPI app
+python app.py
+# or
+uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                                🎉 Your advanced Python environment is ready for production development!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Python Version Management Subsection -->
+                    <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🔄 Changing Python Versions</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">
+                            Need to switch to Python 3.13, 3.14, or 3.15? Here are two methods:
+                        </p>
+
+                        <div class="space-y-6">
+                            <!-- Method 1 -->
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Method 1: Change Docker Base Image (Simplest)</h4>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                    Edit the first line of your Dockerfile to use a different Python version:
+                                </p>
+                                <div class="code-block-wrapper">
+                                    <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                    <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile"># Python 3.11 (current LTS - default)
+FROM python:3.11-slim
+
+# Python 3.13 (latest stable)
+FROM python:3.13-slim
+
+# Python 3.14 (newer, if available)
+FROM python:3.14-slim</code></pre>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+                                    After changing, rebuild the container: <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Cmd/Ctrl+Shift+P</code> → "Dev Containers: Rebuild Container"
+                                </p>
+                            </div>
+
+                            <!-- Method 2 -->
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Method 2: Use uv for Version Management (Most Flexible)</h4>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                    With uv, you can install and switch between multiple Python versions WITHOUT rebuilding the container:
+                                </p>
+                                <div class="code-block-wrapper">
+                                    <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                    <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># List available Python versions
+uv python list
+
+# Install Python 3.13
+uv python install 3.13
+
+# Install Python 3.14
+uv python install 3.14
+
+# Install Python 3.15 (if available)
+uv python install 3.15
+
+# Create virtual environment with specific Python version
+uv venv --python 3.13
+
+# Install packages with specific Python version
+uv pip install --python 3.13 -r requirements.txt
+
+# Pin Python version for the project
+uv python pin 3.13</code></pre>
+                                </div>
+                                <div class="mt-4 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-4">
+                                    <p class="text-sm text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">✅ Benefits of uv for version management:</p>
+                                    <ul class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1">
+                                        <li>Switch Python versions instantly (no container rebuild)</li>
+                                        <li>Test code across multiple Python versions</li>
+                                        <li>Faster than pyenv or manual Python compilation</li>
+                                        <li>Integrated with uv's package management</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 rounded-r-lg">
+                            <p class="text-md-error-900 dark:text-md-error-200 font-medium mb-2">📝 Version Selection Guide:</p>
+                            <ul class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm">
+                                <li><strong>Python 3.11</strong>: Current LTS, most stable, best library compatibility</li>
+                                <li><strong>Python 3.13</strong>: Latest stable release, newest features, good compatibility</li>
+                                <li><strong>Python 3.14/3.15</strong>: Experimental/preview, testing only, not for production</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Next.js Example -->
+                <section id="nextjs-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">⚡ Next.js Project Setup</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        Let's create a dev container for a Next.js application with all the modern tooling:
+                    </p>
+
+                    <!-- Step 1 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">1</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create .devcontainer directory</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                In your Next.js project root, create the directory and files:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">mkdir -p .devcontainer
+cd .devcontainer
+touch devcontainer.json Dockerfile</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">2</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create devcontainer.json</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Add this configuration optimized for Next.js development:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "name": "Next.js Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.preferences.importModuleSpecifier": "relative"
+      }
+    }
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume"
+  ]
+}</code></pre>
+                            </div>
+                            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">💡 What's happening here:</p>
+                                <ul class="list-disc list-inside space-y-1 text-purple-800 dark:text-purple-300 text-sm">
+                                    <li><strong>Port 3000</strong>: Next.js default development server port</li>
+                                    <li><strong>npm cache volume</strong>: Dramatically speeds up npm installs by persisting the cache</li>
+                                    <li><strong>Tailwind CSS extension</strong>: IntelliSense for Tailwind classes in your JSX/TSX files</li>
+                                    <li><strong>TypeScript settings</strong>: Optimized for Next.js import conventions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">3</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create Dockerfile</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Use Node.js 20 LTS for optimal Next.js performance:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile">FROM node:20
+
+# Install Claude Code CLI globally
+RUN npm install -g @anthropic-ai/claude-code
+
+# Install common development tools
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /workspace
+
+# Keep container running
+CMD ["sleep", "infinity"]</code></pre>
+                            </div>
+                            <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-md-error-900 dark:text-md-error-200 font-medium mb-2">⚠️ Note:</p>
+                                <p class="text-md-error-800 dark:text-md-error-300 text-sm">
+                                    Next.js 13+ requires Node.js 16.14 or later. We're using Node 20 LTS for the best performance and latest features.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">4</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Open in VS Code</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Same as before - VS Code will detect the dev container configuration:
+                            </p>
+                            <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                <li>Open the project folder in VS Code</li>
+                                <li>Click "Reopen in Container" when prompted (or use Command Palette → "Dev Containers: Reopen in Container")</li>
+                                <li>Wait for the container to build (first time takes a few minutes)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">5</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Test your setup</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Once connected, verify everything is working:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Node.js version
+node --version  # Should show v20.x.x
+
+# Check npm version
+npm --version
+
+# Check Claude Code is installed
+claude --version
+
+# Start Next.js development server
+npm run dev</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                                🎉 Your Next.js app should now be running at <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">http://localhost:3000</code>!
+                            </p>
+                            <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">✅ Pro Tips:</p>
+                                <ul class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                                    <li>The npm cache volume persists between container rebuilds, making installs much faster</li>
+                                    <li>Hot reload works perfectly - just save your files and see changes instantly</li>
+                                    <li>Use Claude Code to help scaffold new pages, components, and API routes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Multiple AI Assistants Example -->
+                <section id="multi-ai-example" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🤖 Multiple AI Assistants Setup</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">
+                        Want to use Claude Code, OpenAI Codex, AND Google Gemini in the same dev container? Here's how to set up all three AI assistants:
+                    </p>
+
+                    <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg">
+                        <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">🎯 Why Multiple AI Assistants?</p>
+                        <ul class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm">
+                            <li><strong>Claude Code</strong>: Excellent for complex reasoning, refactoring, and architectural decisions</li>
+                            <li><strong>Codex</strong>: Great for code completion and quick code generation</li>
+                            <li><strong>Gemini</strong>: Strong at multimodal tasks and Google ecosystem integration</li>
+                            <li>Use the right tool for each specific task!</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 1 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">1</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create devcontainer.json</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Configure all three AI extensions with separate volume mounts:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "name": "Multi-AI Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "openai.codex-vscode",
+        "google.gemini-cli-vscode-ide-companion",
+        "google.geminicodeassist",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "forwardPorts": [3000, 5000, 8000],
+  "postCreateCommand": "npm install || pip install -r requirements.txt || echo 'No dependencies to install'",
+  "remoteUser": "node",
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
+    "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume"
+  ]
+}</code></pre>
+                            </div>
+                            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">💡 What's happening here:</p>
+                                <ul class="list-disc list-inside space-y-1 text-purple-800 dark:text-purple-300 text-sm">
+                                    <li><strong>Three separate volume mounts</strong>: Each AI gets its own persistent config directory</li>
+                                    <li><strong>Multiple extensions</strong>: Install all AI assistant VS Code extensions at once</li>
+                                    <li><strong>Multiple ports</strong>: Forward common ports for different project types</li>
+                                    <li><strong>Flexible postCreateCommand</strong>: Works with npm, pip, or no dependencies</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">2</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Create Dockerfile</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Install all three CLI tools globally:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-dockerfile">FROM node:20
+
+# Install all three AI CLI tools globally
+RUN npm install -g \
+    @anthropic-ai/claude-code \
+    @openai/codex \
+    @google/gemini-cli
+
+# Install common development tools
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    vim \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /workspace
+
+# Keep container running
+CMD ["sleep", "infinity"]</code></pre>
+                            </div>
+                            <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-md-error-900 dark:text-md-error-200 font-medium mb-2">⚠️ Important Notes:</p>
+                                <ul class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm">
+                                    <li>You'll need valid API keys for each service to authenticate</li>
+                                    <li>Each AI assistant authenticates independently</li>
+                                    <li>Build time will be longer with all three CLIs installed</li>
+                                    <li>Consider your API usage costs across multiple services</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">3</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Authentication Setup</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                After the container builds, authenticate each AI service:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Authenticate Claude Code
+claude auth login
+# You'll be prompted to enter your Anthropic API key
+
+# Authenticate Codex
+codex auth login
+# You'll be prompted to enter your OpenAI API key
+
+# Authenticate Gemini
+gemini auth login
+# You'll be prompted to enter your Google AI API key</code></pre>
+                            </div>
+                            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg">
+                                <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">🔑 Getting API Keys:</p>
+                                <ul class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm">
+                                    <li><strong>Claude/Anthropic</strong>: Visit <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" class="underline hover:text-md-primary-600">console.anthropic.com</a></li>
+                                    <li><strong>OpenAI Codex</strong>: Visit <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="underline hover:text-md-primary-600">platform.openai.com/api-keys</a></li>
+                                    <li><strong>Google Gemini</strong>: Visit <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="underline hover:text-md-primary-600">makersuite.google.com/app/apikey</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold">4</span>
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Verify Installation</h3>
+                        </div>
+                        <div class="pl-13">
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                                Test that all three AI assistants are properly installed and configured:
+                            </p>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Claude Code
+claude --version
+claude auth status
+
+# Check Codex
+codex --version
+codex auth status
+
+# Check Gemini
+gemini --version
+gemini auth status</code></pre>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                                🎉 All three AI assistants should now be ready to use!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 rounded-r-lg">
+                        <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">✅ Best Practices:</p>
+                        <ul class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                            <li><strong>Task-specific usage</strong>: Use Claude for complex reasoning, Codex for quick completions, Gemini for multimodal work</li>
+                            <li><strong>API cost awareness</strong>: Monitor your usage across all three services to manage costs</li>
+                            <li><strong>Config persistence</strong>: Volume mounts ensure you don't need to re-authenticate when rebuilding containers</li>
+                            <li><strong>Security</strong>: Never commit API keys to your repository - keep them in the volume-mounted config directories</li>
+                            <li><strong>Extension conflicts</strong>: If you experience conflicts, you can disable individual extensions in VS Code settings</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting -->
+                <section id="troubleshooting" class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🔧 Troubleshooting</h2>
+                    <div class="space-y-6">
+
+                        <div class="border border-red-200 dark:border-red-800 rounded-lg p-6 bg-red-50 dark:bg-red-900/20">
+                            <h3 class="font-semibold text-lg mb-2 text-red-900 dark:text-red-200">
+                                ❌ Error: "Cannot connect to Docker daemon"
+                            </h3>
+                            <p class="text-red-800 dark:text-red-300 mb-3">
+                                <strong>Cause:</strong> Docker Desktop isn't running.
+                            </p>
+                            <p class="text-red-800 dark:text-red-300 mb-2">
+                                <strong>Solution:</strong>
+                            </p>
+                            <ol class="list-decimal list-inside text-sm text-red-700 dark:text-red-300 space-y-1">
+                                <li>Start Docker Desktop from your Applications folder</li>
+                                <li>Wait for the whale icon in your menu bar/system tray to show it's running</li>
+                                <li>Retry in VS Code: Cmd+Shift+P → "Dev Containers: Rebuild Container"</li>
+                            </ol>
+                        </div>
+
+                        <div class="border border-orange-200 dark:border-orange-800 rounded-lg p-6 bg-orange-50 dark:bg-orange-900/20">
+                            <h3 class="font-semibold text-lg mb-2 text-orange-900 dark:text-orange-200">
+                                ❌ Error: "Command not found" (npm, python, etc.)
+                            </h3>
+                            <p class="text-orange-800 dark:text-orange-300 mb-3">
+                                <strong>Cause:</strong> Tool not installed in the container, or PATH not set correctly.
+                            </p>
+                            <p class="text-orange-800 dark:text-orange-300 mb-2">
+                                <strong>Solution:</strong>
+                            </p>
+                            <ol class="list-decimal list-inside text-sm text-orange-700 dark:text-orange-300 space-y-1">
+                                <li>Check your Dockerfile has the correct base image (e.g., <code>FROM node:20</code>)</li>
+                                <li>Rebuild the container: Cmd+Shift+P → "Dev Containers: Rebuild Container"</li>
+                                <li>If still failing, check you're using the correct terminal (should say "Dev Container" in bottom-left)</li>
+                            </ol>
+                        </div>
+
+                        <div class="border border-yellow-200 dark:border-yellow-800 rounded-lg p-6 bg-md-error-50 dark:bg-md-error-900/20">
+                            <h3 class="font-semibold text-lg mb-2 text-md-error-900 dark:text-md-error-200">
+                                ⚠️ Container is very slow
+                            </h3>
+                            <p class="text-md-error-800 dark:text-md-error-300 mb-3">
+                                <strong>Cause:</strong> Docker performance issues, especially on Mac/Windows.
+                            </p>
+                            <p class="text-md-error-800 dark:text-md-error-300 mb-2">
+                                <strong>Solutions:</strong>
+                            </p>
+                            <ul class="list-disc list-inside text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+                                <li><strong>Mac:</strong> Enable VirtioFS in Docker Desktop → Settings → Experimental Features</li>
+                                <li><strong>Windows:</strong> Ensure project is in WSL2 filesystem, not /mnt/c/</li>
+                                <li>Use named volumes for node_modules: Add to mounts: <code>"source=node-modules,target=/workspace/node_modules,type=volume"</code></li>
+                                <li>Create .dockerignore file to exclude node_modules, .git from build context</li>
+                            </ul>
+                        </div>
+
+                        <div class="border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-6 bg-md-primary-50 dark:bg-md-primary-900/20">
+                            <h3 class="font-semibold text-lg mb-2 text-md-primary-900 dark:text-md-primary-200">
+                                ℹ️ Port already in use
+                            </h3>
+                            <p class="text-md-primary-800 dark:text-md-primary-300 mb-3">
+                                <strong>Cause:</strong> Another process is using the port (e.g., 3000, 5000).
+                            </p>
+                            <p class="text-md-primary-800 dark:text-md-primary-300 mb-2">
+                                <strong>Solutions:</strong>
+                            </p>
+                            <ol class="list-decimal list-inside text-sm text-md-primary-700 dark:text-md-primary-300 space-y-1">
+                                <li>Find what's using the port: <code>lsof -i :3000</code> (Mac/Linux) or <code>netstat -ano | findstr :3000</code> (Windows)</li>
+                                <li>Kill the process or change your app's port</li>
+                                <li>Update forwardPorts in devcontainer.json to match new port</li>
+                            </ol>
+                        </div>
+
+                        <div class="border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-6 bg-md-tertiary-50 dark:bg-md-tertiary-900/20">
+                            <h3 class="font-semibold text-lg mb-2 text-md-tertiary-900 dark:text-md-tertiary-200">
+                                💡 Quick Debug Commands
+                            </h3>
+                            <div class="code-block-wrapper">
+                                <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs" aria-label="Copy code">Copy</button>
+                                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Check Docker is running
+docker ps
+
+# Check container logs
+docker logs &lt;container-name&gt;
+
+# View Docker disk usage
+docker system df
+
+# Clean up unused images/containers (frees space)
+docker system prune -a
+
+# Restart Docker Desktop
+# Mac: Click whale icon → Quit → Relaunch
+# Windows: Right-click whale icon → Quit → Relaunch</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Resources -->
+                <section id="resources" class="mb-12 bg-gradient-to-br from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20 rounded-lg p-8 shadow-lg border border-primary/20 dark:border-primary/30">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">📚 Resources & Further Learning</h2>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow border border-gray-200 dark:border-gray-700">
+                            <h3 class="font-semibold text-lg mb-3 text-gray-900 dark:text-white">Official Documentation</h3>
+                            <ul class="space-y-2 text-sm">
+                                <li>
+                                    <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/llms.txt" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Comprehensive Dev Containers Guide (llms.txt)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://docs.claude.com/en/docs/claude-code/devcontainer" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Claude Code Dev Container Docs
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://containers.dev/implementors/spec/" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Dev Container Specification
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://containers.dev/implementors/json_reference/" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        devcontainer.json Reference
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow border border-gray-200 dark:border-gray-700">
+                            <h3 class="font-semibold text-lg mb-3 text-gray-900 dark:text-white">Tools & Downloads</h3>
+                            <ul class="space-y-2 text-sm">
+                                <li>
+                                    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Download VS Code
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Download Docker Desktop
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://docs.docker.com/" target="_blank" rel="noopener noreferrer"
+                                       class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Docker Documentation
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-semibold text-lg mb-3 text-gray-900 dark:text-white">Community & Support</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li>
+                                <a href="https://github.com/anthropics/claude-code/issues" target="_blank" rel="noopener noreferrer"
+                                   class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                    Claude Code GitHub Issues
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://code.visualstudio.com/docs/devcontainers/containers" target="_blank" rel="noopener noreferrer"
+                                   class="text-primary hover:text-secondary hover:underline flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                    VS Code Dev Containers Guide
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="text-center text-gray-600 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700 pt-8 mt-12">
+                    <p>
+                        Created for Claude Code users • Last updated: October 2025
+                    </p>
+                    <p class="mt-2">
+                        Found an issue? <a href="https://github.com/anthropics/claude-code/issues" target="_blank" rel="noopener noreferrer"
+                        class="text-primary hover:text-secondary underline">Report it on GitHub</a>
+                    </p>
+                </footer>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle with system preference detection
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        // Function to set dark mode
+        function setDarkMode(isDark) {
+            html.classList.toggle('dark', isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDark = !html.classList.contains('dark');
+            setDarkMode(isDark);
+        });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const tocSidebar = document.getElementById('tocSidebar');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            tocSidebar.classList.toggle('hidden');
+            tocSidebar.classList.toggle('block');
+        });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').slice(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu if open
+                    if (window.innerWidth < 768) {
+                        tocSidebar.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Active section highlighting in TOC
+        const sections = document.querySelectorAll('section[id]');
+        const observerOptions = {
+            root: null,
+            rootMargin: '-100px 0px -66%',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        link.classList.remove('bg-primary', 'text-white');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('bg-primary', 'text-white');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // Copy code button functionality
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.nextElementSibling.querySelector('code');
+                const text = codeBlock.textContent;
+
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('bg-green-600');
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('bg-green-600');
+                    }, 2000);
+                });
+            });
+        });
+
+        // Highlight.js initialization
+        hljs.highlightAll();
+
+        // Fade-in animation on scroll
+        const fadeElements = document.querySelectorAll('section');
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll progress bar
+        const scrollProgress = document.getElementById('scrollProgress');
+
+        window.addEventListener('scroll', () => {
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.pageYOffset / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Keyboard navigation improvements
+        const keyboardHelp = document.getElementById('keyboardHelp');
+        let helpVisible = false;
+
+        document.addEventListener('keydown', (e) => {
+            // Ignore if typing in input/textarea
+            const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+
+            // Press '?' to toggle keyboard help
+            if (e.key === '?' && !e.ctrlKey && !e.metaKey && !isTyping) {
+                e.preventDefault();
+                helpVisible = !helpVisible;
+                keyboardHelp.classList.toggle('show', helpVisible);
+            }
+
+            // Press 't' to toggle dark mode
+            if (e.key === 't' && !e.ctrlKey && !e.metaKey && !isTyping) {
+                darkModeToggle.click();
+            }
+
+            // Press 'Escape' to close mobile menu or help panel
+            if (e.key === 'Escape') {
+                if (window.innerWidth < 768) {
+                    tocSidebar.classList.add('hidden');
+                }
+                if (helpVisible) {
+                    helpVisible = false;
+                    keyboardHelp.classList.remove('show');
+                }
+            }
+        });
+
+        // Auto-hide keyboard help after 5 seconds
+        let helpTimeout;
+        keyboardHelp.addEventListener('transitionend', () => {
+            if (helpVisible) {
+                clearTimeout(helpTimeout);
+                helpTimeout = setTimeout(() => {
+                    helpVisible = false;
+                    keyboardHelp.classList.remove('show');
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
