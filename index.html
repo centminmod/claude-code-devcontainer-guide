@@ -1540,6 +1540,21 @@ while read -r cidr; do
     ipset add allowed-domains "$cidr" -exist
 done < <(echo "$cf_ranges" | jq -r '.result.ipv4_cidrs[]')
 
+# Fetch and add AWS IP ranges (covers many AI services: Hugging Face, Replicate, etc.)
+# Filtered for US East/West regions and EC2/CloudFront services only to limit allowlist size
+echo "Fetching AWS IP ranges..."
+aws_ranges=$(curl -s https://ip-ranges.amazonaws.com/ip-ranges.json)
+if [ -z "$aws_ranges" ]; then
+    echo "ERROR: Failed to fetch AWS IP ranges"
+    exit 1
+fi
+
+echo "Processing AWS IPs (US regions: us-east-1, us-west-2; Services: EC2, CLOUDFRONT)..."
+while read -r cidr; do
+    echo "Adding AWS range $cidr"
+    ipset add allowed-domains "$cidr" -exist
+done < <(echo "$aws_ranges" | jq -r '.prefixes[] | select(.region == "us-east-1" or .region == "us-west-2") | select(.service == "EC2" or .service == "CLOUDFRONT") | .ip_prefix' | aggregate -q)
+
 # Resolve and add allowed domains (defense-in-depth: includes DNS backup for services above)
 for domain in \
     "dns.google" \
@@ -1598,7 +1613,26 @@ for domain in \
     "react.dev" \
     "reactjs.org" \
     "esm.sh" \
-    "lucide.dev"; do
+    "lucide.dev" \
+    "openrouter.ai" \
+    "api.cerebras.ai" "inference.cerebras.ai" "cloud.cerebras.ai" "cerebras.ai" \
+    "dashscope.aliyuncs.com" "qwen.ai" "qwenlm.ai" "aliyuncs.com" "alibabacloud.com" \
+    "cn-hangzhou.aliyuncs.com" "us-west-1.aliyuncs.com" "ap-southeast-1.aliyuncs.com" \
+    "api.minimax.chat" "minimax.chat" \
+    "z.ai" \
+    "api.cohere.ai" "cohere.ai" \
+    "api.together.xyz" "together.xyz" \
+    "api.replicate.com" "replicate.com" \
+    "api-inference.huggingface.co" "huggingface.co" \
+    "api.perplexity.ai" "perplexity.ai" \
+    "api.mistral.ai" "mistral.ai" \
+    "api.deepinfra.com" "deepinfra.com" \
+    "api.fireworks.ai" "fireworks.ai" \
+    "api.groq.com" "groq.com" \
+    "api.lepton.ai" "lepton.ai" \
+    "mancer.tech" "api.mancer.tech" \
+    "api.deepseek.com" "deepseek.com" \
+    "api.lingyiwanwu.com" "platform.lingyiwanwu.com"; do
 
     # Check if IP address
     if [[ "$domain" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
@@ -1718,6 +1752,22 @@ else
     echo "✓ Can reach api.github.com as expected"
 fi
 
+# Verify OpenRouter API access
+if ! curl --connect-timeout 5 https://openrouter.ai/api/v1/models >/dev/null 2>&1; then
+    echo "✗ Cannot reach OpenRouter"
+    exit 1
+else
+    echo "✓ Can reach OpenRouter as expected"
+fi
+
+# Verify Cerebras API access
+if ! curl --connect-timeout 5 https://api.cerebras.ai/v1/models >/dev/null 2>&1; then
+    echo "✗ Cannot reach Cerebras"
+    exit 1
+else
+    echo "✓ Can reach Cerebras as expected"
+fi
+
 # Mark as configured
 touch "$STATE_FILE"
 echo "Firewall configured successfully!"</code></pre>
@@ -1751,8 +1801,20 @@ echo "Firewall configured successfully!"</code></pre>
                     </li>
                     <li>
                       <strong>Dynamic IP range fetching:</strong> Fetches
-                      official IP ranges from GitHub, Anthropic, Google, and
-                      Cloudflare APIs
+                      official IP ranges from GitHub, Anthropic, Google,
+                      Cloudflare, and AWS APIs
+                    </li>
+                    <li>
+                      <strong>AWS IP ranges:</strong> Filtered for US regions
+                      (us-east-1, us-west-2) and EC2/CloudFront services to
+                      support AWS-hosted AI services (Hugging Face, Replicate)
+                    </li>
+                    <li>
+                      <strong>100+ AI service domains:</strong> Comprehensive
+                      coverage including OpenRouter, Cerebras, Qwen/Alibaba,
+                      Minimax, z.ai, Cohere, Together.ai, Replicate, Hugging
+                      Face, Perplexity, Mistral, DeepInfra, Fireworks, Groq,
+                      Lepton, DeepSeek, 01.AI (Yi models)
                     </li>
                     <li>
                       <strong>DNS resolution backup:</strong> Defense-in-depth
@@ -1764,8 +1826,9 @@ echo "Firewall configured successfully!"</code></pre>
                       inter-container communication
                     </li>
                     <li>
-                      <strong>Self-testing:</strong> Verifies both blocked and
-                      allowed domains (warnings, not failures)
+                      <strong>Self-testing:</strong> Verifies blocked domains
+                      and tests connectivity to GitHub, OpenRouter, and Cerebras
+                      APIs
                     </li>
                   </ul>
                 </div>
