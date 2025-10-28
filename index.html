@@ -2001,6 +2001,55 @@ echo "Claude Code configuration complete"</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   This template configures Claude Code with optimized settings:
                 </p>
+
+                <h5 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                  Basic Configuration (Recommended)
+                </h5>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-json">{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "dangerously_skip_permissions": true,
+  "verbose": true,
+  "env": {
+    "MAX_MCP_OUTPUT_TOKENS": "60000",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "600000",
+    "MAX_THINKING_TOKENS": "8192"
+  },
+  "includeCoAuthoredBy": false,
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.context7.com/mcp"],
+      "transport": {
+        "type": "stdio"
+      }
+    },
+    "cf-docs": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h5 class="text-lg font-semibold mt-6 mb-2 text-gray-900 dark:text-white">
+                  Optional: With OpenTelemetry
+                </h5>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  Use this version if you have OpenTelemetry infrastructure (otel-collector service):
+                </p>
                 <div class="code-block-wrapper">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
@@ -2070,10 +2119,6 @@ echo "Claude Code configuration complete"</code></pre>
                       reasoning (8,192 tokens)
                     </li>
                     <li>
-                      <strong>OTEL_* variables:</strong> OpenTelemetry
-                      configuration for observability (optional)
-                    </li>
-                    <li>
                       <strong>dangerously_skip_permissions:</strong> Skips tool
                       execution prompts for 50-80% faster responses (⚠️ ONLY safe
                       in isolated devcontainers)
@@ -2081,6 +2126,44 @@ echo "Claude Code configuration complete"</code></pre>
                     <li>
                       <strong>verbose:</strong> Enables detailed logging for easier
                       debugging (no performance impact)
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500 p-4 mt-4 rounded-r-lg"
+                >
+                  <p
+                    class="text-orange-900 dark:text-orange-200 font-medium mb-2"
+                  >
+                    📊 Optional OpenTelemetry Variables:
+                  </p>
+                  <p class="text-orange-800 dark:text-orange-300 text-sm mb-2">
+                    Only include these if you have OpenTelemetry infrastructure (otel-collector service):
+                  </p>
+                  <ul
+                    class="list-disc list-inside space-y-1 text-orange-800 dark:text-orange-300 text-sm"
+                  >
+                    <li>
+                      <strong>CLAUDE_CODE_ENABLE_TELEMETRY:</strong> Enables telemetry collection in Claude Code
+                    </li>
+                    <li>
+                      <strong>OTEL_LOG_USER_PROMPTS:</strong> Logs user prompts for debugging and analysis
+                    </li>
+                    <li>
+                      <strong>OTEL_METRICS_EXPORTER:</strong> Sets metrics export protocol (otlp)
+                    </li>
+                    <li>
+                      <strong>OTEL_LOGS_EXPORTER:</strong> Sets logs export protocol (otlp)
+                    </li>
+                    <li>
+                      <strong>OTEL_EXPORTER_OTLP_PROTOCOL:</strong> Communication protocol for OTLP (grpc or http)
+                    </li>
+                    <li>
+                      <strong>OTEL_EXPORTER_OTLP_ENDPOINT:</strong> URL of your OpenTelemetry collector endpoint
+                    </li>
+                    <li>
+                      <strong>OTEL_RESOURCE_ATTRIBUTES:</strong> Service identification metadata for distributed tracing
                     </li>
                   </ul>
                 </div>
