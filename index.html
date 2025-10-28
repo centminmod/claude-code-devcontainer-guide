@@ -4615,16 +4615,23 @@ USER node</code></pre>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
                   ><code class="language-bash"># Authenticate Claude Code
-claude auth login
-# You'll be prompted to enter your Anthropic API key
+claude config set apiKey YOUR_ANTHROPIC_API_KEY
 
 # Authenticate Codex
 codex auth login
-# You'll be prompted to enter your OpenAI API key
 
-# Authenticate Gemini
-gemini auth login
-# You'll be prompted to enter your Google AI API key</code></pre>
+# Authenticate Gemini (3 options)
+
+# Option 1: .env file (recommended for devcontainers)
+cp .env.example .env
+# Edit .env and add: GEMINI_API_KEY=your_key_here
+
+# Option 2: Environment variable
+export GEMINI_API_KEY=YOUR_GOOGLE_API_KEY
+
+# Option 3: Settings file
+mkdir -p ~/.gemini
+echo '{"apiKey": "YOUR_GOOGLE_API_KEY"}' > ~/.gemini/settings.json</code></pre>
                 </div>
                 <div
                   class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg"
@@ -4668,6 +4675,11 @@ gemini auth login
                       >
                     </li>
                   </ul>
+                  <p
+                    class="text-md-primary-800 dark:text-md-primary-300 text-sm mt-4"
+                  >
+                    ⚠️ <strong>Security</strong>: .env is git-ignored. Never commit API keys to version control.
+                  </p>
                 </div>
               </div>
             </div>
