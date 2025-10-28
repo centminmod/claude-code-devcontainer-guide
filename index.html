@@ -767,9 +767,9 @@
                 class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 mb-6 font-mono text-sm overflow-x-auto"
               >
                 <pre class="text-gray-700 dark:text-gray-300">
-┌─────────────────────────────────────────┐
+┌────────────────────────────────────────┐
 │    Your Computer (Mac/Windows/Linux)   │
-│                                         │
+│                                        │
 │  ┌───────────────────────────────────┐ │
 │  │         VS Code                   │ │
 │  │  (Your Editor on the outside)     │ │
@@ -778,15 +778,15 @@
 │                  │ Connects to         │
 │                  ▼                     │
 │  ┌───────────────────────────────────┐ │
-│  │    🐳 Docker Container            │ │
+│  │    Docker Container               │ │
 │  │    (Isolated workspace)           │ │
 │  │                                   │ │
-│  │  ✅ Node.js 20                    │ │
-│  │  ✅ Python 3.11                   │ │
-│  │  ✅ Git, Claude Code, tools       │ │
-│  │  ✅ Your project files            │ │
+│  │  * Node.js 20                     │ │
+│  │  * Python 3.11                    │ │
+│  │  * Git, Claude Code, tools        │ │
+│  │  * Your project files             │ │
 │  └───────────────────────────────────┘ │
-└─────────────────────────────────────────┘</pre
+└────────────────────────────────────────┘</pre
                 >
               </div>
 
@@ -1358,25 +1358,31 @@ code --version</code></pre>
               <p
                 class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mb-2"
               >
-                This implementation provides maximum compatibility across Docker environments through defense-in-depth:
+                This implementation provides maximum compatibility across Docker
+                environments through defense-in-depth:
               </p>
               <ul
                 class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
               >
                 <li>
-                  <strong>Layer 1 (Container Creation):</strong> Disable IPv6 via sysctl flags at container startup (most reliable)
+                  <strong>Layer 1 (Container Creation):</strong> Disable IPv6
+                  via sysctl flags at container startup (most reliable)
                 </li>
                 <li>
-                  <strong>Layer 2 (Runtime):</strong> Attempt IPv6 disable in init script with graceful degradation (warning, not failure)
+                  <strong>Layer 2 (Runtime):</strong> Attempt IPv6 disable in
+                  init script with graceful degradation (warning, not failure)
                 </li>
                 <li>
-                  <strong>Layer 3 (Firewall Backup):</strong> ip6tables DROP rules block all IPv6 traffic if still enabled
+                  <strong>Layer 3 (Firewall Backup):</strong> ip6tables DROP
+                  rules block all IPv6 traffic if still enabled
                 </li>
               </ul>
               <p
                 class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mt-2"
               >
-                <strong>Result:</strong> Container starts successfully in any environment while maintaining security through at least one layer.
+                <strong>Result:</strong> Container starts successfully in any
+                environment while maintaining security through at least one
+                layer.
               </p>
             </div>
 
@@ -1728,25 +1734,30 @@ echo "Firewall configured successfully!"</code></pre>
                     class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1"
                   >
                     <li>
-                      <strong>Three-layer IPv6 security:</strong> Container creation, runtime disable, ip6tables backup
+                      <strong>Three-layer IPv6 security:</strong> Container
+                      creation, runtime disable, ip6tables backup
                     </li>
                     <li>
-                      <strong>Graceful degradation:</strong> Container starts successfully even if IPv6 can't be disabled
+                      <strong>Graceful degradation:</strong> Container starts
+                      successfully even if IPv6 can't be disabled
                     </li>
                     <li>
-                      <strong>Maximum compatibility:</strong> Works across Docker Desktop, Podman, cloud environments
+                      <strong>Maximum compatibility:</strong> Works across
+                      Docker Desktop, Podman, cloud environments
                     </li>
                     <li>
                       <strong>Idempotent:</strong> Uses state file to skip if
                       already configured
                     </li>
                     <li>
-                      <strong>Dynamic IP range fetching:</strong> Fetches official
-                      IP ranges from GitHub, Anthropic, Google, and Cloudflare APIs
+                      <strong>Dynamic IP range fetching:</strong> Fetches
+                      official IP ranges from GitHub, Anthropic, Google, and
+                      Cloudflare APIs
                     </li>
                     <li>
-                      <strong>DNS resolution backup:</strong> Defense-in-depth approach
-                      with DNS resolution for all domains (including those with IP ranges)
+                      <strong>DNS resolution backup:</strong> Defense-in-depth
+                      approach with DNS resolution for all domains (including
+                      those with IP ranges)
                     </li>
                     <li>
                       <strong>Docker preservation:</strong> Maintains
@@ -1805,10 +1816,12 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                 class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm"
               >
                 <li>
-                  <strong>Three-layer defense:</strong> Multiple security layers ensure protection even if one fails
+                  <strong>Three-layer defense:</strong> Multiple security layers
+                  ensure protection even if one fails
                 </li>
                 <li>
-                  <strong>IPv6 handling:</strong> If IPv6 can't be disabled (Docker limitations), ip6tables provides equivalent security
+                  <strong>IPv6 handling:</strong> If IPv6 can't be disabled
+                  (Docker limitations), ip6tables provides equivalent security
                 </li>
                 <li>
                   <strong>Not foolproof:</strong> Firewall provides
@@ -2002,7 +2015,9 @@ echo "Claude Code configuration complete"</code></pre>
                   This template configures Claude Code with optimized settings:
                 </p>
 
-                <h5 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                <h5
+                  class="text-lg font-semibold mb-2 text-gray-900 dark:text-white"
+                >
                   Basic Configuration (Recommended)
                 </h5>
                 <div class="code-block-wrapper">
@@ -2044,11 +2059,14 @@ echo "Claude Code configuration complete"</code></pre>
 }</code></pre>
                 </div>
 
-                <h5 class="text-lg font-semibold mt-6 mb-2 text-gray-900 dark:text-white">
+                <h5
+                  class="text-lg font-semibold mt-6 mb-2 text-gray-900 dark:text-white"
+                >
                   Optional: With OpenTelemetry
                 </h5>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  Use this version if you have OpenTelemetry infrastructure (otel-collector service):
+                  Use this version if you have OpenTelemetry infrastructure
+                  (otel-collector service):
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -2120,12 +2138,12 @@ echo "Claude Code configuration complete"</code></pre>
                     </li>
                     <li>
                       <strong>dangerously_skip_permissions:</strong> Skips tool
-                      execution prompts for 50-80% faster responses (⚠️ ONLY safe
-                      in isolated devcontainers)
+                      execution prompts for 50-80% faster responses (⚠️ ONLY
+                      safe in isolated devcontainers)
                     </li>
                     <li>
-                      <strong>verbose:</strong> Enables detailed logging for easier
-                      debugging (no performance impact)
+                      <strong>verbose:</strong> Enables detailed logging for
+                      easier debugging (no performance impact)
                     </li>
                   </ul>
                 </div>
@@ -2139,31 +2157,39 @@ echo "Claude Code configuration complete"</code></pre>
                     📊 Optional OpenTelemetry Variables:
                   </p>
                   <p class="text-orange-800 dark:text-orange-300 text-sm mb-2">
-                    Only include these if you have OpenTelemetry infrastructure (otel-collector service):
+                    Only include these if you have OpenTelemetry infrastructure
+                    (otel-collector service):
                   </p>
                   <ul
                     class="list-disc list-inside space-y-1 text-orange-800 dark:text-orange-300 text-sm"
                   >
                     <li>
-                      <strong>CLAUDE_CODE_ENABLE_TELEMETRY:</strong> Enables telemetry collection in Claude Code
+                      <strong>CLAUDE_CODE_ENABLE_TELEMETRY:</strong> Enables
+                      telemetry collection in Claude Code
                     </li>
                     <li>
-                      <strong>OTEL_LOG_USER_PROMPTS:</strong> Logs user prompts for debugging and analysis
+                      <strong>OTEL_LOG_USER_PROMPTS:</strong> Logs user prompts
+                      for debugging and analysis
                     </li>
                     <li>
-                      <strong>OTEL_METRICS_EXPORTER:</strong> Sets metrics export protocol (otlp)
+                      <strong>OTEL_METRICS_EXPORTER:</strong> Sets metrics
+                      export protocol (otlp)
                     </li>
                     <li>
-                      <strong>OTEL_LOGS_EXPORTER:</strong> Sets logs export protocol (otlp)
+                      <strong>OTEL_LOGS_EXPORTER:</strong> Sets logs export
+                      protocol (otlp)
                     </li>
                     <li>
-                      <strong>OTEL_EXPORTER_OTLP_PROTOCOL:</strong> Communication protocol for OTLP (grpc or http)
+                      <strong>OTEL_EXPORTER_OTLP_PROTOCOL:</strong>
+                      Communication protocol for OTLP (grpc or http)
                     </li>
                     <li>
-                      <strong>OTEL_EXPORTER_OTLP_ENDPOINT:</strong> URL of your OpenTelemetry collector endpoint
+                      <strong>OTEL_EXPORTER_OTLP_ENDPOINT:</strong> URL of your
+                      OpenTelemetry collector endpoint
                     </li>
                     <li>
-                      <strong>OTEL_RESOURCE_ATTRIBUTES:</strong> Service identification metadata for distributed tracing
+                      <strong>OTEL_RESOURCE_ATTRIBUTES:</strong> Service
+                      identification metadata for distributed tracing
                     </li>
                   </ul>
                 </div>
@@ -2214,8 +2240,9 @@ echo "Claude Code configuration complete"</code></pre>
                   4. Create config.toml.template (Codex CLI)
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  This template configures Codex CLI for Docker containers by disabling
-                  the Landlock sandbox (not supported in LinuxKit kernel):
+                  This template configures Codex CLI for Docker containers by
+                  disabling the Landlock sandbox (not supported in LinuxKit
+                  kernel):
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -2249,10 +2276,27 @@ approval_policy = "never"</code></pre>
                   <ul
                     class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm"
                   >
-                    <li>Docker's LinuxKit kernel doesn't support Landlock security module</li>
-                    <li>Container already provides isolation via Docker, firewall, non-root user</li>
-                    <li>OpenAI's official recommendation for containerized environments</li>
-                    <li>See <a href="#troubleshooting" class="underline hover:text-md-error-600">Troubleshooting → Codex CLI Landlock Error</a> for details</li>
+                    <li>
+                      Docker's LinuxKit kernel doesn't support Landlock security
+                      module
+                    </li>
+                    <li>
+                      Container already provides isolation via Docker, firewall,
+                      non-root user
+                    </li>
+                    <li>
+                      OpenAI's official recommendation for containerized
+                      environments
+                    </li>
+                    <li>
+                      See
+                      <a
+                        href="#troubleshooting"
+                        class="underline hover:text-md-error-600"
+                        >Troubleshooting → Codex CLI Landlock Error</a
+                      >
+                      for details
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -2264,7 +2308,8 @@ approval_policy = "never"</code></pre>
                   5. Create init-codex-config.sh
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  This script automatically configures Codex CLI on container startup:
+                  This script automatically configures Codex CLI on container
+                  startup:
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -2320,10 +2365,22 @@ echo "Codex CLI configuration complete"</code></pre>
                   <ul
                     class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
                   >
-                    <li><strong>Idempotent:</strong> Only creates config if it doesn't exist</li>
-                    <li><strong>Preserves user settings:</strong> Won't overwrite existing configuration</li>
-                    <li><strong>Proper ownership:</strong> Uses chown to ensure node user can access files</li>
-                    <li><strong>Informative output:</strong> Logs what it's doing for debugging</li>
+                    <li>
+                      <strong>Idempotent:</strong> Only creates config if it
+                      doesn't exist
+                    </li>
+                    <li>
+                      <strong>Preserves user settings:</strong> Won't overwrite
+                      existing configuration
+                    </li>
+                    <li>
+                      <strong>Proper ownership:</strong> Uses chown to ensure
+                      node user can access files
+                    </li>
+                    <li>
+                      <strong>Informative output:</strong> Logs what it's doing
+                      for debugging
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -2406,14 +2463,25 @@ USER node</code></pre>
                   <ol
                     class="list-decimal list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm"
                   >
-                    <li><strong>init-claude-config.sh</strong> - Configure Claude Code & MCP servers</li>
-                    <li><strong>init-codex-config.sh</strong> - Configure Codex CLI (disable Landlock sandbox)</li>
-                    <li><strong>init-firewall.sh</strong> - Apply network security rules (runs last)</li>
+                    <li>
+                      <strong>init-claude-config.sh</strong> - Configure Claude
+                      Code & MCP servers
+                    </li>
+                    <li>
+                      <strong>init-codex-config.sh</strong> - Configure Codex
+                      CLI (disable Landlock sandbox)
+                    </li>
+                    <li>
+                      <strong>init-firewall.sh</strong> - Apply network security
+                      rules (runs last)
+                    </li>
                   </ol>
                   <p
                     class="text-md-primary-800 dark:text-md-primary-300 text-sm mt-2"
                   >
-                    Config scripts run before the firewall to ensure npm/npx can download packages if needed. All scripts run automatically each time the container starts.
+                    Config scripts run before the firewall to ensure npm/npx can
+                    download packages if needed. All scripts run automatically
+                    each time the container starts.
                   </p>
                 </div>
               </div>
@@ -4771,32 +4839,50 @@ gemini auth status</code></pre>
                   ❌ Codex CLI: Landlock Sandbox Error
                 </h3>
 
-                <div class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200">
-                  <p class="mb-1">thread 'main' panicked at linux-sandbox/src/linux_run_main.rs:30:9:</p>
+                <div
+                  class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200"
+                >
+                  <p class="mb-1">
+                    thread 'main' panicked at
+                    linux-sandbox/src/linux_run_main.rs:30:9:
+                  </p>
                   <p>error running landlock: Sandbox(LandlockRestrict)</p>
                 </div>
 
                 <p class="text-purple-800 dark:text-purple-300 mb-3">
-                  <strong>Cause:</strong> Docker's LinuxKit kernel doesn't support Landlock (Linux security module). This is a known limitation of containerized environments.
+                  <strong>Cause:</strong> Docker's LinuxKit kernel doesn't
+                  support Landlock (Linux security module). This is a known
+                  limitation of containerized environments.
                 </p>
 
                 <p class="text-purple-800 dark:text-purple-300 mb-2">
-                  <strong>Solution:</strong> Disable Codex sandboxing (safe in containers):
+                  <strong>Solution:</strong> Disable Codex sandboxing (safe in
+                  containers):
                 </p>
 
-                <div class="bg-purple-100 dark:bg-purple-900/40 rounded-lg p-4 mb-3">
-                  <p class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold">
+                <div
+                  class="bg-purple-100 dark:bg-purple-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold"
+                  >
                     ~/.codex/config.toml
                   </p>
-                  <pre class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto"><code>sandbox_mode = "danger-full-access"
+                  <pre
+                    class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto"
+                  ><code>sandbox_mode = "danger-full-access"
 approval_policy = "never"</code></pre>
                 </div>
 
-                <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-3 mb-3">
+                <div
+                  class="bg-green-100 dark:bg-green-900/30 rounded-lg p-3 mb-3"
+                >
                   <p class="text-sm text-green-800 dark:text-green-300 mb-2">
                     <strong>✅ Why This Is Safe:</strong>
                   </p>
-                  <ul class="list-disc list-inside text-xs text-green-700 dark:text-green-300 space-y-1">
+                  <ul
+                    class="list-disc list-inside text-xs text-green-700 dark:text-green-300 space-y-1"
+                  >
                     <li>Docker container provides process isolation</li>
                     <li>Network firewall restricts connections</li>
                     <li>Non-root user execution (node)</li>
@@ -4807,42 +4893,89 @@ approval_policy = "never"</code></pre>
                 <p class="text-purple-800 dark:text-purple-300 mb-2 text-sm">
                   <strong>Verify it works:</strong>
                 </p>
-                <pre class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto mb-3"><code>codex --version
+                <pre
+                  class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto mb-3"
+                ><code>codex --version
 codex exec "echo 'Hello from Codex'"</code></pre>
 
-                <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r">
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r"
+                >
                   <p class="text-xs text-blue-800 dark:text-blue-300">
-                    <strong>📝 Note:</strong> This repository's devcontainer automatically applies this fix via <code>init-codex-config.sh</code>. Configuration persists across container rebuilds.
+                    <strong>📝 Note:</strong> This repository's devcontainer
+                    automatically applies this fix via
+                    <code>init-codex-config.sh</code>. Configuration persists
+                    across container rebuilds.
                   </p>
                 </div>
 
-                <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-r mt-4">
-                  <p class="text-sm font-bold text-red-900 dark:text-red-200 mb-2">
+                <div
+                  class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-r mt-4"
+                >
+                  <p
+                    class="text-sm font-bold text-red-900 dark:text-red-200 mb-2"
+                  >
                     ⚠️ IMPORTANT: VSCode Extension Limitation
                   </p>
                   <p class="text-xs text-red-800 dark:text-red-300 mb-3">
-                    The above configuration <strong>only works for Codex CLI</strong>, not the VSCode extension.
+                    The above configuration
+                    <strong>only works for Codex CLI</strong>, not the VSCode
+                    extension.
                   </p>
 
                   <div class="bg-red-100 dark:bg-red-900/40 rounded p-3 mb-3">
-                    <p class="text-xs font-semibold text-red-900 dark:text-red-200 mb-2">VSCode Extension Issue:</p>
-                    <ul class="list-disc list-inside text-xs text-red-800 dark:text-red-300 space-y-1">
-                      <li>Extension ignores <code>sandbox_mode</code> in config.toml</li>
-                      <li>Only reads <code>model</code> and <code>model_reasoning_effort</code></li>
-                      <li>Always tries to use Landlock sandbox (fails in Docker)</li>
-                      <li>Tracked as <a href="https://github.com/openai/codex/issues/5041" class="underline hover:text-red-600">GitHub Issue #5041</a></li>
+                    <p
+                      class="text-xs font-semibold text-red-900 dark:text-red-200 mb-2"
+                    >
+                      VSCode Extension Issue:
+                    </p>
+                    <ul
+                      class="list-disc list-inside text-xs text-red-800 dark:text-red-300 space-y-1"
+                    >
+                      <li>
+                        Extension ignores <code>sandbox_mode</code> in
+                        config.toml
+                      </li>
+                      <li>
+                        Only reads <code>model</code> and
+                        <code>model_reasoning_effort</code>
+                      </li>
+                      <li>
+                        Always tries to use Landlock sandbox (fails in Docker)
+                      </li>
+                      <li>
+                        Tracked as
+                        <a
+                          href="https://github.com/openai/codex/issues/5041"
+                          class="underline hover:text-red-600"
+                          >GitHub Issue #5041</a
+                        >
+                      </li>
                     </ul>
                   </div>
 
-                  <div class="bg-green-100 dark:bg-green-900/40 rounded p-3 mb-3">
-                    <p class="text-xs font-semibold text-green-900 dark:text-green-200 mb-2">✅ Workaround:</p>
-                    <p class="text-xs text-green-800 dark:text-green-300 mb-1">Use <strong>Codex CLI</strong> instead of VSCode extension:</p>
-                    <pre class="text-xs bg-green-900 dark:bg-black text-green-100 p-2 rounded mt-1"><code>codex exec "your prompt here"</code></pre>
+                  <div
+                    class="bg-green-100 dark:bg-green-900/40 rounded p-3 mb-3"
+                  >
+                    <p
+                      class="text-xs font-semibold text-green-900 dark:text-green-200 mb-2"
+                    >
+                      ✅ Workaround:
+                    </p>
+                    <p class="text-xs text-green-800 dark:text-green-300 mb-1">
+                      Use <strong>Codex CLI</strong> instead of VSCode
+                      extension:
+                    </p>
+                    <pre
+                      class="text-xs bg-green-900 dark:bg-black text-green-100 p-2 rounded mt-1"
+                    ><code>codex exec "your prompt here"</code></pre>
                   </div>
 
                   <div class="bg-yellow-100 dark:bg-yellow-900/40 rounded p-3">
                     <p class="text-xs text-yellow-800 dark:text-yellow-300">
-                      <strong>Status:</strong> OpenAI is working on adding config.toml support to the extension. No ETA available. CLI works perfectly.
+                      <strong>Status:</strong> OpenAI is working on adding
+                      config.toml support to the extension. No ETA available.
+                      CLI works perfectly.
                     </p>
                   </div>
                 </div>
