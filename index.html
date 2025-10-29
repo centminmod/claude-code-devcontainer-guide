@@ -1989,7 +1989,27 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
 # Run this after cloning the repository or rebuilding the container.
 #
 
-HOOKS_DIR="/workspaces/claude-devcontainer/.git/hooks"
+# Strict error handling
+set -euo pipefail
+
+# Dynamically resolve repository root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+HOOKS_DIR="$REPO_ROOT/.git/hooks"
+
+# Validate git repository
+if [ ! -d "$REPO_ROOT/.git" ]; then
+    echo "❌ ERROR: Not a git repository"
+    echo "Current directory: $(pwd)"
+    echo "Expected .git at: $REPO_ROOT/.git"
+    exit 1
+fi
+
+# Validate hooks directory is writable
+if [ -d "$HOOKS_DIR" ] && [ ! -w "$HOOKS_DIR" ]; then
+    echo "❌ ERROR: Hooks directory is not writable: $HOOKS_DIR"
+    exit 1
+fi
 
 echo "=== Git Hooks Setup ==="
 echo ""
@@ -2053,19 +2073,108 @@ echo ""
 echo "Git hooks have been installed successfully."
 echo ""</code></pre>
                   </div>
+
+                  <!-- Key Features Callout -->
+                  <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg">
+                    <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3">
+                      🔧 Key Features of setup-git-hooks.sh
+                    </p>
+
+                    <div class="space-y-3">
+                      <div>
+                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                          1. Dynamic Path Resolution
+                        </p>
+                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2">
+                          Script automatically detects repository root regardless of clone location:
+                        </p>
+                        <div class="bg-gray-50 dark:bg-gray-900 rounded p-2 mb-1">
+                          <code class="text-xs text-gray-800 dark:text-gray-200">
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"<br/>
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"<br/>
+HOOKS_DIR="$REPO_ROOT/.git/hooks"
+                          </code>
+                        </div>
+                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
+                          <li>Works with any repository path (not hard-coded)</li>
+                          <li>Portable across different environments</li>
+                          <li>Resolves paths relative to script location</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                          2. Strict Error Handling
+                        </p>
+                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2">
+                          <code class="bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded">set -euo pipefail</code> ensures robust script execution:
+                        </p>
+                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
+                          <li><code>-e</code>: Exit immediately if any command fails</li>
+                          <li><code>-u</code>: Treat unset variables as errors</li>
+                          <li><code>-o pipefail</code>: Catch failures in piped commands</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                          3. Validation Checks
+                        </p>
+                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-1">
+                          Script validates prerequisites before installation:
+                        </p>
+                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
+                          <li>Verifies <code>.git</code> directory exists</li>
+                          <li>Checks hooks directory is writable</li>
+                          <li>Provides clear error messages with diagnostics</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Step 2 -->
+                <!-- Step 2: Automatic Installation -->
                 <div
                   class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
                 >
                   <p
                     class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3"
                   >
-                    Step 2: Run setup script
+                    Step 2: Automatic Installation (Recommended)
+                  </p>
+
+                  <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-4 rounded-r-lg">
+                    <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">
+                      ✅ Automatic Installation
+                    </p>
+                    <p class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mb-2">
+                      The git hook is automatically installed on every container start via the <code>postStartCommand</code> in devcontainer.json. No manual setup required!
+                    </p>
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
+                      <code class="text-xs text-gray-800 dark:text-gray-200">
+"postStartCommand": "... && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh"
+                      </code>
+                    </div>
+                    <p class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                      This ensures hooks are always present after container rebuilds or fresh clones.
+                    </p>
+                  </div>
+
+                  <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                    Benefits:
+                  </p>
+                  <ul class="text-sm text-gray-700 dark:text-gray-300 list-disc list-inside space-y-1 mb-4">
+                    <li>No manual installation required after container rebuild</li>
+                    <li>Hooks always present in fresh clones</li>
+                    <li>Consistent enforcement across team members</li>
+                    <li>Zero-friction developer experience</li>
+                  </ul>
+
+                  <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                    Manual Installation (if not configured):
                   </p>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                    After cloning or rebuilding the container:
+                    If automatic installation is not set up, run manually after cloning or rebuilding:
                   </p>
                   <div class="code-block-wrapper">
                     <button
