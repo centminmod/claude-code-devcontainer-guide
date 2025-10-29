@@ -800,7 +800,7 @@
 │  │    Docker Container               │ │
 │  │    (Isolated workspace)           │ │
 │  │                                   │ │
-│  │  * Node.js 20                     │ │
+│  │  * Node.js 22                     │ │
 │  │  * Python 3.11                    │ │
 │  │  * Git, Claude Code, tools        │ │
 │  │  * Your project files             │ │
@@ -1087,7 +1087,8 @@
               📋 Prerequisites
             </h2>
             <p class="text-gray-700 dark:text-gray-300 mb-6">
-              Let's get your development environment ready. You'll need these three tools:
+              Let's get your development environment ready. You'll need these
+              three tools:
             </p>
 
             <div class="space-y-4 mb-6">
@@ -1236,7 +1237,7 @@ code --version</code></pre>
                 <ul
                   class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1"
                 >
-                  <li>Specifies base image (e.g., Node.js 20, Python 3.11)</li>
+                  <li>Specifies base image (e.g., Node.js 22, Python 3.11)</li>
                   <li>Installs system packages and tools</li>
                   <li>Sets up users and permissions</li>
                   <li>Configures the shell environment</li>
@@ -1303,10 +1304,13 @@ code --version</code></pre>
               class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg"
             >
               <p class="text-sm text-yellow-900 dark:text-yellow-200">
-                <strong>⚠️ Advanced Section:</strong> If you're new to dev containers,
-                you can skip this section and jump to
-                <a href="#claude-config" class="underline hover:text-yellow-700 dark:hover:text-yellow-100">Claude Code Configuration</a>.
-                Return here when you need production-grade security.
+                <strong>⚠️ Advanced Section:</strong> If you're new to dev
+                containers, you can skip this section and jump to
+                <a
+                  href="#claude-config"
+                  class="underline hover:text-yellow-700 dark:hover:text-yellow-100"
+                  >Claude Code Configuration</a
+                >. Return here when you need production-grade security.
               </p>
             </div>
 
@@ -3407,7 +3411,8 @@ echo "Claude Code configuration complete"</code></pre>
                   3. Create mcp.json.template
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  MCP configuration with both SSE (remote) and stdio (local) transports:
+                  MCP configuration with both SSE (remote) and stdio (local)
+                  transports:
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -3453,10 +3458,26 @@ echo "Claude Code configuration complete"</code></pre>
                 <div
                   class="mt-3 bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-3 rounded-r-lg"
                 >
-                  <p class="text-sm text-md-primary-900 dark:text-md-primary-200">
-                    <strong>💡 Chrome DevTools Note:</strong> The <code class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded">--executablePath=/usr/bin/chromium</code>
-                    argument is required in containers because Chromium (not Google Chrome) is installed at <code class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded">/usr/bin/chromium</code>.
-                    The <code class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded">--no-sandbox</code> and related flags are required for running Chromium in Docker containers.
+                  <p
+                    class="text-sm text-md-primary-900 dark:text-md-primary-200"
+                  >
+                    <strong>💡 Chrome DevTools Note:</strong> The
+                    <code
+                      class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded"
+                      >--executablePath=/usr/bin/chromium</code
+                    >
+                    argument is required in containers because Chromium (not
+                    Google Chrome) is installed at
+                    <code
+                      class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded"
+                      >/usr/bin/chromium</code
+                    >. The
+                    <code
+                      class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded"
+                      >--no-sandbox</code
+                    >
+                    and related flags are required for running Chromium in
+                    Docker containers.
                   </p>
                 </div>
               </div>
@@ -3759,65 +3780,103 @@ USER node</code></pre>
               🚀 Launching Your Dev Container
             </h2>
             <p class="text-gray-700 dark:text-gray-300 mb-6">
-              Now that you understand dev containers and have configured your setup,
-              here's how to launch and use them:
+              Now that you understand dev containers and have configured your
+              setup, here's how to launch and use them:
             </p>
 
             <div class="space-y-4">
               <!-- First Time Setup -->
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-primary-200 dark:border-md-primary-800">
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-primary-200 dark:border-md-primary-800"
+              >
                 <div class="flex items-center justify-between mb-2">
                   <p class="font-medium text-gray-900 dark:text-white">
                     First Time Setup
                   </p>
-                  <span class="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded">
+                  <span
+                    class="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded"
+                  >
                     Slower (5-10 min)
                   </span>
                 </div>
                 <div class="space-y-2">
                   <div class="flex items-center gap-2 text-sm">
-                    <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Cmd+Shift+P</kbd>
+                    <kbd
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Cmd+Shift+P</kbd
+                    >
                     <span class="text-gray-600 dark:text-gray-400">(Mac)</span>
                     <span class="text-gray-500">or</span>
-                    <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Ctrl+Shift+P</kbd>
-                    <span class="text-gray-600 dark:text-gray-400">(Windows/Linux)</span>
+                    <kbd
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Ctrl+Shift+P</kbd
+                    >
+                    <span class="text-gray-600 dark:text-gray-400"
+                      >(Windows/Linux)</span
+                    >
                   </div>
                   <div class="flex items-center gap-2 text-sm">
                     <span class="text-gray-600 dark:text-gray-400">→</span>
-                    <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Dev Containers: Open Folder in Container</code>
+                    <code
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Dev Containers: Open Folder in Container</code
+                    >
                   </div>
                 </div>
               </div>
 
               <!-- Subsequent Launches -->
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-tertiary-200 dark:border-md-tertiary-800">
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-tertiary-200 dark:border-md-tertiary-800"
+              >
                 <div class="flex items-center justify-between mb-2">
                   <p class="font-medium text-gray-900 dark:text-white">
                     Subsequent Launches
                   </p>
-                  <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded">
+                  <span
+                    class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded"
+                  >
                     Fast (&lt;30 sec)
                   </span>
                 </div>
                 <div class="space-y-2">
                   <div class="flex items-center gap-2 text-sm">
-                    <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Cmd+Shift+P</kbd>
+                    <kbd
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Cmd+Shift+P</kbd
+                    >
                     <span class="text-gray-600 dark:text-gray-400">(Mac)</span>
                     <span class="text-gray-500">or</span>
-                    <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Ctrl+Shift+P</kbd>
-                    <span class="text-gray-600 dark:text-gray-400">(Windows/Linux)</span>
+                    <kbd
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Ctrl+Shift+P</kbd
+                    >
+                    <span class="text-gray-600 dark:text-gray-400"
+                      >(Windows/Linux)</span
+                    >
                   </div>
                   <div class="flex items-center gap-2 text-sm">
                     <span class="text-gray-600 dark:text-gray-400">→</span>
-                    <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Dev Containers: Reopen in Container</code>
+                    <code
+                      class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                      >Dev Containers: Reopen in Container</code
+                    >
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="mt-6 bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 rounded-r-lg">
+            <div
+              class="mt-6 bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 rounded-r-lg"
+            >
               <p class="text-sm text-md-primary-900 dark:text-md-primary-200">
-                <strong>💡 Tip:</strong> VS Code will automatically prompt you with "Reopen in Container" when you open a folder containing a <code class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded">.devcontainer</code> directory.
+                <strong>💡 Tip:</strong> VS Code will automatically prompt you
+                with "Reopen in Container" when you open a folder containing a
+                <code
+                  class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded"
+                  >.devcontainer</code
+                >
+                directory.
               </p>
             </div>
           </section>
@@ -4052,8 +4111,8 @@ cd .devcontainer</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-dockerfile"># Start from Node.js 20 base image
-FROM node:20
+                  ><code class="language-dockerfile"># Start from Node.js 22 base image
+FROM node:22
 
 # Install essential tools and firewall dependencies
 RUN apt-get update && apt-get install -y \
@@ -4109,7 +4168,7 @@ USER node</code></pre>
                     class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1"
                   >
                     <li>
-                      <strong>FROM node:20:</strong> Uses official Node.js 20 as
+                      <strong>FROM node:22:</strong> Uses official Node.js 22 as
                       the base
                     </li>
                     <li>
@@ -5458,7 +5517,7 @@ touch devcontainer.json Dockerfile</code></pre>
               </div>
               <div class="pl-13">
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  Use Node.js 20 LTS for optimal Next.js performance:
+                  Use Node.js 22 LTS for optimal Next.js performance:
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -5469,7 +5528,7 @@ touch devcontainer.json Dockerfile</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-dockerfile">FROM node:20
+                  ><code class="language-dockerfile">FROM node:22
 
 # npm CLI packages (Claude Code, Codex, Gemini) installed via postCreateCommand
 # This ensures packages install AFTER npm-global volume mounts, preventing version conflicts
@@ -5521,7 +5580,7 @@ CMD ["sleep", "infinity"]</code></pre>
                   </p>
                   <p class="text-md-error-800 dark:text-md-error-300 text-sm">
                     Next.js 13+ requires Node.js 16.14 or later. We're using
-                    Node 20 LTS for the best performance and latest features.
+                    Node 22 LTS for the best performance and latest features.
                   </p>
                 </div>
               </div>
@@ -5847,7 +5906,7 @@ npm run dev</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-dockerfile">FROM node:20
+                  ><code class="language-dockerfile">FROM node:22
 
 ARG TZ
 ENV TZ="$TZ"
@@ -6174,16 +6233,42 @@ echo '{"apiKey": "YOUR_GOOGLE_API_KEY"}' > ~/.gemini/settings.json</code></pre>
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
                   ><code class="language-bash"># Check Claude Code
 claude --version
-claude auth status
 
 # Check Codex
 codex --version
-codex auth status
 
 # Check Gemini
 gemini --version
-gemini auth status</code></pre>
+
+# Check Wrangler
+wrangler --version
+
+# Check gh
+gh --version
+
+# Check AWS CLI
+aws --version
+
+# Check Vercel CLIs
+vercel --version
+</code></pre>
                 </div>
+
+                <!-- Screenshot showing version check output -->
+                <div class="mt-4 mb-4">
+                  <img
+                    src="claude-devcontainer-demo-1-800px.png"
+                    alt="Terminal screenshot showing successful version checks for Claude Code, Codex, Gemini, Wrangler, gh CLI, AWS CLI, and Vercel CLIs"
+                    class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                  />
+                  <p
+                    class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+                  >
+                    Example output showing all CLI tools successfully installed
+                    and configured within dev container
+                  </p>
+                </div>
+
                 <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
                   🎉 All three AI assistants should now be ready to use!
                 </p>
@@ -6395,7 +6480,7 @@ gemini auth status</code></pre>
                 >
                   <li>
                     Check your Dockerfile has the correct base image (e.g.,
-                    <code>FROM node:20</code>)
+                    <code>FROM node:22</code>)
                   </li>
                   <li>
                     Rebuild the container: Cmd+Shift+P → "Dev Containers:
@@ -6665,7 +6750,9 @@ codex exec "echo 'Hello from Codex'"</code></pre>
                     <code>mkdir -p /home/node/.config/gh</code> creates both
                     parent and subdirectory
                   </li>
-                  <li>Parent directory <code>.config</code> is owned by root</li>
+                  <li>
+                    Parent directory <code>.config</code> is owned by root
+                  </li>
                   <li>
                     <code>chown</code> on subdirectory only affects that
                     subdirectory
@@ -6714,8 +6801,8 @@ codex exec "echo 'Hello from Codex'"</code></pre>
                     class="list-disc list-inside text-xs text-blue-700 dark:text-blue-300 space-y-1 mt-2"
                   >
                     <li>
-                      ❌ <code>chown -R user /path/parent/child</code> (only owns
-                      child)
+                      ❌ <code>chown -R user /path/parent/child</code> (only
+                      owns child)
                     </li>
                     <li>
                       ✅ <code>chown -R user /path/parent</code> (owns parent +
