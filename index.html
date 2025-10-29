@@ -677,7 +677,8 @@
                 This guide will teach you everything you need to know about
                 development containers (devcontainers) for Claude Code. Whether
                 you're a complete beginner or looking to refine your setup,
-                you're in the right place.
+                you're in the right place. If you like this guide and find it
+                useful, consider <a href="https://www.buymeacoffee.com/georgeliu" class="text-md-primary-600 dark:text-md-primary-400 hover:underline" target="_blank" rel="noopener noreferrer">buying me a coffee</a> to support my work.
               </p>
               <div
                 class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg"
@@ -1918,12 +1919,11 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                 🔐 Git Safety and Branch Protection
               </h3>
               <p class="text-gray-700 dark:text-gray-300 mb-6">
-                Prevent accidental commits to protected branches (<code
-                  >main</code
-                >/
+                Prevent accidental commits to protected branches
+                (<code>main</code>/
                 <code>master</code>) using a pre-commit git hook. This provides
-                <strong>technical enforcement</strong> that blocks commits before
-                they reach the repository.
+                <strong>technical enforcement</strong> that blocks commits
+                before they reach the repository.
               </p>
 
               <div
@@ -1944,7 +1944,9 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                   class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
                 >
                   <li>Hooks don't transfer when cloning the repository</li>
-                  <li>Must be installed manually after cloning or rebuilding</li>
+                  <li>
+                    Must be installed manually after cloning or rebuilding
+                  </li>
                   <li>
                     Provide <strong>technical enforcement</strong> (not just
                     guidance)
@@ -2075,58 +2077,102 @@ echo ""</code></pre>
                   </div>
 
                   <!-- Key Features Callout -->
-                  <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg">
-                    <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3">
+                  <div
+                    class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-4 rounded-r-lg"
+                  >
+                    <p
+                      class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3"
+                    >
                       🔧 Key Features of setup-git-hooks.sh
                     </p>
 
                     <div class="space-y-3">
                       <div>
-                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                        <p
+                          class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1"
+                        >
                           1. Dynamic Path Resolution
                         </p>
-                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2">
-                          Script automatically detects repository root regardless of clone location:
+                        <p
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2"
+                        >
+                          Script automatically detects repository root
+                          regardless of clone location:
                         </p>
-                        <div class="bg-gray-50 dark:bg-gray-900 rounded p-2 mb-1">
-                          <code class="text-xs text-gray-800 dark:text-gray-200">
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"<br/>
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"<br/>
-HOOKS_DIR="$REPO_ROOT/.git/hooks"
+                        <div
+                          class="bg-gray-50 dark:bg-gray-900 rounded p-2 mb-1"
+                        >
+                          <code
+                            class="text-xs text-gray-800 dark:text-gray-200"
+                          >
+                            SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &&
+                            pwd)"<br />
+                            REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"<br />
+                            HOOKS_DIR="$REPO_ROOT/.git/hooks"
                           </code>
                         </div>
-                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
-                          <li>Works with any repository path (not hard-coded)</li>
+                        <ul
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2"
+                        >
+                          <li>
+                            Works with any repository path (not hard-coded)
+                          </li>
                           <li>Portable across different environments</li>
                           <li>Resolves paths relative to script location</li>
                         </ul>
                       </div>
 
                       <div>
-                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                        <p
+                          class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1"
+                        >
                           2. Strict Error Handling
                         </p>
-                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2">
-                          <code class="bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded">set -euo pipefail</code> ensures robust script execution:
+                        <p
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-2"
+                        >
+                          <code
+                            class="bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded"
+                            >set -euo pipefail</code
+                          >
+                          ensures robust script execution:
                         </p>
-                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
-                          <li><code>-e</code>: Exit immediately if any command fails</li>
-                          <li><code>-u</code>: Treat unset variables as errors</li>
-                          <li><code>-o pipefail</code>: Catch failures in piped commands</li>
+                        <ul
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2"
+                        >
+                          <li>
+                            <code>-e</code>: Exit immediately if any command
+                            fails
+                          </li>
+                          <li>
+                            <code>-u</code>: Treat unset variables as errors
+                          </li>
+                          <li>
+                            <code>-o pipefail</code>: Catch failures in piped
+                            commands
+                          </li>
                         </ul>
                       </div>
 
                       <div>
-                        <p class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1">
+                        <p
+                          class="text-sm font-semibold text-md-primary-800 dark:text-md-primary-300 mb-1"
+                        >
                           3. Validation Checks
                         </p>
-                        <p class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-1">
+                        <p
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 mb-1"
+                        >
                           Script validates prerequisites before installation:
                         </p>
-                        <ul class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2">
+                        <ul
+                          class="text-xs text-md-primary-700 dark:text-md-primary-400 list-disc list-inside space-y-1 ml-2"
+                        >
                           <li>Verifies <code>.git</code> directory exists</li>
                           <li>Checks hooks directory is writable</li>
-                          <li>Provides clear error messages with diagnostics</li>
+                          <li>
+                            Provides clear error messages with diagnostics
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -2143,38 +2189,59 @@ HOOKS_DIR="$REPO_ROOT/.git/hooks"
                     Step 2: Automatic Installation (Recommended)
                   </p>
 
-                  <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-4 rounded-r-lg">
-                    <p class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">
+                  <div
+                    class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-4 rounded-r-lg"
+                  >
+                    <p
+                      class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+                    >
                       ✅ Automatic Installation
                     </p>
-                    <p class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mb-2">
-                      The git hook is automatically installed on every container start via the <code>postStartCommand</code> in devcontainer.json. No manual setup required!
+                    <p
+                      class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mb-2"
+                    >
+                      The git hook is automatically installed on every container
+                      start via the <code>postStartCommand</code> in
+                      devcontainer.json. No manual setup required!
                     </p>
                     <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                       <code class="text-xs text-gray-800 dark:text-gray-200">
-"postStartCommand": "... && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh"
+                        "postStartCommand": "... && bash
+                        ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh"
                       </code>
                     </div>
-                    <p class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
-                      This ensures hooks are always present after container rebuilds or fresh clones.
+                    <p
+                      class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
+                    >
+                      This ensures hooks are always present after container
+                      rebuilds or fresh clones.
                     </p>
                   </div>
 
-                  <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                  <p
+                    class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2"
+                  >
                     Benefits:
                   </p>
-                  <ul class="text-sm text-gray-700 dark:text-gray-300 list-disc list-inside space-y-1 mb-4">
-                    <li>No manual installation required after container rebuild</li>
+                  <ul
+                    class="text-sm text-gray-700 dark:text-gray-300 list-disc list-inside space-y-1 mb-4"
+                  >
+                    <li>
+                      No manual installation required after container rebuild
+                    </li>
                     <li>Hooks always present in fresh clones</li>
                     <li>Consistent enforcement across team members</li>
                     <li>Zero-friction developer experience</li>
                   </ul>
 
-                  <p class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2">
+                  <p
+                    class="text-sm text-gray-700 dark:text-gray-300 font-semibold mb-2"
+                  >
                     Manual Installation (if not configured):
                   </p>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                    If automatic installation is not set up, run manually after cloning or rebuilding:
+                    If automatic installation is not set up, run manually after
+                    cloning or rebuilding:
                   </p>
                   <div class="code-block-wrapper">
                     <button
@@ -2359,7 +2426,8 @@ ls -la .git/hooks/pre-commit
 # Should show: -rwxr-xr-x (executable permission)</code></pre>
                   </div>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
-                    If hook is missing or not executable, run the setup script manually:
+                    If hook is missing or not executable, run the setup script
+                    manually:
                   </p>
                   <div class="code-block-wrapper mt-2">
                     <button
@@ -2401,10 +2469,20 @@ cat /tmp/git-hooks-install.log</code></pre>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
                     Common issues:
                   </p>
-                  <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 mt-2">
-                    <li>Not a git repository: Ensure you're in the repository root</li>
-                    <li>Permission denied: Check file permissions with <code>ls -la .devcontainer/setup-git-hooks.sh</code></li>
-                    <li>Script not executable: Run <code>chmod +x .devcontainer/setup-git-hooks.sh</code></li>
+                  <ul
+                    class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 mt-2"
+                  >
+                    <li>
+                      Not a git repository: Ensure you're in the repository root
+                    </li>
+                    <li>
+                      Permission denied: Check file permissions with
+                      <code>ls -la .devcontainer/setup-git-hooks.sh</code>
+                    </li>
+                    <li>
+                      Script not executable: Run
+                      <code>chmod +x .devcontainer/setup-git-hooks.sh</code>
+                    </li>
                   </ul>
                 </div>
 
@@ -2443,13 +2521,12 @@ bash .git/hooks/pre-commit
                 <div
                   class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
                 >
-                  <p
-                    class="text-gray-900 dark:text-gray-100 font-medium mb-3"
-                  >
+                  <p class="text-gray-900 dark:text-gray-100 font-medium mb-3">
                     🚨 Bypass hook (emergency only)
                   </p>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                    If you absolutely must commit to main/master (not recommended):
+                    If you absolutely must commit to main/master (not
+                    recommended):
                   </p>
                   <div class="code-block-wrapper">
                     <button
@@ -2462,10 +2539,285 @@ bash .git/hooks/pre-commit
                       class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
                     ><code class="language-bash">git commit --no-verify -m "your message"</code></pre>
                   </div>
-                  <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 mt-3 rounded-r-lg">
+                  <div
+                    class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 mt-3 rounded-r-lg"
+                  >
                     <p class="text-red-800 dark:text-red-200 text-xs">
-                      ⚠️ Warning: Only use <code>--no-verify</code> when absolutely necessary. It bypasses all git hooks and safety checks.
+                      ⚠️ Warning: Only use <code>--no-verify</code> when
+                      absolutely necessary. It bypasses all git hooks and safety
+                      checks.
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pre-Work Sync Check -->
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-8"
+              >
+                Pre-Work Sync Check (MANDATORY)
+              </h4>
+
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg"
+              >
+                <p
+                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3"
+                >
+                  ⚠️ ALWAYS Check Before Creating Branches
+                </p>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  Before creating any new feature or session branch, you MUST
+                  ensure your local master branch is up-to-date with the remote.
+                  This prevents working on outdated code and reduces merge
+                  conflicts.
+                </p>
+              </div>
+
+              <div class="space-y-6 mb-8">
+                <!-- Step 1: Check Current Status -->
+                <div>
+                  <p
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-3"
+                  >
+                    Step 1: Check Your Sync Status
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># 1. Switch to master (if not already there)
+git checkout master
+
+# 2. Fetch latest changes from remote (safe, doesn't merge)
+git fetch origin
+
+# 3. Check sync status
+git status</code></pre>
+                  </div>
+                </div>
+
+                <!-- Status Scenarios -->
+                <div>
+                  <p
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-3"
+                  >
+                    Step 2: Interpret Status and Take Action
+                  </p>
+
+                  <!-- Scenario 1: Up to Date -->
+                  <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-4"
+                  >
+                    <p
+                      class="text-green-900 dark:text-green-200 font-medium mb-3"
+                    >
+                      ✅ Scenario 1: Up to Date
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                      Status shows:
+                      <code
+                        class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs"
+                        >"Your branch is up to date with 'origin/master'"</code
+                      >
+                    </p>
+                    <p
+                      class="text-sm text-green-700 dark:text-green-300 font-medium mb-3"
+                    >
+                      → Safe to proceed! Create your branch:
+                    </p>
+                    <div class="code-block-wrapper">
+                      <button
+                        class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                        aria-label="Copy code"
+                      >
+                        Copy
+                      </button>
+                      <pre
+                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      ><code class="language-bash">git checkout -b feature/your-feature-name
+# OR
+git checkout -b session/$(date +%Y%m%d-%H%M)-description</code></pre>
+                    </div>
+                  </div>
+
+                  <!-- Scenario 2: Behind -->
+                  <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-4"
+                  >
+                    <p
+                      class="text-yellow-900 dark:text-yellow-200 font-medium mb-3"
+                    >
+                      ⚠️ Scenario 2: Behind Remote
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                      Status shows:
+                      <code
+                        class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs"
+                        >"Your branch is behind 'origin/master' by X
+                        commits"</code
+                      >
+                    </p>
+                    <p
+                      class="text-sm text-yellow-700 dark:text-yellow-300 font-medium mb-3"
+                    >
+                      → Pull first, then verify:
+                    </p>
+                    <div class="code-block-wrapper">
+                      <button
+                        class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                        aria-label="Copy code"
+                      >
+                        Copy
+                      </button>
+                      <pre
+                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      ><code class="language-bash"># Pull latest changes
+git pull origin master
+
+# Verify sync status
+git status  # Should now show "up to date"
+
+# Now create your branch
+git checkout -b feature/your-feature-name</code></pre>
+                    </div>
+                  </div>
+
+                  <!-- Scenario 3: Diverged -->
+                  <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-4"
+                  >
+                    <p
+                      class="text-md-error-900 dark:text-md-error-200 font-medium mb-3"
+                    >
+                      ❌ Scenario 3: Diverged from Remote
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                      Status shows:
+                      <code
+                        class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs"
+                        >"Your branch and 'origin/master' have diverged"</code
+                      >
+                    </p>
+                    <p
+                      class="text-sm text-red-700 dark:text-red-300 font-medium mb-3"
+                    >
+                      → Resolve divergence before creating branch:
+                    </p>
+
+                    <div class="space-y-3">
+                      <div>
+                        <p
+                          class="text-xs text-gray-600 dark:text-gray-400 mb-2"
+                        >
+                          Option 1: If you have NO local commits on master
+                          (safe):
+                        </p>
+                        <div class="code-block-wrapper">
+                          <button
+                            class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                            aria-label="Copy code"
+                          >
+                            Copy
+                          </button>
+                          <pre
+                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                          ><code class="language-bash"># Force sync with remote (discards local changes)
+git reset --hard origin/master
+
+# Verify
+git status  # Should show "up to date"</code></pre>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p
+                          class="text-xs text-gray-600 dark:text-gray-400 mb-2"
+                        >
+                          Option 2: If you have local commits to preserve:
+                        </p>
+                        <div class="code-block-wrapper">
+                          <button
+                            class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                            aria-label="Copy code"
+                          >
+                            Copy
+                          </button>
+                          <pre
+                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                          ><code class="language-bash"># Option A: Merge (creates merge commit)
+git pull origin master
+
+# Option B: Rebase (linear history)
+git rebase origin/master
+
+# Resolve any conflicts, then verify
+git status</code></pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Why This Matters -->
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg"
+                >
+                  <p class="text-blue-900 dark:text-blue-200 font-medium mb-3">
+                    💡 Why This Matters
+                  </p>
+                  <ul
+                    class="text-sm text-gray-700 dark:text-gray-300 space-y-2 ml-4"
+                  >
+                    <li>
+                      ✅ Ensures your feature branch is based on the latest code
+                    </li>
+                    <li>
+                      ✅ Prevents building on outdated codebase (which leads to
+                      conflicts)
+                    </li>
+                    <li>✅ Reduces merge conflicts when creating your PR</li>
+                    <li>
+                      ✅ Ensures tests/CI run against current codebase state
+                    </li>
+                    <li>
+                      ✅ Prevents duplicating work that others already merged
+                    </li>
+                    <li>✅ Maintains clean, linear git history</li>
+                  </ul>
+                </div>
+
+                <!-- Complete Workflow Example -->
+                <div>
+                  <p
+                    class="text-sm font-medium text-gray-900 dark:text-white mb-3"
+                  >
+                    Complete Workflow: From Master to New Branch
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># Step-by-step workflow
+git checkout master              # Switch to master
+git fetch origin                 # Download latest info
+git status                       # Check if behind
+git pull origin master           # Pull if needed (only if behind)
+git status                       # Verify "up to date"
+git checkout -b feature/new-api  # Create branch
+git branch --show-current        # Verify: "feature/new-api"
+
+# ✅ Now safe to start work!</code></pre>
                   </div>
                 </div>
               </div>
@@ -2535,10 +2887,9 @@ session/20251029-1600-update-docs</code></pre>
                     </p>
                     <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
                       Check if hook is installed:
-                      <code
-                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
-                        >test -x .git/hooks/pre-commit && echo "✅ Installed"
-                        || echo "❌ Missing"</code
+                      <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                        >test -x .git/hooks/pre-commit && echo "✅ Installed" ||
+                        echo "❌ Missing"</code
                       >
                     </p>
                   </div>
@@ -2550,8 +2901,7 @@ session/20251029-1600-update-docs</code></pre>
                     </p>
                     <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
                       Make hook executable:
-                      <code
-                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                      <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
                         >chmod +x .git/hooks/pre-commit</code
                       >
                     </p>
@@ -2564,8 +2914,7 @@ session/20251029-1600-update-docs</code></pre>
                     </p>
                     <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
                       <strong>Better approach:</strong> Create hotfix branch:
-                      <code
-                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                      <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
                         >git checkout -b hotfix/critical-fix</code
                       >
                     </p>
@@ -2573,8 +2922,7 @@ session/20251029-1600-update-docs</code></pre>
                       class="text-xs text-amber-700 dark:text-amber-400 mt-1 italic"
                     >
                       Bypass (NOT recommended):
-                      <code
-                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                      <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
                         >git commit --no-verify</code
                       >
                     </p>
@@ -2602,8 +2950,8 @@ session/20251029-1600-update-docs</code></pre>
                     <code>git branch --show-current</code>
                   </li>
                   <li>
-                    If branch is <code>main</code> or <code>master</code>,
-                    hook exits with code 1 (blocks commit)
+                    If branch is <code>main</code> or <code>master</code>, hook
+                    exits with code 1 (blocks commit)
                   </li>
                   <li>
                     Users can override with
@@ -3440,7 +3788,9 @@ cd .devcontainer</code></pre>
                       firewall on container startup
                     </li>
                     <li>
-                      <strong>mounts:</strong> Persists command history, AI configs (Claude/Codex/Gemini), GitHub CLI auth, and npm global packages between rebuilds
+                      <strong>mounts:</strong> Persists command history, AI
+                      configs (Claude/Codex/Gemini), GitHub CLI auth, and npm
+                      global packages between rebuilds
                     </li>
                   </ul>
                 </div>
@@ -3453,21 +3803,31 @@ cd .devcontainer</code></pre>
                     🔧 Customize for Your Tools
                   </p>
                   <p class="text-sm text-purple-800 dark:text-purple-300 mb-2">
-                    Need other tools persisted? Add your own volumes using the same pattern:
+                    Need other tools persisted? Add your own volumes using the
+                    same pattern:
                   </p>
                   <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                     <code class="text-xs text-gray-800 dark:text-gray-200">
-"source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
+                      "source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
                     </code>
                   </div>
-                  <p class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium">
+                  <p
+                    class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium"
+                  >
                     Common tools for React projects:
                   </p>
-                  <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4">
+                  <ul
+                    class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4"
+                  >
                     <li>• Docker CLI: <code>~/.docker</code></li>
                     <li>• Yarn cache: <code>~/.yarn</code></li>
-                    <li>• VS Code extensions: <code>~/.vscode-server/extensions</code></li>
-                    <li>• Playwright browsers: <code>~/.cache/ms-playwright</code></li>
+                    <li>
+                      • VS Code extensions:
+                      <code>~/.vscode-server/extensions</code>
+                    </li>
+                    <li>
+                      • Playwright browsers: <code>~/.cache/ms-playwright</code>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -3826,24 +4186,30 @@ npm run dev  # or npm start</code></pre>
                     🔧 Customize for Your Tools
                   </p>
                   <p class="text-sm text-purple-800 dark:text-purple-300 mb-2">
-                    Python developers often need to persist additional tools. Add volumes using this pattern:
+                    Python developers often need to persist additional tools.
+                    Add volumes using this pattern:
                   </p>
                   <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                     <code class="text-xs text-gray-800 dark:text-gray-200">
-"source=&lt;tool&gt;-${devcontainerId},target=/home/vscode/.&lt;config-path&gt;,type=volume"
+                      "source=&lt;tool&gt;-${devcontainerId},target=/home/vscode/.&lt;config-path&gt;,type=volume"
                     </code>
                   </div>
-                  <p class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium">
+                  <p
+                    class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium"
+                  >
                     Common Python tools:
                   </p>
-                  <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4">
+                  <ul
+                    class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4"
+                  >
                     <li>• pip cache: <code>~/.cache/pip</code></li>
                     <li>• Poetry: <code>~/.config/pypoetry</code></li>
                     <li>• Jupyter: <code>~/.jupyter</code></li>
                     <li>• PostgreSQL CLI: <code>~/.psqlrc</code></li>
                   </ul>
                   <p class="text-xs text-purple-700 dark:text-purple-400 mt-2">
-                    <strong>Note:</strong> Adjust target paths for your user (<code>vscode</code> vs <code>node</code>)
+                    <strong>Note:</strong> Adjust target paths for your user
+                    (<code>vscode</code> vs <code>node</code>)
                   </p>
                 </div>
               </div>
@@ -4224,17 +4590,22 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     🔧 Customize for Your Tools
                   </p>
                   <p class="text-sm text-purple-800 dark:text-purple-300 mb-2">
-                    This advanced setup already includes cargo (for uv/Rust tools) and bun. Add more volumes as needed:
+                    This advanced setup already includes cargo (for uv/Rust
+                    tools) and bun. Add more volumes as needed:
                   </p>
                   <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                     <code class="text-xs text-gray-800 dark:text-gray-200">
-"source=&lt;tool&gt;-${devcontainerId},target=/home/vscode/.&lt;config-path&gt;,type=volume"
+                      "source=&lt;tool&gt;-${devcontainerId},target=/home/vscode/.&lt;config-path&gt;,type=volume"
                     </code>
                   </div>
-                  <p class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium">
+                  <p
+                    class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium"
+                  >
                     Additional tools for advanced Python:
                   </p>
-                  <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4">
+                  <ul
+                    class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4"
+                  >
                     <li>• PostgreSQL CLI: <code>~/.psqlrc</code></li>
                     <li>• Redis CLI: <code>~/.redisclirc</code></li>
                     <li>• Docker: <code>~/.docker</code></li>
@@ -4824,7 +5195,8 @@ touch devcontainer.json Dockerfile</code></pre>
                       server port
                     </li>
                     <li>
-                      <strong>npm-global volume</strong>: Persists globally installed CLI tools (npm install -g) across rebuilds
+                      <strong>npm-global volume</strong>: Persists globally
+                      installed CLI tools (npm install -g) across rebuilds
                     </li>
                     <li>
                       <strong>Tailwind CSS extension</strong>: IntelliSense for
@@ -4849,14 +5221,20 @@ touch devcontainer.json Dockerfile</code></pre>
                   </p>
                   <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                     <code class="text-xs text-gray-800 dark:text-gray-200">
-"source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
+                      "source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
                     </code>
                   </div>
-                  <p class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium">
+                  <p
+                    class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium"
+                  >
                     Popular Next.js tools:
                   </p>
-                  <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4">
-                    <li>• Playwright browsers: <code>~/.cache/ms-playwright</code></li>
+                  <ul
+                    class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4"
+                  >
+                    <li>
+                      • Playwright browsers: <code>~/.cache/ms-playwright</code>
+                    </li>
                     <li>• Turborepo cache: <code>~/.turbo</code></li>
                     <li>• Vercel CLI: <code>~/.vercel</code></li>
                     <li>• Docker CLI: <code>~/.docker</code></li>
@@ -5182,7 +5560,10 @@ npm run dev</code></pre>
                     class="list-disc list-inside space-y-1 text-purple-800 dark:text-purple-300 text-sm"
                   >
                     <li>
-                      <strong>Complete volume setup</strong>: All 8 volumes for full production capabilities - command history, AI configs, GitHub CLI, npm global tools, cargo (Rust/uv), and bun runtime
+                      <strong>Complete volume setup</strong>: All 8 volumes for
+                      full production capabilities - command history, AI
+                      configs, GitHub CLI, npm global tools, cargo (Rust/uv),
+                      and bun runtime
                     </li>
                     <li>
                       <strong>Multiple extensions</strong>: Install all AI
@@ -5207,17 +5588,22 @@ npm run dev</code></pre>
                     🔧 Customize for Your Infrastructure
                   </p>
                   <p class="text-sm text-purple-800 dark:text-purple-300 mb-2">
-                    This is the FULL production setup. Add infrastructure and deployment tools:
+                    This is the FULL production setup. Add infrastructure and
+                    deployment tools:
                   </p>
                   <div class="bg-gray-50 dark:bg-gray-900 rounded p-3 mb-2">
                     <code class="text-xs text-gray-800 dark:text-gray-200">
-"source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
+                      "source=&lt;tool&gt;-${devcontainerId},target=/home/node/.&lt;config-path&gt;,type=volume"
                     </code>
                   </div>
-                  <p class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium">
+                  <p
+                    class="text-sm text-purple-800 dark:text-purple-300 mb-1 font-medium"
+                  >
                     Common infrastructure tools:
                   </p>
-                  <ul class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4">
+                  <ul
+                    class="text-xs text-purple-700 dark:text-purple-400 space-y-1 ml-4"
+                  >
                     <li>• Docker: <code>~/.docker</code></li>
                     <li>• Kubernetes: <code>~/.kube</code></li>
                     <li>• Terraform: <code>~/.terraform.d</code></li>
@@ -5226,7 +5612,8 @@ npm run dev</code></pre>
                     <li>• Azure CLI: <code>~/.azure</code></li>
                   </ul>
                   <p class="text-xs text-purple-700 dark:text-purple-400 mt-2">
-                    <strong>Pro tip:</strong> Use volumes for ANY tool config you want persistent between rebuilds
+                    <strong>Pro tip:</strong> Use volumes for ANY tool config
+                    you want persistent between rebuilds
                   </p>
                 </div>
               </div>
@@ -5541,7 +5928,8 @@ echo '{"apiKey": "YOUR_GOOGLE_API_KEY"}' > ~/.gemini/settings.json</code></pre>
                   <p
                     class="text-md-primary-800 dark:text-md-primary-300 text-sm mt-4"
                   >
-                    ⚠️ <strong>Security</strong>: .env is git-ignored. Never commit API keys to version control.
+                    ⚠️ <strong>Security</strong>: .env is git-ignored. Never
+                    commit API keys to version control.
                   </p>
                 </div>
               </div>
@@ -5637,15 +6025,21 @@ gemini auth status</code></pre>
               🔑 GitHub CLI Authentication
             </h2>
             <p class="text-gray-700 dark:text-gray-300 mb-6">
-              The GitHub CLI (<code>gh</code>) is pre-installed for creating pull requests and managing repositories. One-time authentication setup is required and persists across container rebuilds.
+              The GitHub CLI (<code>gh</code>) is pre-installed for creating
+              pull requests and managing repositories. One-time authentication
+              setup is required and persists across container rebuilds.
             </p>
 
             <!-- Why It Matters -->
-            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mb-6 rounded-r-lg">
+            <div
+              class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mb-6 rounded-r-lg"
+            >
               <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">
                 💡 Why GitHub CLI Matters:
               </p>
-              <ul class="list-disc list-inside text-purple-800 dark:text-purple-300 space-y-1 text-sm">
+              <ul
+                class="list-disc list-inside text-purple-800 dark:text-purple-300 space-y-1 text-sm"
+              >
                 <li>Create pull requests: <code>gh pr create</code></li>
                 <li>Required for git-pr-helper skill workflows</li>
                 <li>Integrates with CLAUDE.md Git Safety Protocol</li>
@@ -5654,11 +6048,15 @@ gemini auth status</code></pre>
 
             <!-- Quick Setup -->
             <div class="mb-6">
-              <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
                 Quick Setup
               </h3>
               <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                <pre class="text-sm text-gray-800 dark:text-gray-200"><code>gh auth login</code></pre>
+                <pre
+                  class="text-sm text-gray-800 dark:text-gray-200"
+                ><code>gh auth login</code></pre>
               </div>
               <div class="mt-4 space-y-2 text-gray-700 dark:text-gray-300">
                 <p><strong>Follow the prompts</strong>:</p>
@@ -5674,22 +6072,33 @@ gemini auth status</code></pre>
             </div>
 
             <!-- Persistence -->
-            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-6">
-              <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">
+            <div
+              class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-6"
+            >
+              <p
+                class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+              >
                 ✅ One-Time Setup
               </p>
               <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
-                Authentication is stored in <code>/home/node/.config/gh</code> and backed by a Docker volume. It persists across container rebuilds and only needs to be done once per devcontainer volume.
+                Authentication is stored in
+                <code>/home/node/.config/gh</code> and backed by a Docker
+                volume. It persists across container rebuilds and only needs to
+                be done once per devcontainer volume.
               </p>
             </div>
 
             <!-- Verification -->
             <div class="mb-6">
-              <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
                 Verify Setup
               </h3>
               <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                <pre class="text-sm text-gray-800 dark:text-gray-200"><code>gh auth status</code></pre>
+                <pre
+                  class="text-sm text-gray-800 dark:text-gray-200"
+                ><code>gh auth status</code></pre>
               </div>
               <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                 Should show: ✓ Logged in to github.com as your-username
@@ -5697,9 +6106,21 @@ gemini auth status</code></pre>
             </div>
 
             <!-- Learn More -->
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+            <div
+              class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+            >
               <p class="text-sm text-gray-700 dark:text-gray-300">
-                <strong>Need more details?</strong> See the comprehensive GitHub CLI documentation in <a href="../README.md" class="text-primary hover:underline">README.md</a> or <a href="./llms.txt" class="text-primary hover:underline">llms.txt</a> for alternative authentication methods, troubleshooting, and security best practices.
+                <strong>Need more details?</strong> See the comprehensive GitHub
+                CLI documentation in
+                <a href="../README.md" class="text-primary hover:underline"
+                  >README.md</a
+                >
+                or
+                <a href="./llms.txt" class="text-primary hover:underline"
+                  >llms.txt</a
+                >
+                for alternative authentication methods, troubleshooting, and
+                security best practices.
               </p>
             </div>
           </section>
