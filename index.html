@@ -3140,7 +3140,8 @@ cd .devcontainer</code></pre>
   "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
-    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume"
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -3524,7 +3525,8 @@ npm run dev  # or npm start</code></pre>
   "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "vscode",
   "mounts": [
-    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -3860,6 +3862,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
   "remoteUser": "vscode",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume",
     "source=cargo-${devcontainerId},target=/home/vscode/.cargo,type=volume",
     "source=bun-${devcontainerId},target=/home/vscode/.bun,type=volume"
   ]
@@ -4452,6 +4455,7 @@ touch devcontainer.json Dockerfile</code></pre>
   "remoteUser": "node",
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume"
   ]
 }</code></pre>
@@ -4781,7 +4785,8 @@ npm run dev</code></pre>
   "mounts": [
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
-    "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume"
+    "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -5210,6 +5215,82 @@ gemini auth status</code></pre>
                   settings
                 </li>
               </ul>
+            </div>
+          </section>
+
+          <!-- GitHub CLI Authentication -->
+          <section
+            id="github-cli-auth"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              🔑 GitHub CLI Authentication
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              The GitHub CLI (<code>gh</code>) is pre-installed for creating pull requests and managing repositories. One-time authentication setup is required and persists across container rebuilds.
+            </p>
+
+            <!-- Why It Matters -->
+            <div class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mb-6 rounded-r-lg">
+              <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">
+                💡 Why GitHub CLI Matters:
+              </p>
+              <ul class="list-disc list-inside text-purple-800 dark:text-purple-300 space-y-1 text-sm">
+                <li>Create pull requests: <code>gh pr create</code></li>
+                <li>Required for git-pr-helper skill workflows</li>
+                <li>Integrates with CLAUDE.md Git Safety Protocol</li>
+              </ul>
+            </div>
+
+            <!-- Quick Setup -->
+            <div class="mb-6">
+              <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                Quick Setup
+              </h3>
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <pre class="text-sm text-gray-800 dark:text-gray-200"><code>gh auth login</code></pre>
+              </div>
+              <div class="mt-4 space-y-2 text-gray-700 dark:text-gray-300">
+                <p><strong>Follow the prompts</strong>:</p>
+                <ol class="list-decimal list-inside space-y-1 ml-4">
+                  <li>Choose GitHub.com</li>
+                  <li>Select HTTPS protocol</li>
+                  <li>Authenticate Git credentials: Yes</li>
+                  <li>Choose "Login with a web browser"</li>
+                  <li>Copy the one-time code and press Enter</li>
+                  <li>Authorize in your browser</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Persistence -->
+            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-6">
+              <p class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2">
+                ✅ One-Time Setup
+              </p>
+              <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                Authentication is stored in <code>/home/node/.config/gh</code> and backed by a Docker volume. It persists across container rebuilds and only needs to be done once per devcontainer volume.
+              </p>
+            </div>
+
+            <!-- Verification -->
+            <div class="mb-6">
+              <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                Verify Setup
+              </h3>
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+                <pre class="text-sm text-gray-800 dark:text-gray-200"><code>gh auth status</code></pre>
+              </div>
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Should show: ✓ Logged in to github.com as your-username
+              </p>
+            </div>
+
+            <!-- Learn More -->
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                <strong>Need more details?</strong> See the comprehensive GitHub CLI documentation in <a href="../README.md" class="text-primary hover:underline">README.md</a> or <a href="./llms.txt" class="text-primary hover:underline">llms.txt</a> for alternative authentication methods, troubleshooting, and security best practices.
+              </p>
             </div>
           </section>
 
