@@ -2324,6 +2324,152 @@ git commit -m "test commit"</code></pre>
                 </div>
               </div>
 
+              <!-- Troubleshooting Section -->
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-8"
+              >
+                Troubleshooting
+              </h4>
+
+              <div class="space-y-4">
+                <!-- Hook not working -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-error-900 dark:text-md-error-200 font-medium mb-3"
+                  >
+                    🔍 Hook not blocking commits to main?
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    Verify the hook is installed and executable:
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># Check if hook exists and is executable
+ls -la .git/hooks/pre-commit
+
+# Should show: -rwxr-xr-x (executable permission)</code></pre>
+                  </div>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                    If hook is missing or not executable, run the setup script manually:
+                  </p>
+                  <div class="code-block-wrapper mt-2">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash">bash .devcontainer/setup-git-hooks.sh</code></pre>
+                  </div>
+                </div>
+
+                <!-- Installation failed -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-warning-900 dark:text-md-warning-200 font-medium mb-3"
+                  >
+                    ⚠️ Setup script fails or shows errors?
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    Check the installation log (if configured):
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># If postStartCommand logs to file
+cat /tmp/git-hooks-install.log</code></pre>
+                  </div>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mt-3">
+                    Common issues:
+                  </p>
+                  <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 mt-2">
+                    <li>Not a git repository: Ensure you're in the repository root</li>
+                    <li>Permission denied: Check file permissions with <code>ls -la .devcontainer/setup-git-hooks.sh</code></li>
+                    <li>Script not executable: Run <code>chmod +x .devcontainer/setup-git-hooks.sh</code></li>
+                  </ul>
+                </div>
+
+                <!-- Test hook manually -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-3"
+                  >
+                    🧪 Test the hook manually
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    You can run the hook script directly to verify it works:
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># Test the hook directly
+bash .git/hooks/pre-commit
+
+# Should show:
+# ✅ Committing to branch: [your-current-branch]
+# OR
+# ❌ ERROR: Direct commits to 'main' are not allowed</code></pre>
+                  </div>
+                </div>
+
+                <!-- Bypass hook -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-gray-900 dark:text-gray-100 font-medium mb-3"
+                  >
+                    🚨 Bypass hook (emergency only)
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    If you absolutely must commit to main/master (not recommended):
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash">git commit --no-verify -m "your message"</code></pre>
+                  </div>
+                  <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 mt-3 rounded-r-lg">
+                    <p class="text-red-800 dark:text-red-200 text-xs">
+                      ⚠️ Warning: Only use <code>--no-verify</code> when absolutely necessary. It bypasses all git hooks and safety checks.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <h4
                 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-8"
               >
