@@ -677,8 +677,19 @@
                 This guide will teach you everything you need to know about
                 development containers (devcontainers) for Claude Code. Whether
                 you're a complete beginner or looking to refine your setup,
-                you're in the right place. If you like this guide and find it
-                useful, consider <a href="https://www.buymeacoffee.com/georgeliu" class="text-md-primary-600 dark:text-md-primary-400 hover:underline" target="_blank" rel="noopener noreferrer">buying me a coffee</a> to support my work.
+                you're in the right place. The guide was created from all my own
+                experiences and collected context documentation used to create
+                my own dev containers and will be continually updated as my
+                development and experience progresses. If you like this guide
+                and find it useful, consider
+                <a
+                  href="https://www.buymeacoffee.com/georgeliu"
+                  class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >buying me a coffee</a
+                >
+                to support my work.
               </p>
               <div
                 class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg"
@@ -1169,6 +1180,70 @@ docker ps
 code --version</code></pre>
               </div>
             </div>
+
+            <!-- VSCode Keyboard Shortcuts -->
+            <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 rounded-r-lg p-6 mt-6">
+              <h3 class="font-semibold text-lg mb-4 text-md-primary-900 dark:text-md-primary-200 flex items-center gap-2">
+                <span>🚀</span>
+                <span>Quick Launch Shortcuts</span>
+              </h3>
+
+              <div class="space-y-4">
+                <!-- First Time Setup -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-primary-200 dark:border-md-primary-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <p class="font-medium text-gray-900 dark:text-white">
+                      First Time Setup
+                    </p>
+                    <span class="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded">
+                      Slower (5-10 min)
+                    </span>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-sm">
+                      <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Cmd+Shift+P</kbd>
+                      <span class="text-gray-600 dark:text-gray-400">(Mac)</span>
+                      <span class="text-gray-500">or</span>
+                      <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Ctrl+Shift+P</kbd>
+                      <span class="text-gray-600 dark:text-gray-400">(Windows/Linux)</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">→</span>
+                      <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Dev Containers: Open Folder in Container</code>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subsequent Launches -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-md-tertiary-200 dark:border-md-tertiary-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <p class="font-medium text-gray-900 dark:text-white">
+                      Subsequent Launches
+                    </p>
+                    <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded">
+                      Fast (&lt;30 sec)
+                    </span>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-sm">
+                      <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Cmd+Shift+P</kbd>
+                      <span class="text-gray-600 dark:text-gray-400">(Mac)</span>
+                      <span class="text-gray-500">or</span>
+                      <kbd class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Ctrl+Shift+P</kbd>
+                      <span class="text-gray-600 dark:text-gray-400">(Windows/Linux)</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm">
+                      <span class="text-gray-600 dark:text-gray-400">→</span>
+                      <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">Dev Containers: Reopen in Container</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-sm text-md-primary-800 dark:text-md-primary-300 mt-4">
+                <strong>Tip:</strong> VS Code will automatically prompt you with "Reopen in Container" when you open a folder containing a <code class="bg-md-primary-100 dark:bg-md-primary-900 px-1 rounded">.devcontainer</code> directory.
+              </p>
+            </div>
           </section>
 
           <!-- Architecture -->
@@ -1472,6 +1547,11 @@ fi
 
 echo "Starting firewall configuration..."
 
+# Initialize DNS resolution statistics
+TOTAL_DOMAINS=0
+RESOLVED_DOMAINS=0
+FAILED_DOMAINS=0
+
 # Extract Docker DNS before flushing
 DOCKER_DNS_RULES=$(iptables-save -t nat | grep "127\.0\.0\.11" || true)
 
@@ -1642,21 +1722,43 @@ for domain in \
         continue
     fi
 
-    # Resolve hostname
+    # Resolve hostname with graceful error handling
+    TOTAL_DOMAINS=$((TOTAL_DOMAINS + 1))
     echo "Resolving $domain..."
     ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}')
     if [ -z "$ips" ]; then
-        echo "ERROR: Failed to resolve $domain"
-        exit 1
+        echo "WARNING: Failed to resolve $domain (continuing...)"
+        FAILED_DOMAINS=$((FAILED_DOMAINS + 1))
+        continue
     fi
 
+    # Successfully resolved, add IPs to allowlist
+    domain_resolved=false
     while read -r ip; do
+        if [[ ! "$ip" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            echo "WARNING: Invalid IP from DNS for $domain: $ip (skipping)"
+            continue
+        fi
         echo "Adding $ip for $domain"
         ipset add allowed-domains "$ip" -exist
+        domain_resolved=true
     done < <(echo "$ips")
+
+    # Count as resolved only if at least one valid IP was added
+    if [ "$domain_resolved" = true ]; then
+        RESOLVED_DOMAINS=$((RESOLVED_DOMAINS + 1))
+    else
+        FAILED_DOMAINS=$((FAILED_DOMAINS + 1))
+    fi
 done
 
+echo ""
 echo "IP allowlist built successfully"
+echo "DNS Resolution Summary: ${RESOLVED_DOMAINS}/${TOTAL_DOMAINS} domains resolved successfully"
+if [ "$FAILED_DOMAINS" -gt 0 ]; then
+    echo "  WARNING: ${FAILED_DOMAINS} domains failed to resolve"
+fi
+echo ""
 
 # Flush iptables
 echo "Flushing iptables..."
@@ -1809,6 +1911,11 @@ echo "Firewall configured successfully!"</code></pre>
                       <strong>AWS IP ranges:</strong> Filtered for US regions
                       (us-east-1, us-west-2) and EC2/CloudFront services to
                       support AWS-hosted AI services (Hugging Face, Replicate)
+                    </li>
+                    <li>
+                      <strong>Resilient DNS resolution:</strong> Warns on DNS
+                      failures instead of failing container startup, tracks
+                      resolution statistics (e.g., "98/102 domains resolved")
                     </li>
                     <li>
                       <strong>100+ AI service domains:</strong> Comprehensive
@@ -5720,8 +5827,8 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 ENV DEVCONTAINER=true
 
 # Create config directories and set permissions
-RUN mkdir -p /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global/lib && \
-  chown -R node:node /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global
+RUN mkdir -p /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global/lib && \
+  chown -R node:node /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global
 
 # Default working directory
 WORKDIR /workspaces
@@ -6413,6 +6520,128 @@ codex exec "echo 'Hello from Codex'"</code></pre>
                       CLI works perfectly.
                     </p>
                   </div>
+                </div>
+              </div>
+
+              <div
+                class="border border-teal-200 dark:border-teal-800 rounded-lg p-6 bg-teal-50 dark:bg-teal-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-teal-900 dark:text-teal-200"
+                >
+                  ❌ Docker Build: Permission Denied in .config Directory
+                </h3>
+
+                <div
+                  class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200"
+                >
+                  <p class="mb-1">
+                    mkdir: cannot create directory '/home/node/.config/fish':
+                    Permission denied
+                  </p>
+                  <p>ERROR: command failed: mkdir -p /home/node/.config/fish</p>
+                </div>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-3">
+                  <strong>Cause:</strong> Setting ownership on a subdirectory
+                  (like <code>.config/gh</code>) instead of the parent directory
+                  (<code>.config</code>) leaves the parent owned by root. When
+                  installers (uv, fish, zsh) try to create their own
+                  subdirectories, they fail due to permission errors.
+                </p>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-2">
+                  <strong>Root Cause Explanation:</strong>
+                </p>
+                <ul
+                  class="list-disc list-inside text-sm text-teal-700 dark:text-teal-300 space-y-1 mb-4"
+                >
+                  <li>
+                    <code>mkdir -p /home/node/.config/gh</code> creates both
+                    parent and subdirectory
+                  </li>
+                  <li>Parent directory <code>.config</code> is owned by root</li>
+                  <li>
+                    <code>chown</code> on subdirectory only affects that
+                    subdirectory
+                  </li>
+                  <li>
+                    Later installers cannot create new subdirectories in
+                    root-owned parent
+                  </li>
+                </ul>
+
+                <div
+                  class="bg-teal-100 dark:bg-teal-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-teal-700 dark:text-teal-300 mb-2 font-semibold"
+                  >
+                    ❌ Incorrect (in Dockerfile):
+                  </p>
+                  <pre
+                    class="text-xs bg-teal-900 dark:bg-black text-teal-100 p-3 rounded overflow-x-auto"
+                  ><code>RUN mkdir -p /home/node/.config/gh /home/node/.claude && \
+  chown -R node:node /home/node/.config/gh  # Only owns subdirectory!</code></pre>
+                </div>
+
+                <div
+                  class="bg-green-100 dark:bg-green-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-green-700 dark:text-green-300 mb-2 font-semibold"
+                  >
+                    ✅ Correct (in Dockerfile):
+                  </p>
+                  <pre
+                    class="text-xs bg-green-900 dark:bg-black text-green-100 p-3 rounded overflow-x-auto"
+                  ><code>RUN mkdir -p /home/node/.config/gh /home/node/.claude && \
+  chown -R node:node /home/node/.config  # Owns entire .config tree!</code></pre>
+                </div>
+
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r mb-3"
+                >
+                  <p class="text-xs text-blue-800 dark:text-blue-300">
+                    <strong>💡 Pattern to remember:</strong>
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-blue-700 dark:text-blue-300 space-y-1 mt-2"
+                  >
+                    <li>
+                      ❌ <code>chown -R user /path/parent/child</code> (only owns
+                      child)
+                    </li>
+                    <li>
+                      ✅ <code>chown -R user /path/parent</code> (owns parent +
+                      all children)
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-2 text-sm">
+                  <strong>Verification commands:</strong>
+                </p>
+                <pre
+                  class="text-xs bg-teal-900 dark:bg-black text-teal-100 p-3 rounded overflow-x-auto mb-3"
+                ><code># Check parent directory ownership
+ls -ld /home/node/.config
+# Should show: drwxr-xr-x node node
+
+# Test creating new subdirectory as node user
+su - node -c "mkdir -p /home/node/.config/test"
+# Should succeed without permission errors</code></pre>
+
+                <div
+                  class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-3 rounded-r"
+                >
+                  <p class="text-xs text-yellow-800 dark:text-yellow-300">
+                    <strong>⚠️ When you see this:</strong> Permission errors
+                    during RUN commands that create files in
+                    <code>~/.config</code>, installers like uv/fish/zsh failing,
+                    or build succeeding up to a point then failing on config
+                    directory creation.
+                  </p>
                 </div>
               </div>
 
