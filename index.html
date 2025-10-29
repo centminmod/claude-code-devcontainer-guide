@@ -3934,7 +3934,13 @@ cd .devcontainer</code></pre>
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
-    "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume"
+    "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
+    "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
+    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
+    "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume",
+    "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume",
+    "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume",
+    "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -5361,7 +5367,13 @@ touch devcontainer.json Dockerfile</code></pre>
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
-    "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume"
+    "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
+    "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
+    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
+    "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume",
+    "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume",
+    "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume",
+    "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -5730,7 +5742,11 @@ npm run dev</code></pre>
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
     "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
-    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume"
+    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
+    "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume",
+    "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume",
+    "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume",
+    "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -5899,15 +5915,15 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
   && mkdir /commandhistory \
   && touch /commandhistory/.bash_history \
   && chown -R $USERNAME /commandhistory \
-  && echo 'export PATH=$PATH:/home/node/.npm-global/bin' >> /home/node/.bashrc \
+  && echo 'export PATH=$PATH:/home/node/.npm-global/bin:/home/node/.local/bin' >> /home/node/.bashrc \
   && chown node:node /home/node/.bashrc
 
 # Set `DEVCONTAINER` environment variable to help with orientation
 ENV DEVCONTAINER=true
 
 # Create config directories and set permissions
-RUN mkdir -p /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global/lib && \
-  chown -R node:node /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global
+RUN mkdir -p /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global/lib /home/node/.aws /home/node/.wrangler /home/node/.vercel /home/node/.local/bin && \
+  chown -R node:node /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini /home/node/.npm-global /home/node/.aws /home/node/.wrangler /home/node/.vercel /home/node/.local
 
 # Default working directory
 WORKDIR /workspaces
@@ -5941,15 +5957,27 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "source /usr/share/doc/fzf/examples/key-bindings.zsh" \
   -a "source /usr/share/doc/fzf/examples/completion.zsh" \
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-  -a "export PATH=\$PATH:/home/node/.npm-global/bin" \
+  -a "export PATH=\$PATH:/home/node/.npm-global/bin:/home/node/.local/bin" \
   -a "alias fd=fdfind" \
   -a "alias rg='rg --smart-case'" \
   -x
 
-# Install all three AI CLIs with version pinning for Claude Code
+# Install Claude Code, Codex CLI, Gemini CLI, Cloudflare Wrangler, and Vercel CLI
+# Note: Codex and Gemini don't support version pinning like Claude does
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
     npm install -g @openai/codex && \
-    npm install -g @google/gemini-cli
+    npm install -g @google/gemini-cli && \
+    npm install -g wrangler@latest && \
+    npm install -g vercel@latest
+
+# Install AWS CLI v2 to volume-persisted location
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install --install-dir /home/node/.local/aws-cli --bin-dir /home/node/.local/bin && \
+    rm -rf awscliv2.zip aws
+
+# Add .local/bin to PATH for AWS CLI
+ENV PATH="/home/node/.local/bin:$PATH"
 
 # Install uv (fast Python package manager - 10-100x faster than pip)
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
