@@ -1909,6 +1909,454 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                 </li>
               </ul>
             </div>
+
+            <!-- Git Safety and Branch Protection -->
+            <div class="mt-12">
+              <h3
+                class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center"
+              >
+                🔐 Git Safety and Branch Protection
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-6">
+                Prevent accidental commits to protected branches (<code
+                  >main</code
+                >/
+                <code>master</code>) using a pre-commit git hook. This provides
+                <strong>technical enforcement</strong> that blocks commits before
+                they reach the repository.
+              </p>
+
+              <div
+                class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-6 rounded-r-lg"
+              >
+                <p
+                  class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+                >
+                  ⚠️ Why Git Hooks?
+                </p>
+                <p
+                  class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm mb-2"
+                >
+                  Git hooks are stored in <code>.git/hooks/</code> which is
+                  <strong>not tracked by git</strong>. This means:
+                </p>
+                <ul
+                  class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
+                >
+                  <li>Hooks don't transfer when cloning the repository</li>
+                  <li>Must be installed manually after cloning or rebuilding</li>
+                  <li>
+                    Provide <strong>technical enforcement</strong> (not just
+                    guidance)
+                  </li>
+                </ul>
+              </div>
+
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-6"
+              >
+                Installation Steps
+              </h4>
+
+              <div class="space-y-4">
+                <!-- Step 1 -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3"
+                  >
+                    Step 1: Create setup script
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    Create
+                    <code>.devcontainer/setup-git-hooks.sh</code>:
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash">#!/bin/bash
+#
+# Setup Git Hooks
+#
+# Installs git hooks for branch protection and safety.
+# Run this after cloning the repository or rebuilding the container.
+#
+
+HOOKS_DIR="/workspaces/claude-devcontainer/.git/hooks"
+
+echo "=== Git Hooks Setup ==="
+echo ""
+
+# Create hooks directory if it doesn't exist
+if [ ! -d "$HOOKS_DIR" ]; then
+    echo "Creating hooks directory..."
+    mkdir -p "$HOOKS_DIR"
+fi
+
+# Install pre-commit hook
+echo "Installing pre-commit hook..."
+cat > "$HOOKS_DIR/pre-commit" << 'EOF'
+#!/bin/bash
+#
+# Git Pre-Commit Hook: Branch Protection
+#
+# Prevents direct commits to main/master branches.
+# Encourages feature branch workflow for safety.
+#
+
+BRANCH=$(git branch --show-current)
+
+# Block commits to protected branches
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+    echo ""
+    echo "❌ ERROR: Direct commits to '$BRANCH' are not allowed"
+    echo ""
+    echo "This is a safety measure to protect your work."
+    echo ""
+    echo "📝 Create a feature branch instead:"
+    echo "   git checkout -b feature/your-feature-name"
+    echo ""
+    echo "Or for session-based work:"
+    echo "   git checkout -b session/$(date +%Y%m%d-%H%M)-description"
+    echo ""
+    exit 1
+fi
+
+# Success - allow commit
+echo "✅ Committing to branch: $BRANCH"
+exit 0
+EOF
+
+chmod +x "$HOOKS_DIR/pre-commit"
+
+echo "✅ Pre-commit hook installed"
+echo ""
+
+# Verify installation
+if [ -x "$HOOKS_DIR/pre-commit" ]; then
+    echo "✅ Hook is executable"
+else
+    echo "❌ Hook is not executable!"
+    exit 1
+fi
+
+echo ""
+echo "=== Setup Complete ==="
+echo ""
+echo "Git hooks have been installed successfully."
+echo ""</code></pre>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-3"
+                  >
+                    Step 2: Run setup script
+                  </p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                    After cloning or rebuilding the container:
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># From repository root
+bash .devcontainer/setup-git-hooks.sh</code></pre>
+                  </div>
+
+                  <div class="mt-4">
+                    <p
+                      class="text-sm text-gray-600 dark:text-gray-400 mb-2 font-medium"
+                    >
+                      Expected output:
+                    </p>
+                    <div
+                      class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800"
+                    >
+                      <pre
+                        class="text-xs text-green-800 dark:text-green-200 whitespace-pre-wrap"
+                      >
+=== Git Hooks Setup ===
+
+Installing pre-commit hook...
+✅ Pre-commit hook installed
+
+✅ Hook is executable
+
+=== Setup Complete ===
+
+Git hooks have been installed successfully.</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-8"
+              >
+                Testing the Hook
+              </h4>
+
+              <div class="space-y-4">
+                <!-- Test 1 -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-md-error-900 dark:text-md-error-200 font-medium mb-3"
+                  >
+                    Test 1: Verify hook blocks commits to main
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># Switch to main branch
+git checkout main
+
+# Try to commit (should be blocked)
+echo "test" > /tmp/test-hook.txt
+git add /tmp/test-hook.txt
+git commit -m "test"</code></pre>
+                  </div>
+
+                  <div class="mt-4">
+                    <p
+                      class="text-sm text-gray-600 dark:text-gray-400 mb-2 font-medium"
+                    >
+                      Expected output (hook blocks commit):
+                    </p>
+                    <div
+                      class="bg-red-50 dark:bg-red-900/20 rounded-lg p-3 border border-red-200 dark:border-red-800"
+                    >
+                      <pre
+                        class="text-xs text-red-800 dark:text-red-200 whitespace-pre-wrap"
+                      >
+❌ ERROR: Direct commits to 'main' are not allowed
+
+This is a safety measure to protect your work.
+
+📝 Create a feature branch instead:
+   git checkout -b feature/your-feature-name
+
+Or for session-based work:
+   git checkout -b session/20251029-1430-description</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Test 2 -->
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                >
+                  <p
+                    class="text-green-900 dark:text-green-200 font-medium mb-3"
+                  >
+                    Test 2: Verify hook allows commits to feature branches
+                  </p>
+                  <div class="code-block-wrapper">
+                    <button
+                      class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                      aria-label="Copy code"
+                    >
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    ><code class="language-bash"># Create and switch to feature branch
+git checkout -b feature/test-hook
+
+# Commit should succeed
+git add /tmp/test-hook.txt
+git commit -m "test commit"</code></pre>
+                  </div>
+
+                  <div class="mt-4">
+                    <p
+                      class="text-sm text-gray-600 dark:text-gray-400 mb-2 font-medium"
+                    >
+                      Expected output (hook allows commit):
+                    </p>
+                    <div
+                      class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800"
+                    >
+                      <pre
+                        class="text-xs text-green-800 dark:text-green-200 whitespace-pre-wrap"
+                      >
+✅ Committing to branch: feature/test-hook
+[feature/test-hook abc1234] test commit
+ 1 file changed, 1 insertion(+)</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-8"
+              >
+                Branch Naming Conventions
+              </h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                >
+                  <p
+                    class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+                  >
+                    Feature Branches (long-term work)
+                  </p>
+                  <div class="code-block-wrapper">
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs"
+                    ><code>feature/add-authentication
+feature/update-api
+fix/broken-login
+refactor/clean-up-code</code></pre>
+                  </div>
+                </div>
+
+                <div
+                  class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                >
+                  <p
+                    class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+                  >
+                    Session Branches (exploratory work)
+                  </p>
+                  <div class="code-block-wrapper">
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs"
+                    ><code>session/20251029-1045-add-firewall
+session/20251029-1430-fix-bug
+session/20251029-1600-update-docs</code></pre>
+                  </div>
+                  <p
+                    class="text-xs text-gray-600 dark:text-gray-400 mt-2 italic"
+                  >
+                    Format: session/YYYYMMDD-HHMM-description
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg"
+              >
+                <p
+                  class="text-amber-900 dark:text-amber-200 font-medium mb-2 flex items-center"
+                >
+                  🔧 Troubleshooting
+                </p>
+                <div class="space-y-3">
+                  <div>
+                    <p
+                      class="text-sm text-amber-800 dark:text-amber-300 font-medium"
+                    >
+                      Problem: Hook doesn't block commits
+                    </p>
+                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                      Check if hook is installed:
+                      <code
+                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                        >test -x .git/hooks/pre-commit && echo "✅ Installed"
+                        || echo "❌ Missing"</code
+                      >
+                    </p>
+                  </div>
+                  <div>
+                    <p
+                      class="text-sm text-amber-800 dark:text-amber-300 font-medium"
+                    >
+                      Problem: Permission denied error
+                    </p>
+                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                      Make hook executable:
+                      <code
+                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                        >chmod +x .git/hooks/pre-commit</code
+                      >
+                    </p>
+                  </div>
+                  <div>
+                    <p
+                      class="text-sm text-amber-800 dark:text-amber-300 font-medium"
+                    >
+                      Problem: Emergency fix needed on main
+                    </p>
+                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                      <strong>Better approach:</strong> Create hotfix branch:
+                      <code
+                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                        >git checkout -b hotfix/critical-fix</code
+                      >
+                    </p>
+                    <p
+                      class="text-xs text-amber-700 dark:text-amber-400 mt-1 italic"
+                    >
+                      Bypass (NOT recommended):
+                      <code
+                        class="bg-amber-100 dark:bg-amber-900 px-1 rounded"
+                        >git commit --no-verify</code
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg"
+              >
+                <p
+                  class="text-blue-900 dark:text-blue-200 font-medium mb-2 flex items-center"
+                >
+                  💡 How It Works
+                </p>
+                <ol
+                  class="list-decimal list-inside space-y-1 text-blue-800 dark:text-blue-300 text-sm"
+                >
+                  <li>
+                    Git automatically runs
+                    <code>.git/hooks/pre-commit</code> before every commit
+                  </li>
+                  <li>
+                    Hook reads current branch name with
+                    <code>git branch --show-current</code>
+                  </li>
+                  <li>
+                    If branch is <code>main</code> or <code>master</code>,
+                    hook exits with code 1 (blocks commit)
+                  </li>
+                  <li>
+                    Users can override with
+                    <code>--no-verify</code> flag if absolutely necessary
+                  </li>
+                </ol>
+              </div>
+            </div>
           </section>
 
           <!-- Claude Code Configuration & MCP -->
