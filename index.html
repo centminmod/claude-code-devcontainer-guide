@@ -623,6 +623,20 @@
               </li>
               <li>
                 <a
+                  href="#ai-cli-auth"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >AI CLI Authentication</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#github-cli-auth"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >GitHub CLI Authentication</a
+                >
+              </li>
+              <li>
+                <a
                   href="#troubleshooting"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Troubleshooting</a
@@ -6308,6 +6322,377 @@ vercel --version
                   <strong>Extension conflicts</strong>: If you experience
                   conflicts, you can disable individual extensions in VS Code
                   settings
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- AI CLI Authentication -->
+          <section
+            id="ai-cli-auth"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              🤖 AI CLI Authentication
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              Before using Claude Code, Codex CLI, or Gemini CLI within your dev
+              container, you need to authenticate each tool with its respective
+              API service. Authentication is a one-time setup that persists
+              across container rebuilds thanks to Docker volume mounts.
+            </p>
+
+            <!-- Why It Matters -->
+            <div
+              class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">
+                💡 Why AI CLI Authentication Matters:
+              </p>
+              <ul
+                class="list-disc list-inside text-purple-800 dark:text-purple-300 space-y-1 text-sm"
+              >
+                <li>
+                  Enables AI assistants to access their respective APIs for code
+                  generation and assistance
+                </li>
+                <li>
+                  Credentials are stored in
+                  <code>~/.config/</code> directories that persist via Docker
+                  volumes
+                </li>
+                <li>
+                  One-time setup per container - authentication survives
+                  container rebuilds
+                </li>
+                <li>
+                  Each CLI uses different authentication methods (OAuth, API
+                  keys) suited to their service
+                </li>
+              </ul>
+            </div>
+
+            <!-- Claude Code Authentication -->
+            <div class="mb-8">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
+                1. Claude Code Authentication
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
+                Claude Code uses the <code>/login</code> slash command to
+                authenticate with your Anthropic account. This opens a
+                browser-based OAuth flow where you can choose between using your
+                Claude subscription (Pro, Max, Team, Enterprise) or Anthropic
+                Console account for API usage billing.
+              </p>
+
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4">
+                <pre
+                  class="text-sm text-gray-800 dark:text-gray-200"
+                ><code>/login</code></pre>
+              </div>
+
+              <div class="mt-4 mb-4">
+                <img
+                  src="claude-code-login-1.png"
+                  alt="Claude Code login screen showing /login command with options to select Claude account with subscription or Anthropic Console account"
+                  class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                />
+                <p
+                  class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+                >
+                  Claude Code login screen: Select authentication method (Claude
+                  subscription or Console API billing)
+                </p>
+              </div>
+
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-4"
+              >
+                <p
+                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+                >
+                  ✅ Authentication Persistence
+                </p>
+                <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                  Claude Code stores authentication tokens in
+                  <code>~/.config/claude/</code>, which is mounted as a Docker
+                  volume. Your login persists across container rebuilds,
+                  eliminating the need to re-authenticate after
+                  <code>devcontainer.json</code> changes.
+                </p>
+              </div>
+
+              <div
+                class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 rounded-r-lg"
+              >
+                <p
+                  class="text-yellow-900 dark:text-yellow-200 font-medium mb-2"
+                >
+                  🔧 Troubleshooting:
+                </p>
+                <ul
+                  class="list-disc list-inside text-yellow-800 dark:text-yellow-300 space-y-1 text-sm"
+                >
+                  <li>
+                    If login fails, ensure Docker Desktop is forwarding ports
+                    correctly
+                  </li>
+                  <li>
+                    Browser may block popup - check for blocked popup
+                    notifications
+                  </li>
+                  <li>
+                    If already logged in elsewhere, you may need to sign out
+                    first
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Codex CLI Authentication -->
+            <div class="mb-8">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
+                2. Codex CLI Authentication
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
+                Codex CLI uses OpenAI's authentication system via the
+                <code>codex auth login</code> command. This starts a local
+                server and opens your browser to authenticate with your OpenAI
+                account. The CLI supports standard OpenAI authentication flow.
+              </p>
+
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4">
+                <pre
+                  class="text-sm text-gray-800 dark:text-gray-200"
+                ><code>codex auth login</code></pre>
+              </div>
+
+              <div class="mt-4 mb-4">
+                <img
+                  src="codex-cli-login-1.png"
+                  alt="Codex CLI authentication screen showing local login server on localhost:1455 with OpenAI OAuth URL"
+                  class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                />
+                <p
+                  class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+                >
+                  Codex CLI authentication: Local server starts on localhost and
+                  opens OpenAI OAuth flow
+                </p>
+              </div>
+
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-4"
+              >
+                <p
+                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+                >
+                  ✅ Authentication Persistence
+                </p>
+                <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                  Codex CLI stores OAuth tokens in
+                  <code>~/.config/codex/</code>, mounted as a Docker volume.
+                  After initial authentication, the CLI maintains session across
+                  container rebuilds automatically.
+                </p>
+              </div>
+
+              <div
+                class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 rounded-r-lg"
+              >
+                <p
+                  class="text-yellow-900 dark:text-yellow-200 font-medium mb-2"
+                >
+                  🔧 Troubleshooting:
+                </p>
+                <ul
+                  class="list-disc list-inside text-yellow-800 dark:text-yellow-300 space-y-1 text-sm"
+                >
+                  <li>
+                    Browser must be able to access localhost:1455 - check
+                    firewall settings
+                  </li>
+                  <li>
+                    If authentication fails, try clearing
+                    <code>~/.config/codex/</code> and re-authenticating
+                  </li>
+                  <li>
+                    Port forwarding may need to be configured in
+                    <code>devcontainer.json</code> for remote development
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Gemini CLI Authentication -->
+            <div class="mb-8">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
+                3. Gemini CLI Authentication
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
+                Gemini CLI offers multiple authentication options via the
+                <code>/auth</code> slash command. While OAuth with Google is
+                available, using an API key is the
+                <strong>recommended approach</strong> for dev container
+                environments as it provides more reliable authentication without
+                browser dependencies.
+              </p>
+
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4">
+                <pre
+                  class="text-sm text-gray-800 dark:text-gray-200"
+                ><code>/auth</code></pre>
+              </div>
+
+              <div class="mt-4 mb-4">
+                <img
+                  src="gemini-cli-login-1.png"
+                  alt="Gemini CLI authentication screen showing /auth command with options: Login with Google, Use Gemini API Key, or Vertex AI"
+                  class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                />
+                <p
+                  class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+                >
+                  Gemini CLI authentication: Choose between Google OAuth, API
+                  Key (recommended), or Vertex AI
+                </p>
+              </div>
+
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mb-4"
+              >
+                <p
+                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+                >
+                  ✅ Authentication Persistence
+                </p>
+                <p
+                  class="text-md-primary-800 dark:text-md-primary-300 text-sm mb-2"
+                >
+                  Gemini CLI stores API keys and OAuth tokens in
+                  <code>~/.config/gemini/</code>, mounted as a Docker volume.
+                  Configuration persists across container rebuilds.
+                </p>
+                <p class="text-md-primary-800 dark:text-md-primary-300 text-sm">
+                  <strong>API Key Recommendation:</strong> Select "Use Gemini
+                  API Key" option for most reliable container experience. Get
+                  your API key from
+                  <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline hover:text-md-primary-600"
+                    >Google AI Studio</a
+                  >.
+                </p>
+              </div>
+
+              <div
+                class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 rounded-r-lg"
+              >
+                <p
+                  class="text-yellow-900 dark:text-yellow-200 font-medium mb-2"
+                >
+                  🔧 Troubleshooting:
+                </p>
+                <ul
+                  class="list-disc list-inside text-yellow-800 dark:text-yellow-300 space-y-1 text-sm"
+                >
+                  <li>
+                    If OAuth login fails, switch to API key authentication
+                    method
+                  </li>
+                  <li>
+                    API keys can be created and managed at
+                    <a
+                      href="https://aistudio.google.com/app/apikey"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline hover:text-yellow-600"
+                      >Google AI Studio</a
+                    >
+                  </li>
+                  <li>
+                    Verify API key has necessary permissions for Gemini models
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Security Note -->
+            <div
+              class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p
+                class="text-md-error-900 dark:text-md-error-200 font-medium mb-2"
+              >
+                🔒 Security Note:
+              </p>
+              <ul
+                class="list-disc list-inside text-md-error-800 dark:text-md-error-300 space-y-1 text-sm"
+              >
+                <li>
+                  All credentials persist in
+                  <code>/home/node/.config/</code> directories mounted as Docker
+                  volumes
+                </li>
+                <li>
+                  Volumes survive container rebuilds but are deleted if you
+                  remove the container completely
+                </li>
+                <li>
+                  Never commit <code>.config/</code> directories or API keys to
+                  git repositories
+                </li>
+                <li>
+                  Use <code>.gitignore</code> to exclude sensitive configuration
+                  files
+                </li>
+                <li>
+                  For team environments, use environment variables or secret
+                  management tools
+                </li>
+              </ul>
+            </div>
+
+            <!-- Best Practices -->
+            <div
+              class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p
+                class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+              >
+                ✨ Best Practices:
+              </p>
+              <ul
+                class="list-disc list-inside text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1 text-sm"
+              >
+                <li>
+                  <strong>Prefer API keys for Gemini:</strong> More reliable
+                  than OAuth in containerized environments
+                </li>
+                <li>
+                  <strong>Verify authentication after rebuilds:</strong> Quick
+                  test with each CLI ensures credentials persisted correctly
+                </li>
+                <li>
+                  <strong>Document required credentials:</strong> Update your
+                  project README with authentication requirements
+                </li>
+                <li>
+                  <strong>Use named volumes:</strong> Explicitly name your
+                  config volumes in <code>devcontainer.json</code> for easier
+                  management
+                </li>
+                <li>
+                  <strong>Backup important configurations:</strong> Export API
+                  keys to secure password manager before major container changes
                 </li>
               </ul>
             </div>
