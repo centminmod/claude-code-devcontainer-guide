@@ -637,6 +637,13 @@
               </li>
               <li>
                 <a
+                  href="#examples"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >Examples</a
+                >
+              </li>
+              <li>
+                <a
                   href="#troubleshooting"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Troubleshooting</a
@@ -6807,6 +6814,198 @@ vercel --version
                 for alternative authentication methods, troubleshooting, and
                 security best practices.
               </p>
+            </div>
+          </section>
+
+          <!-- Examples -->
+          <section
+            id="examples"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              📷 Examples: Multi-AI Collaboration
+            </h2>
+
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              This example demonstrates the power of running multiple AI
+              assistants (Claude Code, OpenAI Codex CLI, and Google Gemini CLI)
+              within a single dev container. Using a custom AI cross-verifier
+              skill, we can leverage each model's unique strengths for
+              comprehensive code analysis and evaluation.
+            </p>
+
+            <div
+              class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p
+                class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+              >
+                🤖 AI Cross Verifier Skill:
+              </p>
+              <p class="text-md-tertiary-800 dark:text-md-tertiary-300 text-sm">
+                The AI Cross Verifier skill enables Claude to coordinate with
+                OpenAI Codex and Google Gemini CLI to provide independent code
+                reviews, plan validation, and comparative analysis for
+                cross-verification of technical decisions.
+              </p>
+            </div>
+
+            <div
+              class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p class="text-purple-900 dark:text-purple-200 font-medium mb-2">
+                💡 What This Demonstrates:
+              </p>
+              <ul
+                class="list-disc list-inside text-purple-800 dark:text-purple-300 space-y-1 text-sm"
+              >
+                <li>
+                  <strong>Multi-AI orchestration</strong>: Claude coordinates
+                  with Codex and Gemini CLIs for cross-verification
+                </li>
+                <li>
+                  <strong>Unified environment</strong>: All three AI assistants
+                  working seamlessly in one container
+                </li>
+                <li>
+                  <strong>Custom skills</strong>: AI cross-verifier skill
+                  automates multi-model evaluation workflows
+                </li>
+                <li>
+                  <strong>Real-world task</strong>: Analyzing and summarizing
+                  the llms.txt documentation file
+                </li>
+              </ul>
+            </div>
+
+            <h3
+              class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white"
+            >
+              Scenario: llms.txt Summarization & Cross-Evaluation
+            </h3>
+
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              In this workflow, we ask Claude Code to summarize the llms.txt
+              file and evaluate responses from both Codex CLI and Gemini CLI.
+              This showcases how the AI cross-verifier skill enables
+              sophisticated multi-model comparisons with a single command.
+            </p>
+
+            <!-- Screenshot 1: Initial Request -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-1.png"
+                alt="Claude Code receiving request to summarize llms.txt file and coordinate with other AI models"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 1: Initial request to Claude to summarize llms.txt and
+                compare with other AI models
+              </p>
+            </div>
+
+            <!-- Screenshot 2: Codex CLI Invocation -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-2.png"
+                alt="Claude Code invoking Codex CLI to get OpenAI's perspective on the llms.txt summary"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 2: Claude invokes Codex CLI to get OpenAI's analysis
+              </p>
+            </div>
+
+            <!-- Screenshot 3: Gemini CLI Invocation -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-3.png"
+                alt="Claude Code invoking Gemini CLI to get Google's perspective on the llms.txt summary"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 3: Claude invokes Gemini CLI to get Google's analysis
+              </p>
+            </div>
+
+            <!-- Screenshot 4: Claude's Analysis Begins -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-4.png"
+                alt="Claude Code analyzing and comparing the responses from Codex and Gemini"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 4: Claude analyzes responses from both Codex and Gemini
+              </p>
+            </div>
+
+            <!-- Screenshot 5: Detailed Comparison -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-5.png"
+                alt="Claude providing detailed comparison of each model's strengths and approach to the task"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 5: Detailed comparison highlighting each model's unique
+                strengths
+              </p>
+            </div>
+
+            <!-- Screenshot 6: Final Summary -->
+            <div class="mt-6 mb-6">
+              <img
+                src="screenshot-multi-ai-dev-container-demo-6.png"
+                alt="Claude's final summary and recommendations based on multi-model evaluation"
+                class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+              />
+              <p
+                class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
+              >
+                Step 6: Claude context usage after session
+              </p>
+            </div>
+
+            <div
+              class="bg-md-primary-50 dark:bg-md-primary-900/20 border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-4 mt-6"
+            >
+              <p
+                class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+              >
+                🎯 Key Takeaways:
+              </p>
+              <ul
+                class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm"
+              >
+                <li>
+                  <strong>Seamless integration</strong>: All three AI CLIs work
+                  together without conflicts or manual switching
+                </li>
+                <li>
+                  <strong>Automatic orchestration</strong>: AI cross-verifier
+                  skill handles the coordination logic
+                </li>
+                <li>
+                  <strong>Complementary insights</strong>: Each model
+                  contributes unique perspectives (Claude for reasoning, Codex
+                  for code focus, Gemini for multimodal understanding)
+                </li>
+                <li>
+                  <strong>Production-ready setup</strong>: Authentication
+                  persists, volumes maintain state, firewall ensures security
+                </li>
+              </ul>
             </div>
           </section>
 
