@@ -3172,8 +3172,8 @@ if [ ! -f "$MCP_FILE" ]; then
         cp "$MCP_TEMPLATE" "$MCP_FILE"
         chown node:node "$MCP_FILE"
         echo "✓ MCP servers configured:"
-        echo "  - context7 (https://mcp.context7.com/sse)"
-        echo "  - cf-docs (https://docs.mcp.cloudflare.com/sse)"
+        echo "  - context7 (npx @upstash/context7-mcp with API key)"
+        echo "  - cf-docs (npx mcp-remote with OAuth)"
     else
         echo "Warning: MCP template not found at $MCP_TEMPLATE"
     fi
@@ -3392,8 +3392,8 @@ echo "Claude Code configuration complete"</code></pre>
                   3. Create mcp.json.template
                 </h4>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  MCP configuration with both SSE (remote) and stdio (local)
-                  transports:
+                  MCP configuration with stdio transport using npx for package
+                  execution:
                 </p>
                 <div class="code-block-wrapper">
                   <button
@@ -3407,16 +3407,15 @@ echo "Claude Code configuration complete"</code></pre>
                   ><code class="language-json">{
   "mcpServers": {
     "context7": {
-      "transport": {
-        "type": "sse",
-        "url": "https://mcp.context7.com/sse"
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
       }
     },
     "cf-docs": {
-      "transport": {
-        "type": "sse",
-        "url": "https://docs.mcp.cloudflare.com/sse"
-      }
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
     },
     "chrome-devtools": {
       "command": "npx",

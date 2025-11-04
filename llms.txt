@@ -916,16 +916,15 @@ echo "[YES] Git hooks installed (blocks main/master commits)"
 {
   "mcpServers": {
     "context7": {
-      "transport": {
-        "type": "sse",
-        "url": "https://mcp.context7.io/sse"
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
       }
     },
     "cf-docs": {
-      "transport": {
-        "type": "sse",
-        "url": "https://mcp-server-cloudflare-docs.taubyte-services.workers.dev/sse"
-      }
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
     },
     "chrome-devtools": {
       "command": "npx",
@@ -2638,10 +2637,15 @@ Let me update your configuration...
 {
  "mcpServers": {
  "context7": {
- "transport": {"type": "sse", "url": "https://mcp.context7.com/sse"}
+ "command": "npx",
+ "args": ["-y", "@upstash/context7-mcp"],
+ "env": {
+ "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+ }
  },
  "cf-docs": {
- "transport": {"type": "sse", "url": "https://docs.mcp.cloudflare.com/sse"}
+ "command": "npx",
+ "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
  },
  "chrome-devtools": {
  "command": "npx",
@@ -5162,52 +5166,35 @@ View MCP connection logs:
 
 #### Context7 - Library Documentation
 
-> **Transport Status (Oct 27, 2025)**: Context7 supports two methods:
-> 1. **SSE transport** (public, no auth): `https://mcp.context7.com/sse`
-> 2. **stdio with mcp-remote** (OAuth secured): `https://mcp.context7.com/mcp`
+> **Configuration Note (Updated)**: Context7 now requires API key authentication via the `@upstash/context7-mcp` package. Get your API key from [context7.com/dashboard](https://context7.com/dashboard) and set it in your `.env` file.
 
-**Method 1: SSE Transport (Simple)**
+**Recommended Method: npx with API Key**
 
-```bash
-# Add via CLI
-claude mcp add --transport sse context7 https://mcp.context7.com/sse
-
-# Or in mcp.json
-{
- "mcpServers": {
- "context7": {
- "transport": {
- "type": "sse",
- "url": "https://mcp.context7.com/sse"
- }
- }
- }
-}
-```
-
-**Method 2: mcp-remote (OAuth Secured, Recommended)**
-
-Provides access to 1000+ library documentation sources with OAuth authentication.
+Provides access to 1000+ library documentation sources with API key authentication.
 
 ```bash
 # Add via CLI
-claude mcp add --transport stdio context7 -- npx mcp-remote https://mcp.context7.com/mcp
+claude mcp add --transport stdio context7 -- npx -y @upstash/context7-mcp
 
-# Or in mcp.json
+# Or in mcp.json (recommended for devcontainers)
 {
  "mcpServers": {
  "context7": {
  "command": "npx",
- "args": ["mcp-remote", "https://mcp.context7.com/mcp"],
- "transport": {
- "type": "stdio"
+ "args": ["-y", "@upstash/context7-mcp"],
+ "env": {
+ "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
  }
  }
  }
 }
 ```
 
-**First use**: Opens browser for OAuth authentication. Subsequent uses are automatic.
+**Setup**:
+1. Create account at [context7.com](https://context7.com)
+2. Get API key from dashboard
+3. Add to `.env` file: `CONTEXT7_API_KEY=ctx7sk-...`
+4. Configure in mcp.json as shown above
 
 **Testing both methods**: Use `.devcontainer/switch-mcp.sh` script to compare SSE vs mcp-remote.
 
@@ -5215,17 +5202,34 @@ claude mcp add --transport stdio context7 -- npx mcp-remote https://mcp.context7
 
 #### Cloudflare Docs - Cloudflare Product Documentation
 
-> **Transport Status (Oct 27, 2025)**: Cloudflare Docs supports two methods:
-> 1. **SSE transport** (public, no auth): `https://docs.mcp.cloudflare.com/sse`
-> 2. **stdio with mcp-remote** (OAuth secured): `https://docs.mcp.cloudflare.com/mcp`
+> **Configuration Note**: Cloudflare Docs MCP server uses the `mcp-remote` package for stdio transport with OAuth authentication.
 
-**Method 1: SSE Transport (Simple)**
+**Recommended Method: npx with mcp-remote**
+
+Provides `search_cloudflare_documentation` tool with OAuth authentication.
 
 ```bash
 # Add via CLI
-claude mcp add --transport sse cf-docs https://docs.mcp.cloudflare.com/sse
+claude mcp add --transport stdio cf-docs -- npx mcp-remote https://docs.mcp.cloudflare.com/mcp
 
-# Or in mcp.json
+# Or in mcp.json (recommended for devcontainers)
+{
+ "mcpServers": {
+ "cf-docs": {
+ "command": "npx",
+ "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
+ }
+ }
+}
+```
+
+**First use**: Opens browser for OAuth authentication. Subsequent uses are automatic.
+
+**Alternative: SSE Transport (Public, No Auth)**
+
+For simple use cases without authentication:
+
+```json
 {
  "mcpServers": {
  "cf-docs": {
@@ -5237,30 +5241,6 @@ claude mcp add --transport sse cf-docs https://docs.mcp.cloudflare.com/sse
  }
 }
 ```
-
-**Method 2: mcp-remote (OAuth Secured, Recommended)**
-
-Provides `search_cloudflare_documentation` tool with OAuth authentication.
-
-```bash
-# Install mcp-remote wrapper
-npm install -g mcp-remote
-
-# Add to mcp.json (cannot use CLI for this syntax)
-{
- "mcpServers": {
- "cf-docs": {
- "command": "npx",
- "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
- "transport": {
- "type": "stdio"
- }
- }
- }
-}
-```
-
-**First use**: Opens browser for OAuth authentication. Subsequent uses are automatic.
 
 **Testing both methods**: Use `.devcontainer/switch-mcp.sh` script to compare SSE vs mcp-remote.
 
@@ -5303,16 +5283,15 @@ Create `.devcontainer/mcp.json.template`:
 {
  "mcpServers": {
  "context7": {
- "transport": {
- "type": "sse",
- "url": "https://mcp.context7.com/sse"
+ "command": "npx",
+ "args": ["-y", "@upstash/context7-mcp"],
+ "env": {
+ "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
  }
  },
  "cf-docs": {
- "transport": {
- "type": "sse",
- "url": "https://docs.mcp.cloudflare.com/sse"
- }
+ "command": "npx",
+ "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"]
  }
  }
 }
@@ -5497,9 +5476,10 @@ MCP servers can cache responses to reduce latency:
 {
  "mcpServers": {
  "context7": {
- "transport": {
- "type": "sse",
- "url": "https://mcp.context7.com/sse"
+ "command": "npx",
+ "args": ["-y", "@upstash/context7-mcp"],
+ "env": {
+ "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
  },
  "cacheTimeout": 3600
  }
