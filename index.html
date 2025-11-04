@@ -3239,39 +3239,19 @@ echo "Claude Code configuration complete"</code></pre>
     "BASH_MAX_TIMEOUT_MS": "600000",
     "MAX_THINKING_TOKENS": "8192"
   },
-  "includeCoAuthoredBy": false,
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://mcp.context7.com/mcp"],
-      "transport": {
-        "type": "stdio"
-      }
-    },
-    "cf-docs": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
-      "transport": {
-        "type": "stdio"
-      }
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "chrome-devtools-mcp@latest",
-        "--executablePath=/usr/bin/chromium",
-        "--headless",
-        "--chromeArg=--no-sandbox",
-        "--chromeArg=--disable-setuid-sandbox",
-        "--chromeArg=--disable-dev-shm-usage"
-      ],
-      "transport": {
-        "type": "stdio"
-      }
-    }
-  }
+  "includeCoAuthoredBy": false
 }</code></pre>
+                </div>
+                <div
+                  class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-3 rounded-r-lg"
+                >
+                  <p
+                    class="text-md-primary-900 dark:text-md-primary-200 text-sm"
+                  >
+                    <strong>📝 Note:</strong> MCP servers are now configured separately in
+                    <code class="bg-md-primary-100 dark:bg-md-primary-800 px-1 py-0.5 rounded">.mcp.json</code>
+                    at the project root (see section 3 below).
+                  </p>
                 </div>
 
                 <h5
@@ -3309,39 +3289,19 @@ echo "Claude Code configuration complete"</code></pre>
     "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector:4317",
     "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment=devcontainer,service.name=claude-code"
   },
-  "includeCoAuthoredBy": false,
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://mcp.context7.com/mcp"],
-      "transport": {
-        "type": "stdio"
-      }
-    },
-    "cf-docs": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/mcp"],
-      "transport": {
-        "type": "stdio"
-      }
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "chrome-devtools-mcp@latest",
-        "--executablePath=/usr/bin/chromium",
-        "--headless",
-        "--chromeArg=--no-sandbox",
-        "--chromeArg=--disable-setuid-sandbox",
-        "--chromeArg=--disable-dev-shm-usage"
-      ],
-      "transport": {
-        "type": "stdio"
-      }
-    }
-  }
+  "includeCoAuthoredBy": false
 }</code></pre>
+                </div>
+                <div
+                  class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mt-3 rounded-r-lg"
+                >
+                  <p
+                    class="text-md-primary-900 dark:text-md-primary-200 text-sm"
+                  >
+                    <strong>📝 Note:</strong> MCP servers are now configured separately in
+                    <code class="bg-md-primary-100 dark:bg-md-primary-800 px-1 py-0.5 rounded">.mcp.json</code>
+                    at the project root (see section 3 below).
+                  </p>
                 </div>
                 <div
                   class="bg-md-secondary-50 dark:bg-md-secondary-900/20 border-l-4 border-md-secondary-500 p-4 mt-4 rounded-r-lg"

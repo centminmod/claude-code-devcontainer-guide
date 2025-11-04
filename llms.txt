@@ -4950,14 +4950,11 @@ Add to `~/.claude/settings.json` or `.devcontainer/settings.json.template`:
  "BASH_DEFAULT_TIMEOUT_MS": "300000",
  "BASH_MAX_TIMEOUT_MS": "600000",
  "MAX_THINKING_TOKENS": "8192"
- },
- "mcpServers": {
- "context7": {
- "transport": {"type": "sse", "url": "https://mcp.context7.com/sse"}
- }
  }
 }
 ```
+
+> **📝 Note:** MCP servers are now configured separately in `.mcp.json` at the project root (not in settings.json). See the [MCP Server Setup](#mcp-server-setup-essential-for-claude-code) section for complete configuration details.
 
 **Init script to apply settings** (`.devcontainer/init-claude-config.sh`):
 ```bash
