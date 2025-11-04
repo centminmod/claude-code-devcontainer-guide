@@ -822,7 +822,7 @@
 │  │    (Isolated workspace)           │ │
 │  │                                   │ │
 │  │  * Node.js 22                     │ │
-│  │  * Python 3.11                    │ │
+│  │  * Python 3.14 (via uv)           │ │
 │  │  * Git, Claude Code, tools        │ │
 │  │  * Your project files             │ │
 │  └───────────────────────────────────┘ │
@@ -947,7 +947,7 @@
                     >
                     <span class="text-gray-700 dark:text-gray-300"
                       ><strong>Multiple Environments:</strong> Work on Python
-                      3.9 and Python 3.11 projects simultaneously without
+                      3.9 and Python 3.14 projects simultaneously without
                       conflicts</span
                     >
                   </li>
@@ -1258,7 +1258,7 @@ code --version</code></pre>
                 <ul
                   class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1"
                 >
-                  <li>Specifies base image (e.g., Node.js 22, Python 3.11)</li>
+                  <li>Specifies base image (e.g., Node.js 22, Python 3.14)</li>
                   <li>Installs system packages and tools</li>
                   <li>Sets up users and permissions</li>
                   <li>Configures the shell environment</li>
@@ -4438,15 +4438,16 @@ npm run dev  # or npm start</code></pre>
     "--sysctl=net.ipv6.conf.lo.disable_ipv6=1"
   ],
   "forwardPorts": [5000, 8000],
-  "postCreateCommand": "pip install -r requirements.txt",
-  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
-  "remoteUser": "vscode",
+  "postCreateCommand": "pip install -r requirements.txt && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-python.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "remoteUser": "node",
   "mounts": [
     "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-    "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
-    "source=gemini-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
-    "source=ghub-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume"
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
+    "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
+    "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -4512,8 +4513,8 @@ npm run dev  # or npm start</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-dockerfile"># Start from Python 3.11 slim image (smaller size)
-FROM python:3.11-slim
+                  ><code class="language-dockerfile"># Start from Node.js 22 base (modern approach with Python 3.14 via uv)
+FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
 
 # Install system dependencies and firewall tools
 RUN apt-get update && apt-get install -y \
@@ -4526,10 +4527,20 @@ RUN apt-get update && apt-get install -y \
     aggregate \
     jq \
     sudo \
+    python3.11 \
+    python3.11-dev \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN useradd -ms /bin/bash vscode
+# Install uv (fast Python package manager)
+# uv installer places binary at /home/node/.local/bin/uv
+USER node
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/node/.bashrc
+ENV PATH="/home/node/.local/bin:$PATH"
+
+# Switch back to root for system configuration
+USER root
 
 # Install Claude Code CLI
 RUN curl -fsSL https://claude.ai/install.sh | bash
@@ -4540,32 +4551,32 @@ RUN mkdir -p /usr/local/share/claude-defaults
 # Copy initialization scripts and templates
 COPY init-firewall.sh /usr/local/bin/
 COPY init-claude-config.sh /usr/local/bin/
-COPY --chown=vscode:vscode settings.json.template /usr/local/share/claude-defaults/settings.json
-COPY --chown=vscode:vscode mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY init-python.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
 
-# Set permissions and configure sudoers for both scripts
+# Set permissions and configure sudoers for scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
     chmod +x /usr/local/bin/init-claude-config.sh && \
-    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/vscode-firewall && \
-    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/vscode-claude-config && \
-    chmod 0440 /etc/sudoers.d/vscode-firewall && \
-    chmod 0440 /etc/sudoers.d/vscode-claude-config
+    chmod +x /usr/local/bin/init-python.sh && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-python.sh" > /etc/sudoers.d/node-python && \
+    chmod 0440 /etc/sudoers.d/node-firewall && \
+    chmod 0440 /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-python
 
 # Set working directory
-WORKDIR /workspace
-
-# Install Python dev tools globally
-RUN pip install --no-cache-dir \
-    black \
-    pylint \
-    pytest \
-    ipython
+WORKDIR /workspaces
 
 # Switch to non-root user
-USER vscode
+USER node
 
 # Set Python to unbuffered mode (better for logs)
-ENV PYTHONUNBUFFERED=1</code></pre>
+ENV PYTHONUNBUFFERED=1
+
+# NOTE: Python 3.14 is installed via init-python.sh in postCreateCommand
+# This ensures installation persists in /home/node/.local volume</code></pre>
                 </div>
                 <div
                   class="mt-4 bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4"
@@ -4579,16 +4590,24 @@ ENV PYTHONUNBUFFERED=1</code></pre>
                     class="text-sm text-purple-800 dark:text-purple-300 space-y-1"
                   >
                     <li>
-                      <strong>python:3.11-slim:</strong> Smaller base image
-                      compared to full Python
+                      <strong>Node.js 22 base image:</strong> Modern approach
+                      combining Node.js and Python 3.14 via uv
+                    </li>
+                    <li>
+                      <strong>Python 3.11 system package:</strong> Installed for
+                      node-gyp compatibility
+                    </li>
+                    <li>
+                      <strong>uv package manager:</strong> Fast Python package
+                      manager for Python 3.14 installation
                     </li>
                     <li>
                       <strong>build-essential:</strong> Needed for packages that
                       compile C extensions
                     </li>
                     <li>
-                      <strong>pip install:</strong> Pre-installs common Python
-                      dev tools
+                      <strong>init-python.sh:</strong> Installs Python 3.14 during
+                      postCreateCommand
                     </li>
                     <li>
                       <strong>PYTHONUNBUFFERED=1:</strong> Makes print() output
@@ -4678,7 +4697,7 @@ pydantic==2.5.0</code></pre>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
                   ><code class="language-bash"># Check Python version
-python --version  # Should show Python 3.11.x
+python --version  # Should show Python 3.14.x
 
 # Check pip version
 pip --version
@@ -4812,17 +4831,18 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
     "--sysctl=net.ipv6.conf.lo.disable_ipv6=1"
   ],
   "forwardPorts": [5000, 8000, 8888],
-  "postCreateCommand": "uv pip install -r requirements.txt",
-  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-firewall.sh",
-  "remoteUser": "vscode",
+  "postCreateCommand": "uv pip install -r requirements.txt && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-python.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "remoteUser": "node",
   "mounts": [
     "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-    "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
-    "source=gemini-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
-    "source=ghub-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume",
-    "source=cargo-${devcontainerId},target=/home/vscode/.cargo,type=volume",
-    "source=bun-${devcontainerId},target=/home/vscode/.bun,type=volume"
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
+    "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
+    "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
+    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
+    "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume"
   ]
 }</code></pre>
                 </div>
@@ -4912,8 +4932,8 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-dockerfile"># Start from Python 3.11 slim image
-FROM python:3.11-slim
+                  ><code class="language-dockerfile"># Start from Node.js 22 base (modern approach with Python 3.14 via uv)
+FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
 
 # Install extended system dependencies (organized by category)
 RUN apt-get update && apt-get install -y \
@@ -4967,6 +4987,10 @@ RUN apt-get update && apt-get install -y \
     nano \
     # Locales for proper encoding
     locales \
+    # Python 3.11 (system Python for node-gyp compatibility)
+    python3.11 \
+    python3.11-dev \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up locale (prevents encoding issues)
@@ -4976,8 +5000,7 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
-# Create non-root user
-RUN useradd -ms /bin/bash vscode
+# NOTE: Using 'node' user from base image (no need to create vscode user)
 
 # Install Claude Code CLI
 RUN curl -fsSL https://claude.ai/install.sh | bash
@@ -4988,19 +5011,23 @@ RUN mkdir -p /usr/local/share/claude-defaults
 # Copy initialization scripts and templates
 COPY init-firewall.sh /usr/local/bin/
 COPY init-claude-config.sh /usr/local/bin/
-COPY --chown=vscode:vscode settings.json.template /usr/local/share/claude-defaults/settings.json
-COPY --chown=vscode:vscode mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY init-python.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
 
-# Set permissions and configure sudoers for both scripts
+# Set permissions and configure sudoers for scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
     chmod +x /usr/local/bin/init-claude-config.sh && \
-    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/vscode-firewall && \
-    echo "vscode ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/vscode-claude-config && \
-    chmod 0440 /etc/sudoers.d/vscode-firewall && \
-    chmod 0440 /etc/sudoers.d/vscode-claude-config
+    chmod +x /usr/local/bin/init-python.sh && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-python.sh" > /etc/sudoers.d/node-python && \
+    chmod 0440 /etc/sudoers.d/node-firewall && \
+    chmod 0440 /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-python
 
 # Set working directory
-WORKDIR /workspace
+WORKDIR /workspaces
 
 # Install Python dev tools globally
 RUN pip install --no-cache-dir \
@@ -5012,22 +5039,26 @@ RUN pip install --no-cache-dir \
     jupyterlab
 
 # Switch to non-root user
-USER vscode
+USER node
 
 # Install uv (fast Python package manager + version management)
+# uv installer places binary at /home/node/.local/bin/uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/vscode/.bashrc
-ENV PATH="/home/vscode/.cargo/bin:$PATH"
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/node/.bashrc
+ENV PATH="/home/node/.local/bin:$PATH"
 
 # Install bun (for Python projects with JS/TS frontends)
 RUN curl -fsSL https://bun.sh/install | bash && \
-    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/vscode/.bashrc && \
-    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/vscode/.bashrc
-ENV BUN_INSTALL="/home/vscode/.bun"
+    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/node/.bashrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/node/.bashrc
+ENV BUN_INSTALL="/home/node/.bun"
 ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 # Set Python to unbuffered mode (better for logs)
-ENV PYTHONUNBUFFERED=1</code></pre>
+ENV PYTHONUNBUFFERED=1
+
+# NOTE: Python 3.14 is installed via init-python.sh in postCreateCommand
+# This ensures installation persists in /home/node/.local volume</code></pre>
                 </div>
                 <div
                   class="mt-4 bg-md-secondary-50 dark:bg-md-secondary-900/20 border border-md-secondary-200 dark:border-md-secondary-800 rounded-lg p-4"
@@ -5165,7 +5196,7 @@ uv pip list</code></pre>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
                   ><code class="language-bash"># Verify Python
-python --version  # Should show Python 3.11.x
+python --version  # Should show Python 3.14.x
 
 # Verify pip
 pip --version
@@ -5228,14 +5259,16 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     </button>
                     <pre
                       class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                    ><code class="language-dockerfile"># Python 3.11 (current LTS - default)
-FROM python:3.11-slim
+                    ><code class="language-dockerfile"># Python 3.14 (current default - managed via uv + init-python.sh)
+FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
+# NOTE: Python 3.14 installed in postCreateCommand via init-python.sh
+# System Python 3.11 included for node-gyp compatibility
 
-# Python 3.13 (latest stable)
+# Python 3.13 (alternative via Docker base image)
 FROM python:3.13-slim
 
-# Python 3.14 (newer, if available)
-FROM python:3.14-slim</code></pre>
+# Python 3.11 only (for legacy compatibility)
+FROM python:3.11-slim</code></pre>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
                     After changing, rebuild the container:
@@ -5323,18 +5356,123 @@ uv python pin 3.13</code></pre>
                   class="list-disc list-inside space-y-1 text-md-error-800 dark:text-md-error-300 text-sm"
                 >
                   <li>
-                    <strong>Python 3.11</strong>: Current LTS, most stable, best
-                    library compatibility
+                    <strong>Python 3.14</strong>: Current default in this
+                    devcontainer (via uv), latest features, managed by
+                    init-python.sh script
                   </li>
                   <li>
-                    <strong>Python 3.13</strong>: Latest stable release, newest
-                    features, good compatibility
+                    <strong>Python 3.11</strong>: System Python (included for
+                    node-gyp compatibility), LTS version, excellent library
+                    compatibility
                   </li>
                   <li>
-                    <strong>Python 3.14/3.15</strong>: Experimental/preview,
-                    testing only, not for production
+                    <strong>Python 3.13</strong>: Alternative stable release,
+                    good balance of features and compatibility
+                  </li>
+                  <li>
+                    <strong>Python 3.15+</strong>: Experimental/preview, testing
+                    only, not for production
                   </li>
                 </ul>
+              </div>
+
+              <!-- init-python.sh Documentation -->
+              <div class="mt-8 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  🐍 Python 3.14 Setup Script (init-python.sh)
+                </h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  This project uses a dedicated script to install Python 3.14 via uv during postCreateCommand.
+                  The script ensures reproducible Python setup and persists installation in the <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">/home/node/.local</code> volume:
+                </p>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash">#!/bin/bash
+set -e
+
+echo "=== Python 3.14 Setup ==="
+
+# Install Python 3.14 via uv
+echo "Installing Python 3.14..."
+/home/node/.local/bin/uv python install 3.14
+
+# Pin Python 3.14 for the project
+echo "Pinning Python 3.14..."
+cd /workspaces/claude-devcontainer
+/home/node/.local/bin/uv python pin 3.14
+
+# Get Python 3.14 path
+PYTHON314_PATH=$(/home/node/.local/bin/uv python find 3.14)
+echo "Python 3.14 installed at: $PYTHON314_PATH"
+
+# Create system symlink and update alternatives (requires sudo)
+sudo ln -sf "$PYTHON314_PATH" /usr/local/bin/python3.14
+sudo update-alternatives --install /usr/bin/python python /usr/local/bin/python3.14 100
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.14 100
+
+# Verify installation
+echo "Verifying Python installation..."
+python --version
+python3 --version
+echo ""
+echo "Available Python versions:"
+/home/node/.local/bin/uv python list
+
+echo "✅ Python 3.14 configured as default"</code></pre>
+                </div>
+                <div class="mt-4 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-4">
+                  <p class="text-sm text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2">
+                    ✅ Why use init-python.sh?
+                  </p>
+                  <ul class="text-sm text-md-tertiary-800 dark:text-md-tertiary-300 space-y-1">
+                    <li><strong>Runs during postCreateCommand:</strong> Executes after volume mounts, ensuring proper persistence</li>
+                    <li><strong>Volume persistence:</strong> Python 3.14 installation saved in <code class="bg-md-tertiary-100 dark:bg-md-tertiary-800 px-1 rounded">/home/node/.local</code> volume</li>
+                    <li><strong>System Python 3.11 retained:</strong> Keeps Python 3.11 for node-gyp compatibility</li>
+                    <li><strong>Reproducible setup:</strong> Same Python version across container rebuilds</li>
+                    <li><strong>update-alternatives integration:</strong> Sets Python 3.14 as default <code class="bg-md-tertiary-100 dark:bg-md-tertiary-800 px-1 rounded">python</code> command</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- .python-version Documentation -->
+              <div class="mt-6 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  📌 Project Python Version Pinning (.python-version)
+                </h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  This project uses a <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">.python-version</code> file to pin the Python version for the project:
+                </p>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code>3.14</code></pre>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+                  This file tells uv which Python version to use for the project. To switch versions:
+                </p>
+                <div class="code-block-wrapper mt-3">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-bash"># Change to Python 3.13
+echo "3.13" > .python-version
+uv python pin 3.13
+
+# Install the new version if not already installed
+uv python install 3.13</code></pre>
+                </div>
               </div>
             </div>
           </section>
@@ -5813,8 +5951,8 @@ npm run dev</code></pre>
     "--sysctl=net.ipv6.conf.lo.disable_ipv6=1"
   ],
   "forwardPorts": [3000, 5000, 8000],
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && (npm install || pip install -r requirements.txt || echo 'No dependencies to install')",
-  "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-codex-config.sh && sudo /usr/local/bin/init-firewall.sh",
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && (npm install || pip install -r requirements.txt || echo 'No dependencies to install') && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
     "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
@@ -6058,10 +6196,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "aws
 ENV PATH="/home/node/.local/bin:$PATH"
 
 # Install uv (fast Python package manager - 10-100x faster than pip)
+# uv installer places binary at /home/node/.local/bin/uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/node/.bashrc && \
-    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /home/node/.zshrc
-ENV PATH="/home/node/.cargo/bin:$PATH"
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/node/.bashrc && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/node/.zshrc
+# Note: .local/bin already in PATH via ENV declaration above
 
 # Install bun (fast JavaScript runtime for hybrid Python/JS projects)
 RUN curl -fsSL https://bun.sh/install | bash && \

@@ -549,7 +549,8 @@ Below is a complete, production-ready devcontainer configuration with all securi
     "source=gitconfig-${devcontainerId},target=/home/node/.gitconfig,type=volume",
     "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume"
   ],
-  "postStartCommand": "/bin/bash /home/node/.devcontainer/init-firewall.sh && /bin/bash /home/node/.devcontainer/init-claude-config.sh && /bin/bash /home/node/.devcontainer/init-codex-config.sh && /bin/bash /home/node/.devcontainer/setup-git-hooks.sh",
+  "postCreateCommand": "npm install -g npm@latest && npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh",
   "runArgs": [
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW",
@@ -563,10 +564,8 @@ Below is a complete, production-ready devcontainer configuration with all securi
 ```dockerfile
 FROM node:22
 
-# Switch to root for system package installation
-USER root
-
 # Install system dependencies and security tools
+# Note: python3 package provides Python 3.11 on Debian Bookworm (for node-gyp compatibility)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -575,52 +574,86 @@ RUN apt-get update && apt-get install -y \
     vim \
     sudo \
     iptables \
+    ipset \
     iputils-ping \
     dnsutils \
     net-tools \
     procps \
     ca-certificates \
+    build-essential \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    ripgrep \
+    fd-find \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
-# Install UV (Python package installer)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    mv /root/.local/bin/uv /usr/local/bin/uv
-
-# Install Bun (JavaScript runtime & package manager)
-RUN curl -fsSL https://bun.sh/install | bash && \
-    mv /root/.bun/bin/bun /usr/local/bin/bun
-
-# Install AWS CLI v2
-RUN cd /tmp && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
-    ./aws/install && \
-    rm -rf awscliv2.zip aws
-
-# Install GitHub CLI
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-    apt-get update && \
-    apt-get install -y gh && \
-    rm -rf /var/lib/apt/lists/*
+# Set up non-root user configuration
+RUN mkdir -p /home/node/.config/gh /home/node/.claude /home/node/.codex /home/node/.gemini \
+             /home/node/.npm-global /home/node/.local/bin /home/node/.aws /home/node/.wrangler /home/node/.vercel && \
+    chown -R node:node /home/node/.config /home/node/.claude /home/node/.codex /home/node/.gemini \
+                       /home/node/.npm-global /home/node/.local /home/node/.aws /home/node/.wrangler /home/node/.vercel
 
 # Switch to node user for user-level installations
 USER node
 
-# Install Multi-AI CLIs (Claude Code, OpenAI Codex, Google Gemini)
-RUN npm install -g @anthropic-ai/claude-code@latest \
-                   @openai/codex@latest \
-                   @google/gemini-cli@latest
+# Install AWS CLI v2 to volume-persisted location
+RUN cd /tmp && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install --install-dir /home/node/.local/aws-cli --bin-dir /home/node/.local/bin && \
+    rm -rf awscliv2.zip aws
 
-# Install Wrangler (Cloudflare CLI) and Vercel CLI
-RUN npm install -g wrangler@latest vercel@latest
+# Install uv (fast Python package manager + version management)
+# uv installer places binary at /home/node/.local/bin/uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/node/.bashrc
+ENV PATH="/home/node/.local/bin:$PATH"
 
-# Set up bash history persistence
-RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-    && mkdir -p /home/node/.bashrc.d \
-    && echo "$SNIPPET" > /home/node/.bashrc.d/history.bash \
-    && echo "for script in /home/node/.bashrc.d/*.bash; do source \$script; done" >> /home/node/.bashrc
+# Python 3.14 installation moved to init-python.sh (runs via postCreateCommand)
+# This ensures installation happens AFTER volume mounts, so it persists correctly
+# System Python 3.11 remains available for node-gyp compatibility
+
+# Install bun (fast JavaScript runtime)
+RUN curl -fsSL https://bun.sh/install | bash && \
+    echo 'export BUN_INSTALL="$HOME/.bun"' >> /home/node/.bashrc && \
+    echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> /home/node/.bashrc
+ENV BUN_INSTALL="/home/node/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
+
+# Switch to root for final setup (scripts, sudoers)
+USER root
+
+# Create directory for Claude Code and Codex defaults
+RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/codex-defaults
+
+# Copy initialization scripts and templates
+COPY init-firewall.sh /usr/local/bin/
+COPY init-claude-config.sh /usr/local/bin/
+COPY init-codex-config.sh /usr/local/bin/
+COPY init-python.sh /usr/local/bin/
+COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
+COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY --chown=node:node config.toml.template /usr/local/share/codex-defaults/config.toml
+
+# Set permissions and configure sudoers for init scripts
+RUN chmod +x /usr/local/bin/init-firewall.sh && \
+    chmod +x /usr/local/bin/init-claude-config.sh && \
+    chmod +x /usr/local/bin/init-codex-config.sh && \
+    chmod +x /usr/local/bin/init-python.sh && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-python.sh" > /etc/sudoers.d/node-python && \
+    chmod 0440 /etc/sudoers.d/node-firewall && \
+    chmod 0440 /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-codex-config && \
+    chmod 0440 /etc/sudoers.d/node-python
+
+# Switch back to node user for runtime
+USER node
 
 # Set working directory
 WORKDIR /workspaces
@@ -629,7 +662,79 @@ WORKDIR /workspaces
 CMD ["/bin/bash"]
 ```
 
-### File 3: `.devcontainer/init-firewall.sh`
+### File 3: `.devcontainer/init-python.sh`
+
+```bash
+#!/bin/bash
+set -e
+
+echo "=== Python 3.14 Setup ==="
+
+# Install Python 3.14 via uv
+echo "Installing Python 3.14..."
+/home/node/.local/bin/uv python install 3.14
+
+# Pin Python 3.14 for the project
+echo "Pinning Python 3.14..."
+cd /workspaces/claude-devcontainer
+/home/node/.local/bin/uv python pin 3.14
+
+# Get Python 3.14 path
+PYTHON314_PATH=$(/home/node/.local/bin/uv python find 3.14)
+echo "Python 3.14 installed at: $PYTHON314_PATH"
+
+# Create system symlink and update alternatives (requires sudo)
+sudo ln -sf "$PYTHON314_PATH" /usr/local/bin/python3.14
+sudo update-alternatives --install /usr/bin/python python /usr/local/bin/python3.14 100
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.14 100
+
+# Verify installation
+echo "Verifying Python installation..."
+python --version
+python3 --version
+echo ""
+echo "Available Python versions:"
+/home/node/.local/bin/uv python list
+
+echo "✅ Python 3.14 configured as default"
+```
+
+**Purpose**: Installs Python 3.14 via uv and sets it as the default Python version while preserving system Python 3.11.
+
+**Key Features**:
+- **Runs in postCreateCommand**: Executes after volume mounts, ensuring persistence
+- **Volume persistence**: Python 3.14 installation saved in `/home/node/.local` volume
+- **Dual Python setup**: Python 3.14 (default) + Python 3.11 (system, for node-gyp)
+- **update-alternatives**: Sets Python 3.14 as default `python` and `python3` commands
+- **Project pinning**: Creates `.python-version` file for reproducible builds
+
+**Why postCreateCommand timing matters**:
+- Container build runs BEFORE volumes mount
+- Installing Python during build would place files in ephemeral container layer
+- postCreateCommand runs AFTER volumes mount, ensuring files persist in `/home/node/.local` volume
+- This allows Python 3.14 to survive container rebuilds
+
+### File 4: `.devcontainer/.python-version`
+
+```
+3.14
+```
+
+**Purpose**: Pins Python version for uv and other Python version managers.
+
+**Usage**:
+```bash
+# uv automatically reads .python-version and uses Python 3.14
+uv python install  # Installs Python 3.14 (from .python-version)
+uv run python --version  # Uses Python 3.14
+
+# Change Python version
+echo "3.13" > .python-version
+uv python pin 3.13
+uv python install 3.13
+```
+
+### File 5: `.devcontainer/init-firewall.sh`
 
 ```bash
 #!/bin/bash
@@ -687,7 +792,7 @@ echo "[YES] Firewall configured (default-deny + allowlist)"
 sudo iptables -L -n -v
 ```
 
-### File 4: `.devcontainer/init-claude-config.sh`
+### File 6: `.devcontainer/init-claude-config.sh`
 
 ```bash
 #!/bin/bash
@@ -728,7 +833,7 @@ fi
 echo "[YES] Claude Code configuration complete"
 ```
 
-### File 5: `.devcontainer/init-codex-config.sh`
+### File 7: `.devcontainer/init-codex-config.sh`
 
 ```bash
 #!/bin/bash
@@ -758,7 +863,7 @@ fi
 echo "[YES] Codex configuration complete"
 ```
 
-### File 6: `.devcontainer/setup-git-hooks.sh`
+### File 8: `.devcontainer/setup-git-hooks.sh`
 
 ```bash
 #!/bin/bash
@@ -805,7 +910,7 @@ chmod +x "$PRE_COMMIT_HOOK"
 echo "[YES] Git hooks installed (blocks main/master commits)"
 ```
 
-### File 7: `.devcontainer/mcp.json.template`
+### File 9: `.devcontainer/mcp.json.template`
 
 ```json
 {
@@ -833,7 +938,7 @@ echo "[YES] Git hooks installed (blocks main/master commits)"
 }
 ```
 
-### File 8: `.devcontainer/config.toml.template`
+### File 10: `.devcontainer/config.toml.template`
 
 ```toml
 # OpenAI Codex configuration for container environments
@@ -864,8 +969,8 @@ enabled = false
 ### How to Use This Example
 
 **For AI Assistants:**
-1. Copy all 8 files above when user requests devcontainer setup
-2. Adjust Dockerfile base image based on user's tech stack (node:22, python:3.11, golang:1.21, etc.)
+1. Copy all 10 files above when user requests devcontainer setup
+2. Adjust Dockerfile base image based on user's tech stack (node:22 for Python 3.14 via uv, golang:1.21, etc.)
 3. Adjust Dockerfile RUN commands to install user's required tools
 4. Adjust firewall allowlist in init-firewall.sh for user's APIs
 5. Explain each file's purpose and customization points
@@ -887,7 +992,7 @@ enabled = false
 [YES] **Multi-AI**: Claude Code, OpenAI Codex, Google Gemini CLI
 [YES] **Git Safety**: Pre-commit hooks block main/master commits
 [YES] **Volume Persistence**: 11 volumes for configs (.claude, .codex, .gemini, .aws, .ssh, etc.)
-[YES] **Production Tools**: uv, bun, AWS CLI, gh, wrangler, vercel
+[YES] **Production Tools**: Python 3.14 (via uv), bun, AWS CLI, gh, wrangler, vercel
 [YES] **Codex Fix**: sandbox_mode = true in config.toml (required for containers)
 [YES] **Non-root User**: Runs as `node` user (security best practice)
 
@@ -902,11 +1007,11 @@ enabled = false
 ```
 User's primary language?
 ├─ JavaScript/TypeScript → node:22
-├─ Python → python:3.11-slim
+├─ Python → node:22 + uv for Python 3.14 (see Production Example)
 ├─ Go → golang:1.21
 ├─ Rust → rust:1.75
 ├─ Java → eclipse-temurin:17
-├─ Multi-language → node:22 + install others
+├─ Multi-language → node:22 + install others via uv/apt
 └─ Universal → mcr.microsoft.com/devcontainers/base:ubuntu
 ```
 
@@ -1325,16 +1430,20 @@ your-project/
  ```json
  {
  "features": {
- "ghcr.io/devcontainers/features/node:1": {
- "version": "20"
+ "ghcr.io/devcontainers/features/git:1": {
+ "version": "latest"
  },
- "ghcr.io/devcontainers/features/python:1": {
- "version": "3.11"
- },
- "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+ "ghcr.io/devcontainers/features/docker-in-docker:2": {
+ "version": "latest"
+ }
  }
  }
  ```
+
+ **Note on Python**: Use uv for Python installation instead of Python feature:
+ - Node.js feature is not needed (use `FROM node:22` base image)
+ - Python feature is not needed (use uv in Dockerfile + init-python.sh)
+ - See Production-Ready Complete Example for recommended Python 3.14 setup
 - **Schema**: https://containers.dev/implementors/json_reference/#general-properties
 - **Registry**: https://containers.dev/features
 - **Docs**: https://containers.dev/implementors/features/
@@ -2439,7 +2548,7 @@ Proceed? [Y]
 
 **Common Stacks** (Reference for Recommended Configs):
 - **Node.js/TypeScript**: `node:22` + eslint, prettier, Claude Code
-- **Python**: `python:3.11-slim` + pylint, black, ipykernel
+- **Python**: `node:22` + uv + Python 3.14 + pylint, black, ipykernel (see Production Example)
 - **Full-stack**: Docker Compose with app + database + cache
 - **Go**: `golang:1.21` + delve debugger
 - **Rust**: `rust:1.75` + rust-analyzer
@@ -2666,12 +2775,15 @@ Then I'll create a basic devcontainer.json...
 **Error**: `"ERROR: failed to solve: python:3.11-slim: not found"`
 **AI Response**:
 ```
-The base image tag is incorrect. Let me check Docker Hub for valid tags:
-- python:3.11-slim
-- python:3.11-alpine
-- python:3.11
+For Python projects, use node:22 + uv + Python 3.14 instead of python base images.
+See the Production-Ready Complete Example for the recommended approach.
 
-I'll update your Dockerfile with the correct tag...
+I'll update your Dockerfile to use:
+- Base: FROM node:22
+- Python: Installed via uv in postCreateCommand
+- Benefits: Faster package management, version flexibility, Node.js tools included
+
+This is the current best practice for Python devcontainers.
 ```
 
 **Error**: `"EACCES: permission denied, open '/workspaces/...'" `
@@ -2756,26 +2868,30 @@ WORKDIR /workspaces
  }
  },
  "forwardPorts": [8888],
- "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && pip install -r requirements.txt",
+ "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && uv python install 3.14 && uv pip install jupyterlab pandas numpy matplotlib",
  "remoteUser": "vscode",
  "mounts": [
  "source=claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
  "source=ghub-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume",
- "source=npm-global-${devcontainerId},target=/home/vscode/.npm-global,type=volume"
+ "source=npm-global-${devcontainerId},target=/home/vscode/.npm-global,type=volume",
+ "source=local-bin-${devcontainerId},target=/home/vscode/.local,type=volume"
  ]
 }
 ```
 
 **Dockerfile**:
 ```dockerfile
-FROM python:3.11-slim
-RUN apt-get update && apt-get install -y git curl && apt-get clean
-RUN useradd -m -s /bin/bash vscode
+FROM node:22
+RUN apt-get update && apt-get install -y git curl python3 python3-pip python3-venv && apt-get clean
+RUN useradd -m -s /bin/bash vscode && \
+ mkdir -p /home/vscode/.npm-global /home/vscode/.local && \
+ chown -R vscode:vscode /home/vscode/.npm-global /home/vscode/.local
 USER vscode
-RUN pip install --user jupyterlab pandas numpy matplotlib
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
- apt-get install -y nodejs
-# Claude Code installed via postCreateCommand (after npm-global volume mounts)
+# Install uv for Python package management
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/vscode/.local/bin:$PATH"
+# Python 3.14 + packages: uv python install 3.14 && uv pip install jupyterlab pandas numpy matplotlib
+# (Run in postCreateCommand after volumes mount for persistence)
 ENV NPM_CONFIG_PREFIX=/home/vscode/.npm-global
 ENV PATH=$PATH:/home/vscode/.npm-global/bin
 WORKDIR /workspaces
@@ -7620,8 +7736,12 @@ COPY --from=builder /app/dist /app
 # npm: Use npm ci (faster than npm install)
 RUN npm ci
 
-# Python: Use uv instead of pip
-RUN pip install uv && uv pip install -r requirements.txt
+# Python: Install uv via official installer (as node user)
+USER node
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/node/.local/bin:$PATH"
+# Python 3.14 + packages installed in postCreateCommand (after volumes mount):
+# /usr/local/bin/init-python.sh or: uv python install 3.14 && uv pip install -r requirements.txt
 ```
 
 **Always Upgrade npm to Latest** (October 2025 best practice):
