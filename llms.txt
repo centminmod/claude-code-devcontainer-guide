@@ -8,9 +8,6 @@
 > **Specification**: https://containers.dev/implementors/spec/
 > **JSON Reference**: https://containers.dev/implementors/json_reference/
 
-
----
-
 ## CRITICAL: For AI Assistants Reading This Document
 
 **Default Approach:** When users request devcontainer help, use the comprehensive Production-Ready Setup pattern as your starting point (includes security firewall, MCP servers, git hooks, complete volume persistence). This is the **recommended baseline** for all real projects.
@@ -537,18 +534,21 @@ Below is a complete, production-ready devcontainer configuration with all securi
     }
   },
   "mounts": [
-    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
-    "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume",
-    "source=bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-    "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume",
+    "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
+    "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
+    "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
     "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume",
-    "source=ssh-keys-${devcontainerId},target=/home/node/.ssh,type=volume",
-    "source=gitconfig-${devcontainerId},target=/home/node/.gitconfig,type=volume",
-    "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume"
+    "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume",
+    "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume",
+    "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
   ],
+  // Volume count: 12 (keep in sync with HTML guide)
+  // Critical: npm-global → .npm-global (NOT npm-cache → .npm)
   "postCreateCommand": "npm install -g npm@latest && npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh",
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh",
   "runArgs": [
@@ -853,7 +853,7 @@ mkdir -p "$CODEX_DIR"
 
 # Initialize Codex config from template if missing
 if [ ! -f "$CODEX_CONFIG" ] && [ -f "$CODEX_TEMPLATE" ]; then
-    echo "Creating config.toml from template (sandbox_mode = true)..."
+    echo "Creating config.toml from template (sandbox_mode = \"danger-full-access\")..."
     cp "$CODEX_TEMPLATE" "$CODEX_CONFIG"
     echo "[YES] Codex sandbox fix applied"
 else
@@ -941,14 +941,18 @@ echo "[YES] Git hooks installed (blocks main/master commits)"
 
 ```toml
 # OpenAI Codex configuration for container environments
-# Critical: sandbox_mode = true required for Codex to work in containers
+# Critical: sandbox_mode = "danger-full-access" required for Codex to work in containers
 
 [codex]
-sandbox_mode = true
+sandbox_mode = "danger-full-access"
 
 [telemetry]
 enabled = false
 ```
+
+> ⚠️ **CRITICAL**: Must use `"danger-full-access"` (string value), NOT `true` (boolean)
+> Docker's LinuxKit kernel doesn't support Landlock. OpenAI's official recommendation.
+> See: AI CLI Authentication section for detailed explanation.
 
 ### File 9 (Optional): `.devcontainer/settings.json.template`
 
@@ -992,7 +996,7 @@ enabled = false
 [YES] **Git Safety**: Pre-commit hooks block main/master commits
 [YES] **Volume Persistence**: 11 volumes for configs (.claude, .codex, .gemini, .aws, .ssh, etc.)
 [YES] **Production Tools**: Python 3.14 (via uv), bun, AWS CLI, gh, wrangler, vercel
-[YES] **Codex Fix**: sandbox_mode = true in config.toml (required for containers)
+[YES] **Codex Fix**: sandbox_mode = "danger-full-access" in config.toml (required for containers)
 [YES] **Non-root User**: Runs as `node` user (security best practice)
 
 ---
@@ -2838,8 +2842,7 @@ Let me update your configuration...
  "mounts": [
  "source=claude-${devcontainerId},target=/home/node/.claude,type=volume",
  "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
- "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
- "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume"
+ "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume"
  ]
 }
 ```
@@ -4767,7 +4770,7 @@ For AI development containers with Claude Code, Codex, Gemini:
 > - Install 3 CLIs: @anthropic-ai/claude-code, @openai/codex, @google/gemini-cli
 > - Configure init scripts: init-claude-config.sh, init-codex-config.sh
 > - Add 3 volume mounts: .claude, .codex, .gemini
-> - Codex requires sandbox fix (config.toml.template with sandbox_mode = true)
+> - Codex requires sandbox fix (config.toml.template with sandbox_mode = "danger-full-access")
 > - **Quick Start**: See [Complete Example (Copy This)](#complete-example-copy-this) for full 9-file implementation with all 3 AI CLIs
 
 > **Note**: This section provides detailed explanations. For a ready-to-copy complete example, jump to [Complete Example (Copy This)](#complete-example-copy-this).
@@ -7290,7 +7293,7 @@ Volumes ensure configuration persists across container rebuilds.
  "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume",
  "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
  "source=bashhistory-${devcontainerId},target=/commandhistory,type=volume",
- "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume"
+ "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume"
  ]
 }
 ```
@@ -7343,7 +7346,7 @@ Volumes ensure configuration persists across container rebuilds.
  "source=bashhistory-${devcontainerId},target=/commandhistory,type=volume",
 
  // Package manager caches (speeds up rebuilds)
- "source=npm-cache-${devcontainerId},target=/home/node/.npm,type=volume",
+ "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
  "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
  "source=pip-cache-${devcontainerId},target=/home/node/.cache/pip,type=volume"
  ]
@@ -9043,7 +9046,7 @@ Use this checklist to verify your devcontainer includes all essential production
   - postStartCommand runs init-claude-config.sh
 
 - [ ] **OpenAI Codex with Sandbox Fix** (if using Codex)
-  - config.toml template with `sandbox_mode = true` (required for containers)
+  - config.toml template with `sandbox_mode = "danger-full-access"` (required for containers)
   - init-codex-config.sh script to auto-initialize configuration
   - Volume mount for `.codex` directory: `source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume`
   - postStartCommand runs init-codex-config.sh
@@ -9142,7 +9145,7 @@ whoami
 
 # 7. Verify Codex sandbox fix (if using Codex)
 cat ~/.codex/config.toml | grep sandbox_mode
-# Expected: Should show "sandbox_mode = true"
+# Expected: Should show "sandbox_mode = \"danger-full-access\""
 
 # 8. Verify AI CLIs installed
 claude --version && codex --version && gemini --version
@@ -9160,7 +9163,7 @@ If you see any of these in your configuration, you're NOT production-ready:
 [NO] **postCreateCommand has npm install commands** → Tools lost on rebuild
 [NO] **remoteUser: "root"** → Security risk (should be non-root user)
 [NO] **No --cap-add flags in runArgs** → Firewall won't work
-[NO] **Codex without sandbox_mode = true** → Codex will fail in container
+[NO] **Codex without sandbox_mode = "danger-full-access"** → Codex will fail in container
 [NO] **devcontainer.json only (no Dockerfile)** → Minimal setup, missing security
 
 ### Quick Fix: Upgrade from Quick Start to Production-Ready
@@ -9195,7 +9198,7 @@ AI Assistant (internal check):
 - [ ] IPv6 disabled? NO → Need runArgs with sysctl
 - [ ] Non-root user? YES → Dockerfile has USER node
 - [ ] MCP servers? NO → Need mcp.json template + init script
-- [ ] Codex fix? NO → Need config.toml with sandbox_mode
+- [ ] Codex fix? NO → Need config.toml with sandbox_mode = "danger-full-access"
 - [ ] Git hooks? NO → Need setup-git-hooks.sh
 - [ ] Volume mounts? NO → Only 3 volumes (need 11+)
 - [ ] Dockerfile RUN? YES → Has npm install in Dockerfile
@@ -9507,7 +9510,7 @@ claude --verbose
 2. IPv6 Disabled (--sysctl + runtime commands)
 3. Non-root User (USER directive + remoteUser)
 4. MCP Servers (mcp.json + init script + volume)
-5. Codex Fix (config.toml with sandbox_mode=true)
+5. Codex Fix (config.toml with sandbox_mode="danger-full-access")
 6. Git Hooks (setup-git-hooks.sh)
 7. Volume Mounts (11+ volumes minimum)
 8. Dockerfile RUN (tools in image, not postCreateCommand)
@@ -9524,9 +9527,9 @@ claude --verbose
 
 **Most likely cause and fix?**
 
-**Correct Answer**: Missing `sandbox_mode = true` in config.toml
+**Correct Answer**: Missing `sandbox_mode = "danger-full-access"` in config.toml
 
-**Fix**: Create config.toml.template with sandbox_mode, init-codex-config.sh to copy it, volume mount for .codex directory
+**Fix**: Create config.toml.template with sandbox_mode = "danger-full-access", init-codex-config.sh to copy it, volume mount for .codex directory
 
 **Common Mistake**: Suggesting reinstall or API key check (wrong root cause)
 
