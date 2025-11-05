@@ -2940,7 +2940,7 @@ Let me update your configuration...
  }
  },
  "forwardPorts": [3000],
- "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install",
+ "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install && /usr/local/bin/init-claude-hooks.sh",
  "remoteUser": "node",
  "mounts": [
  "source=claude-${devcontainerId},target=/home/node/.claude,type=volume",
@@ -2978,7 +2978,7 @@ WORKDIR /workspaces
  }
  },
  "forwardPorts": [8888],
- "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && uv python install 3.14 && uv pip install jupyterlab pandas numpy matplotlib",
+ "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && uv python install 3.14 && uv pip install jupyterlab pandas numpy matplotlib && /usr/local/bin/init-claude-hooks.sh",
  "remoteUser": "vscode",
  "mounts": [
  "source=claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
@@ -3029,7 +3029,7 @@ See [Multi-Container Patterns](#multi-container-patterns-docker-compose) for Doc
  }
  }
  },
- "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest",
+ "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && /usr/local/bin/init-claude-hooks.sh",
  "remoteUser": "vscode",
  "mounts": [
  "source=claude-${devcontainerId},target=/home/vscode/.claude,type=volume",
@@ -3912,7 +3912,7 @@ cat > .devcontainer/devcontainer.json << 'EOF'
  ]
  }
  },
- "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install",
+ "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install && /usr/local/bin/init-claude-hooks.sh",
  "remoteUser": "node",
  "mounts": [
  "source=claude-${devcontainerId},target=/home/node/.claude,type=volume",
