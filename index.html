@@ -581,6 +581,13 @@
               </li>
               <li>
                 <a
+                  href="#session-start-hook"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >Session Start Hook</a
+                >
+              </li>
+              <li>
+                <a
                   href="#launching-container"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Launching Your Dev Container</a
@@ -1292,14 +1299,16 @@ code --version</code></pre>
                 class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm"
               ><code>your-project/
 ├── .devcontainer/
-│   ├── devcontainer.json       # VS Code configuration
-│   ├── Dockerfile              # Container blueprint
-│   ├── init-claude-config.sh   # Claude Code auto-config
-│   ├── init-codex-config.sh    # Codex CLI auto-config
-│   ├── init-firewall.sh        # Network security
-│   ├── settings.json.template  # Claude settings
-│   ├── mcp.json.template       # MCP servers
-│   └── config.toml.template    # Codex configuration
+│   ├── devcontainer.json           # VS Code configuration
+│   ├── Dockerfile                  # Container blueprint
+│   ├── init-claude-config.sh       # Claude Code auto-config
+│   ├── init-claude-hooks.sh        # Hook deployment script
+│   ├── init-codex-config.sh        # Codex CLI auto-config
+│   ├── init-firewall.sh            # Network security
+│   ├── session-start.sh.template   # Session hook template
+│   ├── settings.json.template      # Claude settings
+│   ├── mcp.json.template           # MCP servers
+│   └── config.toml.template        # Codex configuration
 ├── .gitignore
 ├── README.md
 └── [your project files]</code></pre>
@@ -3746,6 +3755,368 @@ USER node</code></pre>
                 <li>
                   <strong>Extensible:</strong> Easy to add more MCP servers or
                   environment variables
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Session Start Hook -->
+          <section
+            id="session-start-hook"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              🪝 Session Start Hook Configuration
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              Session hooks allow you to run automated checks and setup tasks when
+              Claude Code starts. This project includes a SessionStart hook that
+              verifies your devcontainer environment on every session.
+            </p>
+
+            <div
+              class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg"
+            >
+              <p
+                class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+              >
+                💡 What the Session Hook Does:
+              </p>
+              <ul
+                class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300 text-sm"
+              >
+                <li>Confirms devcontainer environment detection</li>
+                <li>Verifies mounted volumes (.claude, .codex, .gemini, etc.)</li>
+                <li>Lists configured MCP servers</li>
+                <li>Checks tool availability (claude, codex, gemini, gh, docker)</li>
+                <li>Displays network configuration</li>
+                <li>Shows current git branch and warns if on main/master</li>
+              </ul>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+              Configuration Format
+            </h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              Add this to your <code>~/.claude/settings.json</code> (user-level)
+              or <code>.claude/settings.json</code> (workspace-level):
+            </p>
+            <div class="code-block-wrapper">
+              <button
+                class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                aria-label="Copy code"
+              >
+                Copy
+              </button>
+              <pre
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+              ><code class="language-json">{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+            </div>
+
+            <div
+              class="mt-6 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 rounded-r-lg"
+            >
+              <p
+                class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+              >
+                ✅ Correct Format - Key Points:
+              </p>
+              <ul
+                class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
+              >
+                <li>
+                  <strong>Capitalized event name:</strong> Use
+                  <code>"SessionStart"</code>, not
+                  <code>"sessionStart"</code>
+                </li>
+                <li>
+                  <strong>Array format:</strong>
+                  <code>"SessionStart": [{ "hooks": [...] }]</code>
+                </li>
+                <li>
+                  <strong>No matcher field:</strong> SessionStart hooks don't use
+                  matchers (unlike PreToolUse/PostToolUse)
+                </li>
+                <li>
+                  <strong>$CLAUDE_PROJECT_DIR variable:</strong> Use instead of
+                  absolute paths for portability
+                </li>
+                <li>
+                  <strong>Double quotes around path:</strong> Required for paths
+                  with environment variables
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="mt-6 bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 rounded-r-lg"
+            >
+              <p
+                class="text-md-error-900 dark:text-md-error-200 font-medium mb-2"
+              >
+                ⚠️ Common Mistakes to Avoid:
+              </p>
+              <div class="space-y-3 text-sm">
+                <div>
+                  <p
+                    class="text-md-error-800 dark:text-md-error-300 font-medium mb-1"
+                  >
+                    ❌ Old format (will fail validation):
+                  </p>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-3 rounded text-xs overflow-x-auto"
+                  ><code class="language-json">{
+  "hooks": {
+    "sessionStart": {
+      "command": ".claude/hooks/session-start.sh"
+    }
+  }
+}</code></pre>
+                </div>
+                <div>
+                  <p
+                    class="text-md-error-800 dark:text-md-error-300 font-medium mb-1"
+                  >
+                    ❌ With matcher field (SessionStart doesn't use matchers):
+                  </p>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-3 rounded text-xs overflow-x-auto"
+                  ><code class="language-json">{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": {},
+      "hooks": [...]
+    }]
+  }
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <h3
+              class="text-2xl font-bold mb-4 mt-6 text-gray-900 dark:text-white"
+            >
+              Hook Deployment
+            </h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
+              The session hook is deployed automatically when the devcontainer is
+              first created, using a 4-step process:
+            </p>
+
+            <div class="space-y-4 mb-6">
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <span
+                    class="flex-shrink-0 w-8 h-8 bg-md-primary-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                    >1</span
+                  >
+                  <p class="font-medium text-gray-900 dark:text-white">
+                    BUILD - Template Inclusion
+                  </p>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 ml-11">
+                  Dockerfile copies
+                  <code>session-start.sh.template</code> and
+                  <code>init-claude-hooks.sh</code> into the container image at
+                  build time.
+                </p>
+              </div>
+
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <span
+                    class="flex-shrink-0 w-8 h-8 bg-md-primary-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                    >2</span
+                  >
+                  <p class="font-medium text-gray-900 dark:text-white">
+                    CREATE - Deployment Script Execution
+                  </p>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 ml-11">
+                  <code>postCreateCommand</code> runs
+                  <code>init-claude-hooks.sh</code> on first container creation.
+                </p>
+              </div>
+
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <span
+                    class="flex-shrink-0 w-8 h-8 bg-md-primary-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                    >3</span
+                  >
+                  <p class="font-medium text-gray-900 dark:text-white">
+                    DEPLOY - Template Copy to Workspace
+                  </p>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 ml-11">
+                  Script copies template to
+                  <code>.claude/hooks/session-start.sh</code> (only if file
+                  doesn't exist, preserving user customizations).
+                </p>
+              </div>
+
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <span
+                    class="flex-shrink-0 w-8 h-8 bg-md-primary-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                    >4</span
+                  >
+                  <p class="font-medium text-gray-900 dark:text-white">
+                    PERSIST - Volume Survival
+                  </p>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400 ml-11">
+                  <code>.claude/</code> directory is mounted as a Docker volume,
+                  so your customizations survive container rebuilds.
+                </p>
+              </div>
+            </div>
+
+            <div class="code-block-wrapper mb-4">
+              <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                <strong>init-claude-hooks.sh deployment script:</strong>
+              </p>
+              <button
+                class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                aria-label="Copy code"
+              >
+                Copy
+              </button>
+              <pre
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+              ><code class="language-bash">#!/bin/bash
+# Claude Code hook deployment script
+set -e
+
+echo "=== Claude Code Hooks Setup ==="
+
+TEMPLATE_DIR="/usr/local/share/claude-defaults/hooks"
+WORKSPACE_HOOKS="/workspaces/$(basename $PWD)/.claude/hooks"
+
+mkdir -p "$WORKSPACE_HOOKS"
+
+# Only deploy if hook doesn't exist (preserves user customizations)
+if [ ! -f "$WORKSPACE_HOOKS/session-start.sh" ]; then
+    cp "$TEMPLATE_DIR/session-start.sh" "$WORKSPACE_HOOKS/session-start.sh"
+    chmod +x "$WORKSPACE_HOOKS/session-start.sh"
+    echo "✅ Deployed session-start.sh"
+else
+    echo "ℹ️  session-start.sh already exists (skipping)"
+fi
+
+echo "=== Hooks Setup Complete ==="</code></pre>
+            </div>
+
+            <div
+              class="mt-4 bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 rounded-r-lg"
+            >
+              <p
+                class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+              >
+                💡 Key Benefits:
+              </p>
+              <ul
+                class="list-disc list-inside space-y-1 text-md-tertiary-800 dark:text-md-tertiary-300 text-sm"
+              >
+                <li>
+                  <strong>Automatic deployment:</strong> No manual copying
+                  required
+                </li>
+                <li>
+                  <strong>Preserves customizations:</strong> Won't overwrite
+                  existing hooks
+                </li>
+                <li>
+                  <strong>Survives rebuilds:</strong> Volume persistence keeps
+                  your changes
+                </li>
+                <li>
+                  <strong>Template versioning:</strong> Template stays in
+                  container for reference
+                </li>
+              </ul>
+            </div>
+
+            <h3
+              class="text-2xl font-bold mb-4 mt-6 text-gray-900 dark:text-white"
+            >
+              Verifying the Hook
+            </h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              To verify your hook configuration is correct:
+            </p>
+            <div class="code-block-wrapper">
+              <button
+                class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                aria-label="Copy code"
+              >
+                Copy
+              </button>
+              <pre
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+              ><code class="language-bash"># Check for validation errors
+claude /doctor
+
+# Should show no errors in "Invalid Settings" section
+# If you see errors about hooks format, the configuration is incorrect</code></pre>
+            </div>
+
+            <div
+              class="mt-6 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+            >
+              <p
+                class="text-gray-900 dark:text-white font-medium mb-2 text-sm"
+              >
+                📚 Additional Resources:
+              </p>
+              <ul
+                class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+              >
+                <li>
+                  • Official hooks documentation:
+                  <a
+                    href="https://docs.claude.com/en/docs/claude-code/hooks"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
+                    >docs.claude.com/hooks</a
+                  >
+                </li>
+                <li>
+                  • Hook examples:
+                  <a
+                    href="https://github.com/anthropics/claude-cookbooks/tree/main/skills/.claude/hooks"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
+                    >Claude Cookbooks</a
+                  >
+                </li>
+                <li>
+                  • Session hook script: Located at
+                  <code>.devcontainer/session-start.sh.template</code>
                 </li>
               </ul>
             </div>

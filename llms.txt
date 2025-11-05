@@ -549,7 +549,7 @@ Below is a complete, production-ready devcontainer configuration with all securi
   ],
   // Volume count: 12 (keep in sync with HTML guide)
   // Critical: npm-global → .npm-global (NOT npm-cache → .npm)
-  "postCreateCommand": "npm install -g npm@latest && npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh",
+  "postCreateCommand": "npm install -g npm@latest && npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh && /usr/local/bin/init-claude-hooks.sh",
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh",
   "runArgs": [
     "--cap-add=NET_ADMIN",
@@ -626,29 +626,35 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 # Switch to root for final setup (scripts, sudoers)
 USER root
 
-# Create directory for Claude Code and Codex defaults
-RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/codex-defaults
+# Create directory for Claude Code, Codex defaults, and hooks
+RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/claude-defaults/hooks /usr/local/share/codex-defaults
 
 # Copy initialization scripts and templates
 COPY init-firewall.sh /usr/local/bin/
 COPY init-claude-config.sh /usr/local/bin/
+COPY init-claude-hooks.sh /usr/local/bin/
 COPY init-codex-config.sh /usr/local/bin/
 COPY init-python.sh /usr/local/bin/
 COPY --chown=node:node settings.json.template /usr/local/share/claude-defaults/settings.json
 COPY --chown=node:node mcp.json.template /usr/local/share/claude-defaults/mcp.json
+COPY --chown=node:node session-start.sh.template /usr/local/share/claude-defaults/hooks/session-start.sh
 COPY --chown=node:node config.toml.template /usr/local/share/codex-defaults/config.toml
 
 # Set permissions and configure sudoers for init scripts
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
     chmod +x /usr/local/bin/init-claude-config.sh && \
+    chmod +x /usr/local/bin/init-claude-hooks.sh && \
     chmod +x /usr/local/bin/init-codex-config.sh && \
     chmod +x /usr/local/bin/init-python.sh && \
+    chmod +x /usr/local/share/claude-defaults/hooks/session-start.sh && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-hooks.sh" > /etc/sudoers.d/node-claude-hooks && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-python.sh" > /etc/sudoers.d/node-python && \
     chmod 0440 /etc/sudoers.d/node-firewall && \
     chmod 0440 /etc/sudoers.d/node-claude-config && \
+    chmod 0440 /etc/sudoers.d/node-claude-hooks && \
     chmod 0440 /etc/sudoers.d/node-codex-config && \
     chmod 0440 /etc/sudoers.d/node-python
 
@@ -734,7 +740,67 @@ uv python pin 3.13
 uv python install 3.13
 ```
 
-### File 5: `.devcontainer/init-firewall.sh`
+### File 5: `.devcontainer/init-claude-hooks.sh`
+
+```bash
+#!/bin/bash
+# Claude Code hook deployment script
+# Runs at container creation (postCreateCommand)
+
+set -e
+
+echo "=== Claude Code Hooks Setup ==="
+
+# Directories
+TEMPLATE_DIR="/usr/local/share/claude-defaults/hooks"
+WORKSPACE_HOOKS="/workspaces/$(basename $PWD)/.claude/hooks"
+
+# Create .claude/hooks directory if missing
+mkdir -p "$WORKSPACE_HOOKS"
+
+# Deploy session-start hook if not already present
+if [ ! -f "$WORKSPACE_HOOKS/session-start.sh" ]; then
+    if [ -f "$TEMPLATE_DIR/session-start.sh" ]; then
+        echo "Deploying session-start.sh hook..."
+        cp "$TEMPLATE_DIR/session-start.sh" "$WORKSPACE_HOOKS/session-start.sh"
+        chmod +x "$WORKSPACE_HOOKS/session-start.sh"
+        echo "[YES] Session-start hook deployed to .claude/hooks/"
+    else
+        echo "[WARNING]  Template not found at $TEMPLATE_DIR/session-start.sh"
+    fi
+else
+    echo "[INFO] Session-start hook already exists (preserving user customizations)"
+fi
+
+echo "[YES] Claude Code hooks setup complete"
+```
+
+**Purpose**: Deploys the session-start.sh hook template to the workspace on first container creation.
+
+**Key Features**:
+- **Runs in postCreateCommand**: Executes after volume mounts, ensuring deployment to persistent storage
+- **Template source**: Copies from `/usr/local/share/claude-defaults/hooks/` (baked into container image)
+- **Workspace destination**: `.claude/hooks/session-start.sh` (persistent across rebuilds)
+- **Preserves customizations**: Checks if hook already exists before copying
+- **Makes executable**: Sets correct permissions (`chmod +x`)
+- **Idempotent**: Safe to run multiple times
+
+**Deployment Flow**:
+```
+1. BUILD: Dockerfile copies .devcontainer/session-start.sh.template
+          → /usr/local/share/claude-defaults/hooks/session-start.sh
+2. CREATE: postCreateCommand runs init-claude-hooks.sh
+3. DEPLOY: Script copies template to .claude/hooks/session-start.sh
+4. PERSIST: Workspace volume (.claude/) survives container rebuilds
+```
+
+**Why This Approach**:
+- **Template in image**: Ensures hook is available even if workspace is fresh
+- **Copy to workspace**: Allows users to customize without rebuilding container
+- **Check before copy**: Respects user modifications to the hook
+- **Volume persistence**: Hook survives `docker compose down` and rebuilds
+
+### File 6: `.devcontainer/init-firewall.sh`
 
 ```bash
 #!/bin/bash
@@ -958,16 +1024,53 @@ enabled = false
 
 ```json
 {
-  "workspace": {
-    "enableTodos": true,
-    "todoFormat": "markdown"
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "dangerously_skip_permissions": true,
+  "verbose": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
   },
-  "chat": {
-    "maxContextTokens": 100000,
-    "enableStreaming": true
-  }
+  "env": {
+    "MAX_MCP_OUTPUT_TOKENS": "60000",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "600000",
+    "MAX_THINKING_TOKENS": "8192",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_LOG_USER_PROMPTS": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector:4317",
+    "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment=devcontainer,service.name=claude-code"
+  },
+  "includeCoAuthoredBy": false
 }
 ```
+
+**Purpose**: Claude Code settings template with SessionStart hook for environment checks.
+
+**Key Features**:
+- **SessionStart hook**: Runs `.claude/hooks/session-start.sh` at the start of each Claude Code session
+- **Correct hook format**: Array format without `matcher` field (SessionStart hooks don't use matchers)
+- **$CLAUDE_PROJECT_DIR**: Environment variable for workspace path (security best practice)
+- **OpenTelemetry**: Telemetry configuration for monitoring and debugging
+- **Environment variables**: Timeout and token limits for Claude Code
+
+**Hook Configuration Notes**:
+- ✅ Use capitalized `"SessionStart"` (not `"sessionStart"`)
+- ✅ Use array format: `"SessionStart": [{ "hooks": [...] }]`
+- ✅ NO `matcher` field (common mistake - matchers are only for PreToolUse/PostToolUse)
+- ✅ Use `$CLAUDE_PROJECT_DIR` instead of absolute paths
+- ⚠️ Old format with `"sessionStart": { "command": "..." }` will fail validation
 
 ### How to Use This Example
 
