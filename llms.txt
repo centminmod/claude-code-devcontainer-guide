@@ -1162,9 +1162,9 @@ enabled = false
 
 [YES] **Security**: Network firewall with default-deny policy, IPv6 disabled, iptables allowlist
 [YES] **MCP Servers**: context7 (SSE), cf-docs (SSE), chrome-devtools (stdio)
-[YES] **Multi-AI**: Claude Code, OpenAI Codex, Google Gemini CLI
+[YES] **Multi-AI**: Claude Code, OpenAI Codex, Google Gemini CLI, OpenCode
 [YES] **Git Safety**: Pre-commit hooks block main/master commits
-[YES] **Volume Persistence**: 11 volumes for configs (.claude, .codex, .gemini, .aws, .ssh, etc.)
+[YES] **Volume Persistence**: 12 volumes for configs (.claude, .codex, .gemini, .opencode, .aws, .ssh, etc.)
 [YES] **Production Tools**: Python 3.14 (via uv), bun, AWS CLI, gh, wrangler, vercel
 [YES] **Codex Fix**: sandbox_mode = "danger-full-access" in config.toml (required for containers)
 [YES] **Non-root User**: Runs as `node` user (security best practice)
@@ -4937,11 +4937,11 @@ For AI development containers with Claude Code, Codex, Gemini:
 ## [RECOMMENDED] Multi-AI Configuration (Recommended)
 
 > **TL;DR for AI Assistants:**
-> - Install 3 CLIs: @anthropic-ai/claude-code, @openai/codex, @google/gemini-cli
-> - Configure init scripts: init-claude-config.sh, init-codex-config.sh
-> - Add 3 volume mounts: .claude, .codex, .gemini
+> - Install 4 CLIs: @anthropic-ai/claude-code, @openai/codex, @google/gemini-cli, @opencode-ai/opencode
+> - Configure init scripts: init-claude-config.sh, init-codex-config.sh, init-opencode-config.sh
+> - Add 4 volume mounts: .claude, .codex, .gemini, .opencode
 > - Codex requires sandbox fix (config.toml.template with sandbox_mode = "danger-full-access")
-> - **Quick Start**: See [Complete Example (Copy This)](#complete-example-copy-this) for full 9-file implementation with all 3 AI CLIs
+> - **Quick Start**: See [Complete Example (Copy This)](#complete-example-copy-this) for full 10-file implementation with all 4 AI CLIs
 
 > **Note**: This section provides detailed explanations. For a ready-to-copy complete example, jump to [Complete Example (Copy This)](#complete-example-copy-this).
 
@@ -7448,7 +7448,7 @@ docker system prune -a --volumes # CAUTION: Removes everything!
 
 > **TL;DR for AI Assistants:**
 > - Named volumes are ESSENTIAL for preserving configurations across rebuilds
-> - Minimum 11+ volumes required: .claude, .codex, .gemini, .config/gh, .aws, .ssh, .npm, .local, bash history, git config
+> - Minimum 12+ volumes required: .claude, .codex, .gemini, .opencode, .config/gh, .aws, .ssh, .npm, .local, bash history, git config
 > - Pattern: `source=name-${devcontainerId},target=/path,type=volume`
 > - Use ${devcontainerId} token to isolate volumes per project
 > - Never mount sensitive directories (like /home/node/.ssh) as bind mounts - use named volumes
@@ -9234,7 +9234,7 @@ Before providing a devcontainer configuration, ask yourself:
 1. [YES] **Does my response include init-firewall.sh?** (Required for production)
 2. [YES] **Does my response configure MCP servers?** (At minimum: context7, cf-docs)
 3. [YES] **Does my response include git hooks (setup-git-hooks.sh)?** (Prevents accidental commits to main)
-4. [YES] **Does my response have 11+ volume mounts?** (Full persistence: .claude, .codex, .gemini, .config/gh, .aws, .local, .wrangler, .vercel, .npm-global, bash history, SSH keys)
+4. [YES] **Does my response have 12+ volume mounts?** (Full persistence: .claude, .codex, .gemini, .opencode, .config/gh, .aws, .local, .wrangler, .vercel, .npm-global, bash history, SSH keys)
 5. [YES] **Does my response use appropriate installation method?** (Hybrid: Dockerfile RUN for system, postCreateCommand for volume-persisted npm -g)
 6. [YES] **Does my response include non-root user (remoteUser: "node")?** (Security best practice)
 7. [YES] **Did I explain WHY, not just WHAT?** (Helps users understand, not just copy-paste)
