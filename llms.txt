@@ -8360,7 +8360,82 @@ No Landlock required
 
 **Status**: This is a known limitation with no official workaround. Use the CLI until OpenAI adds config.toml support to the extension.
 
-### 6. Hardcoding Absolute Paths in devcontainer.json
+### 6. OpenCode TUI Crashes When Loading Models
+
+**Problem**: Running `opencode models` or opening the TUI crashes with:
+
+```
+TypeError: undefined is not an object (evaluating 'flat().length')
+    at <anonymous> (src/cli/cmd/tui/ui/dialog-select.tsx:49:49)
+```
+
+**Root Cause**:
+- OpenCode's auth.json contains provider configurations incompatible with AI SDK v5
+- Cloudflare Workers AI provider doesn't support the specification v2 required by SDK v5
+- Expired OAuth tokens (github-copilot) return undefined when queried
+- Dialog component attempts to flatten undefined provider data → crash
+
+**Diagnosis**:
+```bash
+# Check configured providers
+cat ~/.local/share/opencode/auth.json | jq 'keys'
+
+# Look for incompatible providers
+grep -E "(cloudflare|requesty|github-copilot)" ~/.local/share/opencode/auth.json
+
+# Check cache size
+du -sh ~/.cache/opencode
+```
+
+**Solution**:
+
+1. **Backup current configuration**:
+   ```bash
+   cp ~/.local/share/opencode/auth.json ~/.local/share/opencode/auth.json.backup
+   ```
+
+2. **Remove incompatible providers** - Edit auth.json to keep only:
+   ```json
+   {
+     "anthropic": { "type": "oauth", ... },
+     "openrouter": { "type": "api", ... },
+     "nvidia": { "type": "api", ... }
+   }
+   ```
+
+3. **Clear stale cache**:
+   ```bash
+   rm -rf ~/.cache/opencode/*
+   ```
+
+4. **Verify operation**:
+   ```bash
+   opencode models  # Should display 180+ models
+   opencode         # TUI should start without errors
+   ```
+
+**Why This Works**:
+- Removes provider entries that return undefined when queried
+- Clears cached model metadata referencing removed providers
+- Allows OpenCode to rebuild provider list from scratch with only compatible providers
+
+**Compatible Providers**:
+- ✅ anthropic, openai, google (primary providers)
+- ✅ openrouter, nvidia (third-party aggregators)
+
+**Known Incompatible Providers**:
+- ❌ cloudflare-workers-ai (doesn't support AI SDK v5)
+- ❌ requesty (similar SDK incompatibility - Issue #2468)
+- ❌ github-copilot (OAuth flow incompatible with devcontainers)
+
+**Prevention**:
+- Only authenticate with actively maintained providers (anthropic, openai, google, openrouter, nvidia)
+- Periodically review auth.json and remove unused/expired providers
+- Keep OpenCode updated: `npm update -g @opencode-ai/opencode`
+
+**Reference**: [OpenCode Issue #2468](https://github.com/sst/opencode/issues/2468) - Similar crash pattern with requesty provider
+
+### 7. Hardcoding Absolute Paths in devcontainer.json
 
 **Mistake**:
 ```json
@@ -8376,7 +8451,7 @@ No Landlock required
 }
 ```
 
-### 6. Not Ignoring `.claude/settings.local.json` in Git
+### 8. Not Ignoring `.claude/settings.local.json` in Git
 
 **Mistake**: Committing API keys to git
 
@@ -8386,7 +8461,7 @@ RUN git config --global core.excludesfile ~/.gitignore_global && \
  echo ".claude/settings.local.json" > /home/node/.gitignore_global
 ```
 
-### 7. Using Bind Mounts for Credentials
+### 9. Using Bind Mounts for Credentials
 
 **Mistake**:
 ```json
