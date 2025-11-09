@@ -4343,6 +4343,7 @@ cd .devcontainer</code></pre>
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
     "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
@@ -4477,7 +4478,7 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# npm CLI packages (Claude Code, Codex, Gemini, Wrangler, Vercel) installed via postCreateCommand
+# npm CLI packages (Claude Code, OpenCode, Codex, Gemini, Wrangler, Vercel) installed via postCreateCommand
 # This ensures packages install AFTER npm-global volume mounts, preventing version conflicts
 # See devcontainer.json postCreateCommand for installation details
 
@@ -4776,6 +4777,7 @@ npm run dev  # or npm start</code></pre>
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume"
   ]
@@ -5169,6 +5171,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
     "source=bun-${devcontainerId},target=/home/node/.bun,type=volume",
@@ -5915,6 +5918,7 @@ touch devcontainer.json Dockerfile</code></pre>
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
     "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
@@ -6187,8 +6191,8 @@ npm run dev</code></pre>
               🤖 Multiple AI Assistants Setup
             </h2>
             <p class="text-gray-700 dark:text-gray-300 mb-6">
-              Want to use Claude Code, OpenAI Codex, AND Google Gemini in the
-              same dev container? Here's how to set up all three AI assistants:
+              Want to use Claude Code, OpenAI Codex, Google Gemini, AND OpenCode in the
+              same dev container? Here's how to set up all four AI assistants:
             </p>
 
             <div
@@ -6213,6 +6217,10 @@ npm run dev</code></pre>
                 <li>
                   <strong>Gemini</strong>: Strong at multimodal tasks and Google
                   ecosystem integration
+                </li>
+                <li>
+                  <strong>OpenCode</strong>: Open-source, terminal-native agent with
+                  multi-model support and privacy-first design
                 </li>
                 <li>Use the right tool for each specific task!</li>
               </ul>
@@ -6252,6 +6260,7 @@ npm run dev</code></pre>
       "extensions": [
         "anthropic.claude-code",
         "openai.codex-vscode",
+        "sst-dev.opencode",
         "google.gemini-cli-vscode-ide-companion",
         "google.geminicodeassist",
         "dbaeumer.vscode-eslint",
@@ -6281,7 +6290,7 @@ npm run dev</code></pre>
     "--sysctl=net.ipv6.conf.lo.disable_ipv6=1"
   ],
   "forwardPorts": [3000, 5000, 8000],
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && (npm install || pip install -r requirements.txt || echo 'No dependencies to install') && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh && /usr/local/bin/init-claude-hooks.sh",
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g opencode-ai@latest && npm install -g wrangler@latest && npm install -g vercel@latest && (npm install || pip install -r requirements.txt || echo 'No dependencies to install') && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-opencode-config.sh && /usr/local/bin/init-python.sh && /usr/local/bin/init-claude-hooks.sh",
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "remoteUser": "node",
   "mounts": [
@@ -6289,6 +6298,7 @@ npm run dev</code></pre>
     "source=claude-config-${devcontainerId},target=/home/node/.claude,type=volume",
     "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
     "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+    "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
     "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
     "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
     "source=cargo-${devcontainerId},target=/home/node/.cargo,type=volume",
@@ -6512,7 +6522,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "alias rg='rg --smart-case'" \
   -x
 
-# npm CLI packages (Claude Code, Codex, Gemini, Wrangler, Vercel) installed via postCreateCommand
+# npm CLI packages (Claude Code, OpenCode, Codex, Gemini, Wrangler, Vercel) installed via postCreateCommand
 # This ensures packages install AFTER npm-global volume mounts, preventing version conflicts
 # See devcontainer.json postCreateCommand for installation details
 
@@ -6564,12 +6574,15 @@ COPY --chown=node:node config.toml.template /usr/local/share/codex-defaults/conf
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
   chmod +x /usr/local/bin/init-claude-config.sh && \
   chmod +x /usr/local/bin/init-codex-config.sh && \
+  chmod +x /usr/local/bin/init-opencode-config.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-opencode-config.sh" > /etc/sudoers.d/node-opencode-config && \
   chmod 0440 /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-claude-config && \
-  chmod 0440 /etc/sudoers.d/node-codex-config
+  chmod 0440 /etc/sudoers.d/node-codex-config && \
+  chmod 0440 /etc/sudoers.d/node-opencode-config
 
 # Switch back to node user for runtime
 USER node</code></pre>
@@ -6751,7 +6764,7 @@ vercel --version
                 <div class="mt-4 mb-4">
                   <img
                     src="claude-devcontainer-demo-1-800px.png"
-                    alt="Terminal screenshot showing successful version checks for Claude Code, Codex, Gemini, Wrangler, gh CLI, AWS CLI, and Vercel CLIs"
+                    alt="Terminal screenshot showing successful version checks for Claude Code, OpenCode, Codex, Gemini, Wrangler, gh CLI, AWS CLI, and Vercel CLIs"
                     class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                   />
                   <p
@@ -7101,6 +7114,93 @@ vercel --version
                     Verify API key has necessary permissions for Gemini models
                   </li>
                 </ul>
+              </div>
+            </div>
+
+            <!-- OpenCode Authentication -->
+            <div class="mb-8">
+              <h3
+                class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+              >
+                4. OpenCode Authentication
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4">
+                OpenCode is provider-agnostic and supports multiple AI providers.
+                Configure your preferred provider using environment variables or
+                the config command.
+              </p>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                    Option 1: Anthropic (Claude)
+                  </h4>
+                  <div class="code-block-wrapper">
+                    <button class="copy-button" aria-label="Copy code">
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    ><code class="language-bash">export ANTHROPIC_API_KEY=YOUR_ANTHROPIC_API_KEY
+opencode config set provider anthropic
+opencode config set apiKey YOUR_ANTHROPIC_API_KEY</code></pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                    Option 2: OpenAI
+                  </h4>
+                  <div class="code-block-wrapper">
+                    <button class="copy-button" aria-label="Copy code">
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    ><code class="language-bash">export OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+opencode config set provider openai</code></pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                    Option 3: Google (Gemini)
+                  </h4>
+                  <div class="code-block-wrapper">
+                    <button class="copy-button" aria-label="Copy code">
+                      Copy
+                    </button>
+                    <pre
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    ><code class="language-bash">export GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
+opencode config set provider google</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mt-4 rounded-r-lg"
+              >
+                <p class="text-blue-900 dark:text-blue-200 text-sm">
+                  <strong>Multi-Model Flexibility:</strong> OpenCode stores API
+                  keys in <code>~/.opencode/config</code> (persists via Docker
+                  volume). You can switch providers anytime without
+                  re-authentication using
+                  <code>opencode config set provider &lt;name&gt;</code>.
+                </p>
+              </div>
+
+              <div class="mt-4">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
+                  Verify Configuration
+                </h4>
+                <div class="code-block-wrapper">
+                  <button class="copy-button" aria-label="Copy code">Copy</button>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-bash">opencode config list
+opencode --version</code></pre>
+                </div>
               </div>
             </div>
 

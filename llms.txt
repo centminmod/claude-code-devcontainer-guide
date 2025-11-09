@@ -435,8 +435,8 @@ This setup includes all essential components for real-world development projects
 - [x] Network security with firewall (default-deny + allowlist)
 - [x] MCP servers for Claude (context7, cf-docs, chrome-devtools)
 - [x] Git branch protection hooks (prevents accidental commits to main)
-- [x] Multi-AI support (Claude Code + OpenAI Codex + Google Gemini)
-- [x] Complete volume persistence (11+ volumes for configs, caches, tools)
+- [x] Multi-AI support (Claude Code + OpenAI Codex + Google Gemini + OpenCode)
+- [x] Complete volume persistence (12+ volumes for configs, caches, tools)
 - [x] Production tooling (uv, bun, AWS CLI, gh, wrangler, vercel)
 - [x] Codex sandbox fix (required for Codex to work in containers)
 
@@ -453,6 +453,7 @@ This setup includes all essential components for real-world development projects
 ├── init-firewall.sh           # Network security (CRITICAL for production)
 ├── init-claude-config.sh      # MCP server auto-configuration
 ├── init-codex-config.sh       # Codex sandbox fix (required for Codex)
+├── init-opencode-config.sh    # OpenCode initialization
 ├── setup-git-hooks.sh         # Git branch protection installation
 ├── settings.json.template     # Claude Code optimizations
 ├── mcp.json.template          # MCP servers configuration
@@ -626,7 +627,7 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 # Switch to root for final setup (scripts, sudoers)
 USER root
 
-# Create directory for Claude Code, Codex defaults, and hooks
+# Create directory for Claude Code, OpenCode, Codex defaults, and hooks
 RUN mkdir -p /usr/local/share/claude-defaults /usr/local/share/claude-defaults/hooks /usr/local/share/codex-defaults
 
 # Copy initialization scripts and templates
@@ -645,17 +646,20 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
     chmod +x /usr/local/bin/init-claude-config.sh && \
     chmod +x /usr/local/bin/init-claude-hooks.sh && \
     chmod +x /usr/local/bin/init-codex-config.sh && \
+    chmod +x /usr/local/bin/init-opencode-config.sh && \
     chmod +x /usr/local/bin/init-python.sh && \
     chmod +x /usr/local/share/claude-defaults/hooks/session-start.sh && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-config.sh" > /etc/sudoers.d/node-claude-config && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-claude-hooks.sh" > /etc/sudoers.d/node-claude-hooks && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-codex-config.sh" > /etc/sudoers.d/node-codex-config && \
+    echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-opencode-config.sh" > /etc/sudoers.d/node-opencode-config && \
     echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-python.sh" > /etc/sudoers.d/node-python && \
     chmod 0440 /etc/sudoers.d/node-firewall && \
     chmod 0440 /etc/sudoers.d/node-claude-config && \
     chmod 0440 /etc/sudoers.d/node-claude-hooks && \
     chmod 0440 /etc/sudoers.d/node-codex-config && \
+    chmod 0440 /etc/sudoers.d/node-opencode-config && \
     chmod 0440 /etc/sudoers.d/node-python
 
 # Switch back to node user for runtime
@@ -929,7 +933,70 @@ fi
 echo "[YES] Codex configuration complete"
 ```
 
-### File 8: `.devcontainer/setup-git-hooks.sh`
+### File 8: `.devcontainer/init-opencode-config.sh`
+
+**Purpose:** Initialize OpenCode configuration directory and provide setup instructions.
+
+**Key features:**
+- Creates `/home/node/.opencode` directory if missing
+- Sets correct ownership for node user (without sudo - script runs as root)
+- Provider-agnostic setup supporting Anthropic, OpenAI, Google
+- Informational output guiding users on configuration options
+
+**Implementation:**
+
+```bash
+#!/usr/bin/env bash
+#
+# OpenCode Configuration Initialization Script
+#
+# Purpose: Initialize OpenCode configuration for devcontainer environment
+# This script runs during container creation (postCreateCommand) to set up
+# OpenCode's configuration directory and provide default settings.
+#
+# OpenCode is provider-agnostic and supports:
+# - Anthropic (Claude)
+# - OpenAI
+# - Google (Gemini)
+# - Local models
+#
+# Users should configure their preferred provider via:
+# - Environment variables (ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY)
+# - opencode config commands
+#
+
+set -e
+
+echo "🔧 Initializing OpenCode configuration..."
+
+# Ensure OpenCode config directory exists
+OPENCODE_DIR="/home/node/.opencode"
+if [ ! -d "$OPENCODE_DIR" ]; then
+    echo "📁 Creating OpenCode config directory: $OPENCODE_DIR"
+    mkdir -p "$OPENCODE_DIR"
+    chown -R node:node "$OPENCODE_DIR"
+fi
+
+echo "✅ OpenCode configuration initialized"
+echo ""
+echo "📝 To configure OpenCode, set your preferred AI provider:"
+echo ""
+echo "   Option 1: Anthropic (Claude)"
+echo "   export ANTHROPIC_API_KEY=your_api_key"
+echo ""
+echo "   Option 2: OpenAI"
+echo "   export OPENAI_API_KEY=your_api_key"
+echo ""
+echo "   Option 3: Google (Gemini)"
+echo "   export GOOGLE_API_KEY=your_api_key"
+echo ""
+echo "   Or use: opencode config set provider <anthropic|openai|google>"
+echo ""
+```
+
+**Critical Fix:** This script uses `chown` (NOT `sudo chown`) because it already runs as root via sudoers NOPASSWD configuration. Using `sudo` would cause container rebuild failures. This matches the proven pattern from `init-claude-config.sh` and `init-codex-config.sh`.
+
+### File 9: `.devcontainer/setup-git-hooks.sh`
 
 ```bash
 #!/bin/bash
@@ -4878,17 +4945,18 @@ For AI development containers with Claude Code, Codex, Gemini:
 
 > **Note**: This section provides detailed explanations. For a ready-to-copy complete example, jump to [Complete Example (Copy This)](#complete-example-copy-this).
 
-Configure multiple AI assistants (Claude Code, OpenAI Codex, Google Gemini) in one container.
+Configure multiple AI assistants (Claude Code, OpenAI Codex, Google Gemini, OpenCode) in one container.
 
 ### Installing Multiple CLIs
 
 **Dockerfile additions**:
 
 ```dockerfile
-# Install Claude Code, Codex, Gemini
+# Install Claude Code, OpenCode, Codex, Gemini
 USER node
 RUN npm install -g \
  @anthropic-ai/claude-code@latest \
+ opencode-ai@latest \
  @openai/codex \
  @google/gemini-cli
 ```
@@ -4904,6 +4972,7 @@ RUN npm install -g \
  "extensions": [
  "anthropic.claude-code",
  "openai.chatgpt",
+ "sst-dev.opencode",
  "google.gemini-cli-vscode-ide-companion",
  "google.geminicodeassist",
  "github.copilot",
@@ -4931,6 +5000,7 @@ RUN npm install -g \
  "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume",
  "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
  "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+ "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
  "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume"
  ]
 }
