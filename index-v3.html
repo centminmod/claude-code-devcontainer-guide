@@ -4,9 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claude Code DevContainers - Complete Setup Guide</title>
+    <meta
+      name="description"
+      content="A comprehensive guide to development containers for Claude Code with professional multi-AI setup examples"
+    />
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Claude Code DevContainers - Complete Setup Guide"
+    />
+    <meta
+      property="og:description"
+      content="Master development containers with this comprehensive guide for Claude Code, covering React, Python, MCP servers, and multi-AI environments"
+    />
+    <meta property="og:site_name" content="Claude Code Documentation" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Claude Code DevContainers Setup Guide" />
+    <meta
+      name="twitter:description"
+      content="Complete guide for professional AI-assisted development environments"
+    />
+
+    <!-- Theme Color - Material Design 3 -->
+    <meta
+      name="theme-color"
+      content="#6366f1"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0f172a"
+      media="(prefers-color-scheme: dark)"
+    />
 
     <!-- Tailwind CSS for utility classes (sidebar, overlay, responsive layout) -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Highlight.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
 
     <style>
         /* ===================================
@@ -825,6 +870,45 @@
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M4 6h16M4 12h16M4 18h16"
+                />
+            </svg>
+        </button>
+
+        <!-- Dark Mode Toggle Button -->
+        <button
+            id="darkModeToggle"
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all duration-200"
+            aria-label="Toggle dark mode"
+            style="z-index: 10;"
+        >
+            <svg
+                id="sunIcon"
+                class="w-6 h-6 text-white hidden dark:block"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+            </svg>
+            <svg
+                id="moonIcon"
+                class="w-6 h-6 text-white block dark:hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                 />
             </svg>
         </button>
@@ -2800,7 +2884,7 @@ mkdir -p "$OPENCODE_DIR"
 chown -R node:node "$OPENCODE_DIR"
 
 echo "✅ OpenCode CLI directory configured"
-echo "ℹ️  Configure provider: opencode config set provider <anthropic|openai|google>"
+echo "ℹ️  Configure provider: opencode config set provider &lt;anthropic|openai|google&gt;"
 echo "=== OpenCode CLI Configuration Complete ==="</code></pre>
                         </div>
                     </details>
@@ -5818,6 +5902,51 @@ docker system prune -a
         const tocOverlay = document.getElementById('tocOverlay');
         const tocLinks = document.querySelectorAll('.toc-link');
         const sections = document.querySelectorAll('section[id]');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        // ====================================
+        // Dark Mode Toggle with localStorage
+        // ====================================
+        function setDarkMode(isDark) {
+            html.classList.toggle('dark', isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Initialize dark mode from localStorage or system preference
+        (function initDarkMode() {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (theme === 'dark' || (!theme && prefersDark)) {
+                html.classList.add('dark');
+            }
+        })();
+
+        // Dark mode toggle button click handler
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                setDarkMode(isDark);
+            });
+        }
+
+        // Keyboard shortcut 't' to toggle dark mode
+        document.addEventListener('keydown', (e) => {
+            const isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+            if (e.key === 't' && !e.ctrlKey && !e.metaKey && !isTyping) {
+                if (darkModeToggle) {
+                    darkModeToggle.click();
+                }
+            }
+        });
+
+        // ====================================
+        // Highlight.js Initialization
+        // ====================================
+        if (typeof hljs !== 'undefined') {
+            hljs.highlightAll();
+        }
 
         // ====================================
         // Mobile Menu Toggle
