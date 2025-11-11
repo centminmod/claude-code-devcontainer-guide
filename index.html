@@ -219,6 +219,8 @@
       html,
       body {
         background: var(--bg);
+        /* Prevent horizontal scroll causing off‑viewport fixed elements */
+        overflow-x: hidden;
       }
       body {
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI,
