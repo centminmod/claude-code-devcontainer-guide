@@ -528,6 +528,18 @@
         }
       }
 
+      /* Quick Start → Prerequisites readability tweak
+         Ensures comfortable line-height for the blue note paragraph
+         without affecting other sections. Also trims inline code
+         vertical padding so it doesn’t bloat the line box. */
+      #quick-start .prereq-text {
+        line-height: 1.7;
+      }
+      #quick-start .prereq-text code {
+        padding-top: 0.05rem;
+        padding-bottom: 0.05rem;
+      }
+
       /* Screen-reader only utility */
       .sr-only {
         position: absolute;
@@ -1023,6 +1035,20 @@
               🚀 Quick Start
             </h2>
             <div class="prose prose-lg dark:prose-invert max-w-none">
+              <div
+                class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg"
+              >
+                <p class="text-blue-900 dark:text-blue-200 font-medium mb-2">
+                  📋 Prerequisites
+                </p>
+                <p class="text-sm text-blue-800 dark:text-blue-300 leading-relaxed prereq-text">
+                  Before you can open a project in a dev container, you need a
+                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">.devcontainer</code>
+                  folder with configuration files (<code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">devcontainer.json</code>,
+                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">Dockerfile</code>, etc.).
+                  <strong>This guide will show you how to create these files step-by-step in the sections below.</strong>
+                </p>
+              </div>
               <ol
                 class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300"
               >
