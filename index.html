@@ -28,8 +28,16 @@
     />
 
     <!-- Theme Color - Material Design 3 -->
-    <meta name="theme-color" content="#10A37F" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0B0F19" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#10A37F"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0B0F19"
+      media="(prefers-color-scheme: dark)"
+    />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
 
@@ -163,7 +171,7 @@
         --brand: #10a37f;
         --brand-strong: #0e8e70;
         --accent: #0b5fff;
-        --focus: 0 0 0 3px rgba(11,95,255,0.35);
+        --focus: 0 0 0 3px rgba(11, 95, 255, 0.35);
         --code-bg: #0f172a; /* editor-like dark bg */
         --code-fg: #f3f6fc;
         --code-border: #1f2937;
@@ -171,13 +179,13 @@
         --inline-code-fg: #0b0f19;
         --inline-code-border: #c7d2fe;
         /* Code token colors tuned for dark bg */
-        --code-keyword: #A8CCFF;
-        --code-string: #B0F8B3;
-        --code-number: #FFC8C8;
+        --code-keyword: #a8ccff;
+        --code-string: #b0f8b3;
+        --code-number: #ffc8c8;
         --code-attr: #ffe08a;
         --code-title: #c7c5ff;
         --code-name: #7dd3fc;
-        --code-comment: #A6B4C2;
+        --code-comment: #a6b4c2;
         color-scheme: light;
       }
       .dark:root {
@@ -191,28 +199,31 @@
         --brand: #10a37f;
         --brand-strong: #10a37f;
         --accent: #5b8aff;
-        --focus: 0 0 0 3px rgba(16,163,127,0.4);
+        --focus: 0 0 0 3px rgba(16, 163, 127, 0.4);
         --code-bg: #0f1d33; /* slightly lighter than page for separation */
         --code-fg: #eef2ff;
         --code-border: #2a3750;
-        --inline-code-bg: #2B3A57; /* more contrast on dark */
+        --inline-code-bg: #2b3a57; /* more contrast on dark */
         --inline-code-fg: #e7eaf3;
         --inline-code-border: #455879;
-        --code-keyword: #A8CCFF;
-        --code-string: #B0F8B3;
-        --code-number: #FFC8C8;
+        --code-keyword: #a8ccff;
+        --code-string: #b0f8b3;
+        --code-number: #ffc8c8;
         --code-attr: #ffe599;
         --code-title: #d1d0ff;
         --code-name: #93e5ff;
-        --code-comment: #A6B4C2;
+        --code-comment: #a6b4c2;
         color-scheme: dark;
       }
 
-      html, body {
+      html,
+      body {
         background: var(--bg);
       }
       body {
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI,
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
         color: var(--text-1);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -220,75 +231,153 @@
       }
 
       /* Links */
-      a { color: var(--accent); }
-      a:hover { color: var(--brand); }
+      a {
+        color: var(--accent);
+      }
+      a:hover {
+        color: var(--brand);
+      }
 
       /* Headings scale + weight */
-      .prose h1 { font-weight: 800; letter-spacing: -0.02em; }
-      .prose h2 { font-weight: 700; letter-spacing: -0.02em; }
-      .prose h3 { font-weight: 600; letter-spacing: -0.01em; }
-      .prose h4 { font-weight: 600; }
-      .prose p, .prose li { color: var(--text-2); }
-      .prose strong { color: var(--text-1); }
+      .prose h1 {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .prose h2 {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .prose h3 {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .prose h4 {
+        font-weight: 600;
+      }
+      .prose p,
+      .prose li {
+        color: var(--text-2);
+      }
+      .prose strong {
+        color: var(--text-1);
+      }
 
       /* Card-like surfaces (exclude pre so code blocks can use dedicated bg) */
-      .card, nav.sticky, header.sticky, #tocSidebar nav {
+      .card,
+      nav.sticky,
+      header.sticky,
+      #tocSidebar nav {
         background: var(--surface-1);
         border: 1px solid var(--border);
-        box-shadow: 0 1px 1px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.04);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02),
+          0 8px 24px rgba(0, 0, 0, 0.04);
       }
 
       /* Buttons that used 'bg-primary/secondary' now use brand */
-      .bg-primary, .text-primary { background-color: var(--brand) !important; color: #fff !important; }
-      .hover\:bg-secondary:hover { background-color: var(--brand-strong) !important; }
-      .text-primary { color: var(--brand) !important; background: none !important; }
+      .bg-primary,
+      .text-primary {
+        background-color: var(--brand) !important;
+        color: #fff !important;
+      }
+      .hover\:bg-secondary:hover {
+        background-color: var(--brand-strong) !important;
+      }
+      .text-primary {
+        color: var(--brand) !important;
+        background: none !important;
+      }
 
       /* Map common Tailwind gray utilities to new tokens (scoped overrides) */
-      .text-gray-900 { color: var(--text-1) !important; }
-      .text-gray-800, .text-gray-700 { color: var(--text-2) !important; }
-      .text-gray-600, .text-gray-500 { color: var(--muted) !important; }
-      .bg-gray-50, .bg-white { background: var(--surface-1) !important; }
+      .text-gray-900 {
+        color: var(--text-1) !important;
+      }
+      .text-gray-800,
+      .text-gray-700 {
+        color: var(--text-2) !important;
+      }
+      .text-gray-600,
+      .text-gray-500 {
+        color: var(--muted) !important;
+      }
+      .bg-gray-50,
+      .bg-white {
+        background: var(--surface-1) !important;
+      }
       /* Avoid overriding code block <pre> that may carry bg-gray-800 */
-      .dark .bg-gray-800:not(pre), .dark .bg-gray-900:not(pre) { background: var(--surface-1) !important; }
-      .border-gray-200 { border-color: var(--border) !important; }
-      .dark .border-gray-700 { border-color: var(--border) !important; }
+      .dark .bg-gray-800:not(pre),
+      .dark .bg-gray-900:not(pre) {
+        background: var(--surface-1) !important;
+      }
+      .border-gray-200 {
+        border-color: var(--border) !important;
+      }
+      .dark .border-gray-700 {
+        border-color: var(--border) !important;
+      }
 
       /* Inputs and focus */
-      :where(button, [role="button"], a, input, textarea, select):focus-visible {
-        outline: none; box-shadow: var(--focus);
+      :where(
+          button,
+          [role="button"],
+          a,
+          input,
+          textarea,
+          select
+        ):focus-visible {
+        outline: none;
+        box-shadow: var(--focus);
         border-radius: 8px;
       }
 
       /* Code and pre styling */
-      code, pre, .hljs {
-        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      code,
+      pre,
+      .hljs {
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+          Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       }
-      .prose pre, pre, .code-block-wrapper pre {
+      .prose pre,
+      pre,
+      .code-block-wrapper pre {
         background: var(--code-bg) !important;
         background-color: var(--code-bg) !important;
         /* Light theme: softer overlays */
-        background-image:
-          linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0) 28%),
-          linear-gradient(0deg, rgba(0,0,0,0.06), rgba(0,0,0,0) 24%) !important;
+        background-image: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0) 28%
+          ),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0) 24%) !important;
         background-repeat: no-repeat !important;
         color: var(--code-fg) !important;
         border: 1px solid var(--code-border) !important;
         /* Add subtle brand-tinted top accent + existing inner/dropshadow */
-        box-shadow: inset 0 2px 0 rgba(16,163,127,0.12), inset 0 0 0 1px rgba(255,255,255,0.04), 0 8px 16px rgba(0,0,0,0.18);
+        box-shadow: inset 0 2px 0 rgba(16, 163, 127, 0.12),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+          0 8px 16px rgba(0, 0, 0, 0.18);
         border-radius: 12px;
         padding: 1rem 1.25rem;
         line-height: 1.55; /* slightly tighter */
         overflow: auto;
       }
       /* Dark theme: stronger overlays + slightly stronger brand accent */
-      .dark .prose pre, .dark pre, .dark .code-block-wrapper pre {
-        background-image:
-          linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 28%),
-          linear-gradient(0deg, rgba(0,0,0,0.14), rgba(0,0,0,0) 24%) !important;
-        box-shadow: inset 0 2px 0 rgba(16,163,127,0.22), inset 0 0 0 1px rgba(255,255,255,0.05), 0 8px 16px rgba(0,0,0,0.20);
+      .dark .prose pre,
+      .dark pre,
+      .dark .code-block-wrapper pre {
+        background-image: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0) 28%
+          ),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0) 24%) !important;
+        box-shadow: inset 0 2px 0 rgba(16, 163, 127, 0.22),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+          0 8px 16px rgba(0, 0, 0, 0.2);
       }
       @media (max-width: 640px) {
-        .prose pre, pre, .code-block-wrapper pre {
+        .prose pre,
+        pre,
+        .code-block-wrapper pre {
           padding: 1.25rem 1.35rem;
         }
       }
@@ -302,40 +391,102 @@
       }
       /* Subtle legibility bump for inline code on dark */
       .dark .prose code:not(pre code) {
-        text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
       }
 
       /* Custom Highlight.js theme (light/dark aware via CSS vars) */
-      .hljs { background: transparent; color: var(--code-fg); }
-      .hljs-comment, .hljs-quote { color: var(--code-comment); font-style: italic; }
-      .hljs-keyword, .hljs-selector-tag, .hljs-literal { color: var(--code-keyword); }
-      .hljs-type, .hljs-built_in, .hljs-title { color: var(--code-title); }
-      .hljs-number, .hljs-selector-attr, .hljs-selector-pseudo { color: var(--code-number); }
-      .hljs-string, .hljs-doctag { color: var(--code-string); }
-      .hljs-attr, .hljs-attribute, .hljs-builtin-name { color: var(--code-attr); }
-      .hljs-name, .hljs-section, .hljs-selector-id { color: var(--code-name); }
-      .hljs-emphasis { font-style: italic; }
-      .hljs-strong { font-weight: 600; }
-      .hljs-link { color: #5b8aff; text-decoration: underline; }
+      .hljs {
+        background: transparent;
+        color: var(--code-fg);
+      }
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--code-comment);
+        font-style: italic;
+      }
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-literal {
+        color: var(--code-keyword);
+      }
+      .hljs-type,
+      .hljs-built_in,
+      .hljs-title {
+        color: var(--code-title);
+      }
+      .hljs-number,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo {
+        color: var(--code-number);
+      }
+      .hljs-string,
+      .hljs-doctag {
+        color: var(--code-string);
+      }
+      .hljs-attr,
+      .hljs-attribute,
+      .hljs-builtin-name {
+        color: var(--code-attr);
+      }
+      .hljs-name,
+      .hljs-section,
+      .hljs-selector-id {
+        color: var(--code-name);
+      }
+      .hljs-emphasis {
+        font-style: italic;
+      }
+      .hljs-strong {
+        font-weight: 600;
+      }
+      .hljs-link {
+        color: #5b8aff;
+        text-decoration: underline;
+      }
 
       /* Tables */
-      .prose table { border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 10px; }
-      .prose thead th { background: var(--surface-2); color: var(--text-1); }
-      .prose tbody tr { border-bottom: 1px solid var(--border); }
+      .prose table {
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+      .prose thead th {
+        background: var(--surface-2);
+        color: var(--text-1);
+      }
+      .prose tbody tr {
+        border-bottom: 1px solid var(--border);
+      }
 
       /* Nav & sidebar polish */
-      header.sticky { background: color-mix(in oklab, var(--surface-1) 92%, transparent); }
-      #tocSidebar nav .toc-link:hover { background: color-mix(in oklab, var(--surface-2) 100%, transparent); }
+      header.sticky {
+        background: color-mix(in oklab, var(--surface-1) 92%, transparent);
+      }
+      #tocSidebar nav .toc-link:hover {
+        background: color-mix(in oklab, var(--surface-2) 100%, transparent);
+      }
 
       /* KBD badges */
-      kbd { background: var(--surface-2) !important; border: 1px solid var(--border) !important; color: var(--text-1) !important; }
+      kbd {
+        background: var(--surface-2) !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text-1) !important;
+      }
 
       /* Back to top button refinements */
-      #backToTop { background: var(--brand); border: none; }
-      #backToTop:hover { background: var(--brand-strong); }
+      #backToTop {
+        background: var(--brand);
+        border: none;
+      }
+      #backToTop:hover {
+        background: var(--brand-strong);
+      }
 
       /* Subtle section entrances */
-      .animate-fade-in { will-change: transform, opacity; }
+      .animate-fade-in {
+        will-change: transform, opacity;
+      }
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -395,12 +546,20 @@
       /* Back to top button */
       #backToTop {
         position: fixed;
-        bottom: 2rem;
-        right: 2rem;
+        /* Respect mobile safe areas (iOS notch etc.) */
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        right: max(1rem, env(safe-area-inset-right));
         opacity: 0;
         transform: translateY(100px);
         transition: opacity 0.3s, transform 0.3s;
         z-index: 40;
+        will-change: transform, opacity;
+      }
+      @media (max-width: 640px) {
+        #backToTop {
+          bottom: max(0.75rem, env(safe-area-inset-bottom));
+          right: max(0.75rem, env(safe-area-inset-right));
+        }
       }
       #backToTop.show {
         opacity: 1;
@@ -750,6 +909,13 @@
             <ul class="space-y-2 text-sm">
               <li>
                 <a
+                  href="#ai-prompts"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >AI Copy Prompts</a
+                >
+              </li>
+              <li>
+                <a
                   href="#introduction"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Introduction</a
@@ -954,6 +1120,176 @@
             </div>
           </div>
 
+          <!-- AI Copy Prompts (moved to top) -->
+          <section
+            id="ai-prompts"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+              ✨ AI Copy Prompts
+            </h2>
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+              <p class="text-gray-700 dark:text-gray-300">
+                Use these one‑click prompts to generate your <code>.devcontainer/</code>
+                files exactly as this guide specifies, using
+                <a
+                  href="https://claude-devcontainers.centminmod.com/llms.txt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="underline hover:text-green-600 dark:hover:text-green-400"
+                  >llms.txt</a
+                >
+                as the source of truth.
+              </p>
+            </div>
+
+            <!-- Copy‑Ready AI Prompts -->
+            <section id="ai-prompts-v3" aria-label="AI Prompt Helpers" class="mt-4">
+              <div
+                id="ai-prompt-cta-multi-v3"
+                class="card"
+                style="border-radius:12px;padding:16px;background:var(--surface-1);margin-bottom:14px"
+              >
+                <strong style="color:var(--text-1)">Multi‑AI Dev Container Prompt</strong>
+                <textarea
+                  id="ai-prompt-text-multi-v3"
+                  rows="8"
+                  style="width:100%;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid var(--code-border);border-radius:8px;margin-top:8px;background:var(--code-bg);color:var(--code-fg)"
+                  readonly
+                ></textarea>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                  <button
+                    id="copy-ai-prompt-multi-v3"
+                    type="button"
+                    style="background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 14px;cursor:pointer"
+                  >
+                    Copy prompt
+                  </button>
+                  <a
+                    id="open-chatgpt-multi-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in ChatGPT</a
+                  >
+                  <a
+                    id="open-claude-multi-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in Claude</a
+                  >
+                  <a
+                    id="open-cursor-multi-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in Cursor</a
+                  >
+                </div>
+                <small style="color:var(--muted)">Links prefill the same text as the copy button.</small>
+              </div>
+
+              <div
+                id="ai-prompt-cta-single-v3"
+                class="card"
+                style="border-radius:12px;padding:16px;background:var(--surface-1)"
+              >
+                <strong style="color:var(--text-1)">Single‑AI Dev Container Prompt</strong>
+                <textarea
+                  id="ai-prompt-text-single-v3"
+                  rows="8"
+                  style="width:100%;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid var(--code-border);border-radius:8px;margin-top:8px;background:var(--code-bg);color:var(--code-fg)"
+                  readonly
+                ></textarea>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                  <button
+                    id="copy-ai-prompt-single-v3"
+                    type="button"
+                    style="background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 14px;cursor:pointer"
+                  >
+                    Copy prompt
+                  </button>
+                  <a
+                    id="open-chatgpt-single-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in ChatGPT</a
+                  >
+                  <a
+                    id="open-claude-single-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in Claude</a
+                  >
+                  <a
+                    id="open-cursor-single-v3"
+                    role="button"
+                    target="_blank"
+                    rel="noopener"
+                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    >Open in Cursor</a
+                  >
+                </div>
+                <small style="color:var(--muted)">Links prefill the same text as the copy button.</small>
+              </div>
+            </section>
+
+            <script>
+              (function(){
+                function wire(kind, lines){
+                  const prompt = lines.join('\n');
+                  const $t = document.getElementById('ai-prompt-text-'+kind+'-v3');
+                  const $c = document.getElementById('copy-ai-prompt-'+kind+'-v3');
+                  const $g = document.getElementById('open-chatgpt-'+kind+'-v3');
+                  const $a = document.getElementById('open-claude-'+kind+'-v3');
+                  const $u = document.getElementById('open-cursor-'+kind+'-v3');
+                  if(!$t) return;
+                  $t.value = prompt;
+                  if($c){
+                    $c.addEventListener('click', async () => {
+                      try { await navigator.clipboard.writeText(prompt); $c.textContent='Copied!'; setTimeout(()=>($c.textContent='Copy prompt'),1200);} catch(_) { $t.removeAttribute('readonly'); $t.focus(); $t.select(); }
+                    });
+                  }
+                  if($g) $g.href = 'https://chatgpt.com/?hints=search&q=' + encodeURIComponent(prompt);
+                  if($a) $a.href  = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+                  if($u) $u.href  = 'https://cursor.com/link/prompt?text=' + encodeURIComponent(prompt);
+                }
+                wire('multi', [
+                  'Read https://claude-devcontainers.centminmod.com/llms.txt.',
+                  '',
+                  'Task: Using that llms.txt as the source of truth, help me create the VS Code Dev Container files for this repository exactly as the guide’s Multi‑AI dev container example specifies.',
+                  '',
+                  'Requirements:',
+                  '- Generate a complete `.devcontainer/` with the multi‑AI layout supporting Claude, GPT, and Gemini.',
+                  '- Include `devcontainer.json`, any needed `Dockerfile`(s), features, `postCreateCommand` scripts, recommended extensions, and env vars.',
+                  '- Follow the conventions, names, and structure from llms.txt; do not invent alternatives.',
+                  '- Output changes as patch-style diffs with exact file paths and final contents.',
+                  '- If anything is ambiguous, ask concise follow‑up questions before proceeding.'
+                ]);
+                wire('single', [
+                  'Read https://claude-devcontainers.centminmod.com/llms.txt.',
+                  '',
+                  'Task: Using that llms.txt as the source of truth, help me create the VS Code Dev Container files for this repository for a Single‑AI setup (one provider).',
+                  '',
+                  'Requirements:',
+                  '- Scaffold `.devcontainer/` for a single provider (ask me to pick: Claude OR GPT OR Gemini).',
+                  '- Include `devcontainer.json`, required `Dockerfile`(s) or features, `postCreateCommand`, recommended extensions, and env vars for the chosen provider only.',
+                  '- Follow the conventions and file naming used in llms.txt exactly.',
+                  '- Output changes as patch-style diffs with exact file paths and final contents.',
+                  '- Confirm provider choice and any account-specific env vars before writing files.'
+                ]);
+              })();
+            </script>
+          </section>
+
           <!-- Introduction -->
           <section
             id="introduction"
@@ -1041,12 +1377,24 @@
                 <p class="text-blue-900 dark:text-blue-200 font-medium mb-2">
                   📋 Prerequisites
                 </p>
-                <p class="text-sm text-blue-800 dark:text-blue-300 leading-relaxed prereq-text">
+                <p
+                  class="text-sm text-blue-800 dark:text-blue-300 leading-relaxed prereq-text"
+                >
                   Before you can open a project in a dev container, you need a
-                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">.devcontainer</code>
-                  folder with configuration files (<code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">devcontainer.json</code>,
-                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">Dockerfile</code>, etc.).
-                  <strong>This guide will show you how to create these files step-by-step in the sections below.</strong>
+                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded"
+                    >.devcontainer</code
+                  >
+                  folder with configuration files (<code
+                    class="bg-blue-100 dark:bg-blue-900 px-1 rounded"
+                    >devcontainer.json</code
+                  >,
+                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded"
+                    >Dockerfile</code
+                  >, etc.).
+                  <strong
+                    >This guide will show you how to create these files
+                    step-by-step in the sections below.</strong
+                  >
                 </p>
               </div>
               <ol
@@ -9191,6 +9539,8 @@ docker system prune -a
       aria-live="polite"
       class="sr-only"
     ></div>
+
+    
 
     <!-- Cloudflare Web Analytics -->
     <script
