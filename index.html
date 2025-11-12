@@ -1211,7 +1211,8 @@
             </h2>
             <div class="prose prose-lg dark:prose-invert max-w-none">
               <p class="text-gray-700 dark:text-gray-300">
-                Use these one‑click prompts to generate your <code>.devcontainer/</code>
+                Use these one‑click prompts to generate your
+                <code>.devcontainer/</code>
                 files exactly as this guide specifies, using
                 <a
                   href="https://claude-devcontainers.centminmod.com/llms.txt"
@@ -1220,8 +1221,9 @@
                   class="underline hover:text-green-600 dark:hover:text-green-400"
                   >llms.txt</a
                 >
-                as the source of truth. Prefer to start from a working example?
-                Fork the
+                as the source of truth (AI may hallucinate so double check with
+                actual below guide to be 100% sure). Prefer to start from a
+                working example? Fork the
                 <a
                   href="https://github.com/centminmod/claude-code-devcontainers"
                   target="_blank"
@@ -1234,24 +1236,58 @@
             </div>
 
             <!-- Copy‑Ready AI Prompts -->
-            <section id="ai-prompts-v3" aria-label="AI Prompt Helpers" class="mt-4">
+            <section
+              id="ai-prompts-v3"
+              aria-label="AI Prompt Helpers"
+              class="mt-4"
+            >
               <div
                 id="ai-prompt-cta-multi-v3"
                 class="card"
-                style="border-radius:12px;padding:16px;background:var(--surface-1);margin-bottom:14px"
+                style="
+                  border-radius: 12px;
+                  padding: 16px;
+                  background: var(--surface-1);
+                  margin-bottom: 14px;
+                "
               >
-                <strong style="color:var(--text-1)">Multi‑AI Dev Container Prompt</strong>
+                <strong style="color: var(--text-1)"
+                  >Multi‑AI Dev Container Prompt</strong
+                >
                 <textarea
                   id="ai-prompt-text-multi-v3"
                   rows="8"
-                  style="width:100%;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid var(--code-border);border-radius:8px;margin-top:8px;background:var(--code-bg);color:var(--code-fg)"
+                  style="
+                    width: 100%;
+                    font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
+                    padding: 10px;
+                    border: 1px solid var(--code-border);
+                    border-radius: 8px;
+                    margin-top: 8px;
+                    background: var(--code-bg);
+                    color: var(--code-fg);
+                  "
                   readonly
                 ></textarea>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                <div
+                  style="
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                    margin-top: 10px;
+                  "
+                >
                   <button
                     id="copy-ai-prompt-multi-v3"
                     type="button"
-                    style="background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 14px;cursor:pointer"
+                    style="
+                      background: var(--brand);
+                      color: #fff;
+                      border: 0;
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      cursor: pointer;
+                    "
                   >
                     Copy prompt
                   </button>
@@ -1260,7 +1296,14 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in ChatGPT</a
                   >
                   <a
@@ -1268,7 +1311,14 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in Claude</a
                   >
                   <a
@@ -1276,30 +1326,68 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in Cursor</a
                   >
                 </div>
-                <small style="color:var(--muted)">Links prefill the same text as the copy button.</small>
+                <small style="color: var(--muted)"
+                  >Links prefill the same text as the copy button.</small
+                >
               </div>
 
               <div
                 id="ai-prompt-cta-single-v3"
                 class="card"
-                style="border-radius:12px;padding:16px;background:var(--surface-1)"
+                style="
+                  border-radius: 12px;
+                  padding: 16px;
+                  background: var(--surface-1);
+                "
               >
-                <strong style="color:var(--text-1)">Single‑AI Dev Container Prompt</strong>
+                <strong style="color: var(--text-1)"
+                  >Single‑AI Dev Container Prompt</strong
+                >
                 <textarea
                   id="ai-prompt-text-single-v3"
                   rows="8"
-                  style="width:100%;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid var(--code-border);border-radius:8px;margin-top:8px;background:var(--code-bg);color:var(--code-fg)"
+                  style="
+                    width: 100%;
+                    font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
+                    padding: 10px;
+                    border: 1px solid var(--code-border);
+                    border-radius: 8px;
+                    margin-top: 8px;
+                    background: var(--code-bg);
+                    color: var(--code-fg);
+                  "
                   readonly
                 ></textarea>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                <div
+                  style="
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                    margin-top: 10px;
+                  "
+                >
                   <button
                     id="copy-ai-prompt-single-v3"
                     type="button"
-                    style="background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 14px;cursor:pointer"
+                    style="
+                      background: var(--brand);
+                      color: #fff;
+                      border: 0;
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      cursor: pointer;
+                    "
                   >
                     Copy prompt
                   </button>
@@ -1308,7 +1396,14 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in ChatGPT</a
                   >
                   <a
@@ -1316,7 +1411,14 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in Claude</a
                   >
                   <a
@@ -1324,150 +1426,188 @@
                     role="button"
                     target="_blank"
                     rel="noopener"
-                    style="text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:10px 14px;color:var(--text-1);background:var(--surface-1)"
+                    style="
+                      text-decoration: none;
+                      border: 1px solid var(--border);
+                      border-radius: 999px;
+                      padding: 10px 14px;
+                      color: var(--text-1);
+                      background: var(--surface-1);
+                    "
                     >Open in Cursor</a
                   >
                 </div>
-                <small style="color:var(--muted)">Links prefill the same text as the copy button.</small>
+                <small style="color: var(--muted)"
+                  >Links prefill the same text as the copy button.</small
+                >
               </div>
             </section>
 
             <script>
-              (function(){
-                function wire(kind, lines){
-                  const prompt = lines.join('\n');
-                  const $t = document.getElementById('ai-prompt-text-'+kind+'-v3');
-                  const $c = document.getElementById('copy-ai-prompt-'+kind+'-v3');
-                  const $g = document.getElementById('open-chatgpt-'+kind+'-v3');
-                  const $a = document.getElementById('open-claude-'+kind+'-v3');
-                  const $u = document.getElementById('open-cursor-'+kind+'-v3');
-                  if(!$t) return;
+              (function () {
+                function wire(kind, lines) {
+                  const prompt = lines.join("\n");
+                  const $t = document.getElementById(
+                    "ai-prompt-text-" + kind + "-v3"
+                  );
+                  const $c = document.getElementById(
+                    "copy-ai-prompt-" + kind + "-v3"
+                  );
+                  const $g = document.getElementById(
+                    "open-chatgpt-" + kind + "-v3"
+                  );
+                  const $a = document.getElementById(
+                    "open-claude-" + kind + "-v3"
+                  );
+                  const $u = document.getElementById(
+                    "open-cursor-" + kind + "-v3"
+                  );
+                  if (!$t) return;
                   $t.value = prompt;
-                  if($c){
-                    $c.addEventListener('click', async () => {
-                      try { await navigator.clipboard.writeText(prompt); $c.textContent='Copied!'; setTimeout(()=>($c.textContent='Copy prompt'),1200);} catch(_) { $t.removeAttribute('readonly'); $t.focus(); $t.select(); }
+                  if ($c) {
+                    $c.addEventListener("click", async () => {
+                      try {
+                        await navigator.clipboard.writeText(prompt);
+                        $c.textContent = "Copied!";
+                        setTimeout(
+                          () => ($c.textContent = "Copy prompt"),
+                          1200
+                        );
+                      } catch (_) {
+                        $t.removeAttribute("readonly");
+                        $t.focus();
+                        $t.select();
+                      }
                     });
                   }
-                  if($g) $g.href = 'https://chatgpt.com/?hints=search&q=' + encodeURIComponent(prompt);
-                  if($a) $a.href  = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
-                  if($u) $u.href  = 'https://cursor.com/link/prompt?text=' + encodeURIComponent(prompt);
+                  if ($g)
+                    $g.href =
+                      "https://chatgpt.com/?hints=search&q=" +
+                      encodeURIComponent(prompt);
+                  if ($a)
+                    $a.href =
+                      "https://claude.ai/new?q=" + encodeURIComponent(prompt);
+                  if ($u)
+                    $u.href =
+                      "https://cursor.com/link/prompt?text=" +
+                      encodeURIComponent(prompt);
                 }
-                wire('multi', [
-                  'Read BOTH documentation sources:',
-                  '1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference',
-                  '2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples',
-                  '',
-                  'Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.',
-                  '',
-                  'Task: Help me create VS Code Dev Container files for a Multi-AI setup (Claude + GPT + Gemini + OpenCode).',
-                  '',
-                  'Step 1 - Ask me to choose:',
-                  'a) Complexity level:',
+                wire("multi", [
+                  "Read BOTH documentation sources:",
+                  "1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference",
+                  "2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples",
+                  "",
+                  "Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.",
+                  "",
+                  "Task: Help me create VS Code Dev Container files for a Multi-AI setup (Claude + GPT + Gemini + OpenCode).",
+                  "",
+                  "Step 1 - Ask me to choose:",
+                  "a) Complexity level:",
                   '   - "5-Minute Minimal" (8 volumes, basic setup, quick experiments)',
                   '   - "Production-Ready" (13 volumes, recommended for most projects)',
                   '   - "Complete Example" (all features from llms.txt lines 505-885, full production with 13 volumes)',
-                  'b) Output format:',
+                  "b) Output format:",
                   '   - "Complete files" (full file contents, ready to copy-paste)',
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
-                  '',
-                  'Step 2 - Generate these files in `.devcontainer/`:',
-                  'Core files:',
-                  '- devcontainer.json (use Production-Ready structure with 13 volume mounts for full production, or 8 for minimal)',
-                  '- Dockerfile (node:22 base with all init scripts)',
-                  '- init-firewall.sh',
-                  '- init-claude-config.sh',
-                  '- init-codex-config.sh',
-                  '- init-python.sh',
-                  '- init-claude-hooks.sh',
-                  '- setup-git-hooks.sh',
-                  '',
-                  'Template files (REQUIRED - fetch EXACT contents from repository):',
-                  '- config.toml.template (52 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template',
-                  '- mcp.json.template (16 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template',
-                  '- settings.json.template (32 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template',
-                  '- session-start.sh.template (144 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template',
-                  '',
-                  '⚠️ CRITICAL - DO NOT fabricate template contents:',
-                  '- DO NOT create minimal/simplified versions',
+                  "",
+                  "Step 2 - Generate these files in `.devcontainer/`:",
+                  "Core files:",
+                  "- devcontainer.json (use Production-Ready structure with 13 volume mounts for full production, or 8 for minimal)",
+                  "- Dockerfile (node:22 base with all init scripts)",
+                  "- init-firewall.sh",
+                  "- init-claude-config.sh",
+                  "- init-codex-config.sh",
+                  "- init-python.sh",
+                  "- init-claude-hooks.sh",
+                  "- setup-git-hooks.sh",
+                  "",
+                  "Template files (REQUIRED - fetch EXACT contents from repository):",
+                  "- config.toml.template (52 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template",
+                  "- mcp.json.template (16 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template",
+                  "- settings.json.template (32 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template",
+                  "- session-start.sh.template (144 lines) - https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template",
+                  "",
+                  "⚠️ CRITICAL - DO NOT fabricate template contents:",
+                  "- DO NOT create minimal/simplified versions",
                   '- DO NOT invent field names (e.g., "clients" instead of "mcpServers")',
-                  '- DO NOT use placeholder scripts',
-                  '- ALWAYS fetch exact file contents from repository links above',
-                  '',
-                  'Requirements:',
+                  "- DO NOT use placeholder scripts",
+                  "- ALWAYS fetch exact file contents from repository links above",
+                  "",
+                  "Requirements:",
                   '- Follow the exact structure from llms.txt "Complete Example" section (lines 505-885)',
-                  '- Include ALL Multi-AI extensions (Claude, OpenAI, Gemini, OpenCode, Copilot)',
-                  '- Dockerfile must copy templates to /usr/local/share/claude-defaults/',
-                  '- Use exact file names and structure from the Complete Example',
-                  '- Output in the format chosen by user (complete files or patch-style diffs)',
-                  '',
-                  'Verification checklist after generation:',
-                  '✓ 8 core files in .devcontainer/',
-                  '✓ 4 template files present',
-                  '✓ 8 volume mounts (minimal) or 13 volume mounts (production) in devcontainer.json',
-                  '✓ All init scripts referenced in postCreateCommand',
-                  '✓ All template files copied in Dockerfile'
+                  "- Include ALL Multi-AI extensions (Claude, OpenAI, Gemini, OpenCode, Copilot)",
+                  "- Dockerfile must copy templates to /usr/local/share/claude-defaults/",
+                  "- Use exact file names and structure from the Complete Example",
+                  "- Output in the format chosen by user (complete files or patch-style diffs)",
+                  "",
+                  "Verification checklist after generation:",
+                  "✓ 8 core files in .devcontainer/",
+                  "✓ 4 template files present",
+                  "✓ 8 volume mounts (minimal) or 13 volume mounts (production) in devcontainer.json",
+                  "✓ All init scripts referenced in postCreateCommand",
+                  "✓ All template files copied in Dockerfile",
                 ]);
-                wire('single', [
-                  'Read BOTH documentation sources:',
-                  '1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference',
-                  '2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples',
-                  '',
-                  'Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.',
-                  '',
-                  'Task: Help me create VS Code Dev Container files for a Single-AI setup (one provider only).',
-                  '',
-                  'Step 1 - Ask me to choose:',
-                  'a) Which provider: Claude | GPT (Codex) | Gemini | OpenCode',
-                  'b) Complexity level:',
+                wire("single", [
+                  "Read BOTH documentation sources:",
+                  "1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference",
+                  "2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples",
+                  "",
+                  "Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.",
+                  "",
+                  "Task: Help me create VS Code Dev Container files for a Single-AI setup (one provider only).",
+                  "",
+                  "Step 1 - Ask me to choose:",
+                  "a) Which provider: Claude | GPT (Codex) | Gemini | OpenCode",
+                  "b) Complexity level:",
                   '   - "5-Minute Minimal" (8 volumes, basic setup, quick experiments)',
                   '   - "Production-Ready" (13 volumes, recommended for most projects)',
                   '   - "Complete Example" (all features from llms.txt lines 505-885, full production with 13 volumes)',
-                  'c) Output format:',
+                  "c) Output format:",
                   '   - "Complete files" (full file contents, ready to copy-paste)',
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
-                  '',
-                  'Step 2 - Generate these files in `.devcontainer/`:',
-                  'Core files:',
-                  '- devcontainer.json (use Production-Ready structure, include only chosen provider\'s extensions)',
-                  '- Dockerfile (node:22 base with provider-specific init scripts)',
-                  '- init-firewall.sh (always include)',
-                  '- init-python.sh (always include)',
-                  '- init-claude-hooks.sh (always include)',
-                  '- setup-git-hooks.sh (always include)',
-                  '- init-claude-config.sh (if Claude chosen)',
-                  '- init-codex-config.sh (if GPT/Codex chosen)',
-                  '',
-                  'Template files (REQUIRED - fetch EXACT contents from repository):',
-                  'Claude: settings.json.template (32 lines), mcp.json.template (16 lines), session-start.sh.template (144 lines)',
-                  'GPT/Codex: config.toml.template (52 lines), session-start.sh.template (144 lines)',
-                  'Gemini: session-start.sh.template (144 lines)',
-                  'OpenCode: session-start.sh.template (144 lines)',
-                  '',
-                  'Repository links (fetch exact contents - DO NOT fabricate):',
-                  '- config.toml.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template',
-                  '- mcp.json.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template',
-                  '- settings.json.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template',
-                  '- session-start.sh.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template',
-                  '',
-                  '⚠️ CRITICAL - DO NOT fabricate template contents:',
-                  '- DO NOT create minimal/simplified versions',
-                  '- DO NOT invent field names',
-                  '- DO NOT use placeholder scripts',
-                  '- ALWAYS fetch exact file contents from repository',
-                  '',
-                  'Requirements:',
+                  "",
+                  "Step 2 - Generate these files in `.devcontainer/`:",
+                  "Core files:",
+                  "- devcontainer.json (use Production-Ready structure, include only chosen provider's extensions)",
+                  "- Dockerfile (node:22 base with provider-specific init scripts)",
+                  "- init-firewall.sh (always include)",
+                  "- init-python.sh (always include)",
+                  "- init-claude-hooks.sh (always include)",
+                  "- setup-git-hooks.sh (always include)",
+                  "- init-claude-config.sh (if Claude chosen)",
+                  "- init-codex-config.sh (if GPT/Codex chosen)",
+                  "",
+                  "Template files (REQUIRED - fetch EXACT contents from repository):",
+                  "Claude: settings.json.template (32 lines), mcp.json.template (16 lines), session-start.sh.template (144 lines)",
+                  "GPT/Codex: config.toml.template (52 lines), session-start.sh.template (144 lines)",
+                  "Gemini: session-start.sh.template (144 lines)",
+                  "OpenCode: session-start.sh.template (144 lines)",
+                  "",
+                  "Repository links (fetch exact contents - DO NOT fabricate):",
+                  "- config.toml.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template",
+                  "- mcp.json.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template",
+                  "- settings.json.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template",
+                  "- session-start.sh.template: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template",
+                  "",
+                  "⚠️ CRITICAL - DO NOT fabricate template contents:",
+                  "- DO NOT create minimal/simplified versions",
+                  "- DO NOT invent field names",
+                  "- DO NOT use placeholder scripts",
+                  "- ALWAYS fetch exact file contents from repository",
+                  "",
+                  "Requirements:",
                   '- Follow the exact structure from llms.txt "Complete Example" section (lines 505-885)',
-                  '- Include ONLY the chosen provider\'s extensions (remove others)',
-                  '- Dockerfile must copy required templates to /usr/local/share/claude-defaults/',
-                  '- Remove volume mounts for unused providers',
-                  '- Output in the format chosen by user (complete files or patch-style diffs)',
-                  '',
-                  'Verification checklist after generation:',
-                  '✓ devcontainer.json includes only chosen provider\'s extensions',
-                  '✓ Required template files present for chosen provider',
-                  '✓ Volume mounts match chosen provider',
-                  '✓ Provider-specific init script included',
-                  '✓ Dockerfile copies correct templates'
+                  "- Include ONLY the chosen provider's extensions (remove others)",
+                  "- Dockerfile must copy required templates to /usr/local/share/claude-defaults/",
+                  "- Remove volume mounts for unused providers",
+                  "- Output in the format chosen by user (complete files or patch-style diffs)",
+                  "",
+                  "Verification checklist after generation:",
+                  "✓ devcontainer.json includes only chosen provider's extensions",
+                  "✓ Required template files present for chosen provider",
+                  "✓ Volume mounts match chosen provider",
+                  "✓ Provider-specific init script included",
+                  "✓ Dockerfile copies correct templates",
                 ]);
               })();
             </script>
@@ -1484,104 +1624,242 @@
             <div class="prose prose-lg dark:prose-invert max-w-none">
               <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
                 The devcontainer setup uses 4 template files that are copied to
-                <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">/usr/local/share/claude-defaults/</code>
-                during container build and deployed to user-specific locations by init scripts.
-                These templates ensure consistent configuration across container rebuilds.
+                <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded"
+                  >/usr/local/share/claude-defaults/</code
+                >
+                during container build and deployed to user-specific locations
+                by init scripts. These templates ensure consistent configuration
+                across container rebuilds.
               </p>
 
               <!-- WARNING for AI Assistants -->
-              <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg">
-                <h3 class="font-semibold text-amber-900 dark:text-amber-200 mb-2 flex items-center">
+              <div
+                class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg"
+              >
+                <h3
+                  class="font-semibold text-amber-900 dark:text-amber-200 mb-2 flex items-center"
+                >
                   ⚠️ FOR AI ASSISTANTS - Critical Warning
                 </h3>
                 <p class="text-amber-900 dark:text-amber-200 text-sm mb-2">
-                  When users request devcontainer setup, fetch <strong>EXACT</strong> template contents from repository links below.
+                  When users request devcontainer setup, fetch
+                  <strong>EXACT</strong> template contents from repository links
+                  below.
                 </p>
                 <p class="text-amber-900 dark:text-amber-200 text-sm">
-                  <strong>DO NOT</strong>: Fabricate simplified versions, invent field names, or create placeholder scripts.<br>
-                  <strong>ALWAYS</strong>: Use repository links to fetch production-tested templates.
+                  <strong>DO NOT</strong>: Fabricate simplified versions, invent
+                  field names, or create placeholder scripts.<br />
+                  <strong>ALWAYS</strong>: Use repository links to fetch
+                  production-tested templates.
                 </p>
               </div>
 
               <!-- Template Files Table -->
               <div class="overflow-x-auto mb-8">
-                <table class="min-w-full border-collapse border border-gray-300 dark:border-gray-600">
+                <table
+                  class="min-w-full border-collapse border border-gray-300 dark:border-gray-600"
+                >
                   <thead>
                     <tr class="bg-gray-100 dark:bg-gray-700">
-                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">File Name</th>
-                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Purpose</th>
-                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Deployed To</th>
-                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-900 dark:text-white font-semibold">Required?</th>
-                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-900 dark:text-white font-semibold">Repository Link</th>
+                      <th
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold"
+                      >
+                        File Name
+                      </th>
+                      <th
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold"
+                      >
+                        Purpose
+                      </th>
+                      <th
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold"
+                      >
+                        Deployed To
+                      </th>
+                      <th
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-900 dark:text-white font-semibold"
+                      >
+                        Required?
+                      </th>
+                      <th
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-900 dark:text-white font-semibold"
+                      >
+                        Repository Link
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="text-gray-700 dark:text-gray-300">
                     <tr>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">config.toml.template</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >config.toml.template</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        Codex CLI configuration with Landlock sandbox fix for Docker
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        Codex CLI configuration with Landlock sandbox fix for
+                        Docker
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.codex/config.toml</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >~/.codex/config.toml</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">GPT/Codex</span>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <span
+                          class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium"
+                          >GPT/Codex</span
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template" target="_blank" rel="noopener noreferrer" class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm">52 lines</a>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <a
+                          href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm"
+                          >52 lines</a
+                        >
                       </td>
                     </tr>
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">mcp.json.template</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >mcp.json.template</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
                         MCP servers configuration (context7, cf-docs)
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.claude/mcp.json</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >~/.claude/mcp.json</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">Claude</span>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <span
+                          class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium"
+                          >Claude</span
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template" target="_blank" rel="noopener noreferrer" class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm">16 lines</a>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <a
+                          href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm"
+                          >16 lines</a
+                        >
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">settings.json.template</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >settings.json.template</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        Claude Code optimizations: session hooks, performance settings. <strong>Note:</strong> Template includes OpenTelemetry config (optional - comment out if not using otel-collector service)
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        Claude Code optimizations: session hooks, performance
+                        settings. <strong>Note:</strong> Template includes
+                        OpenTelemetry config (optional - comment out if not
+                        using otel-collector service)
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.claude/settings.json</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >~/.claude/settings.json</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">Claude</span>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <span
+                          class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium"
+                          >Claude</span
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template" target="_blank" rel="noopener noreferrer" class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm">32 lines</a>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <a
+                          href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm"
+                          >32 lines</a
+                        >
                       </td>
                     </tr>
                     <tr class="bg-gray-50 dark:bg-gray-800/50">
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">session-start.sh.template</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >session-start.sh.template</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        Session validation hook: checks volumes, tools, MCP servers at session start
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        Session validation hook: checks volumes, tools, MCP
+                        servers at session start
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">.claude/hooks/session-start.sh</code>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3"
+                      >
+                        <code
+                          class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm"
+                          >.claude/hooks/session-start.sh</code
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <span class="inline-block px-3 py-1 bg-md-primary-100 dark:bg-md-primary-900/30 text-md-primary-800 dark:text-md-primary-200 rounded-full text-sm font-medium">Recommended</span>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <span
+                          class="inline-block px-3 py-1 bg-md-primary-100 dark:bg-md-primary-900/30 text-md-primary-800 dark:text-md-primary-200 rounded-full text-sm font-medium"
+                          >Recommended</span
+                        >
                       </td>
-                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
-                        <a href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template" target="_blank" rel="noopener noreferrer" class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm">144 lines</a>
+                      <td
+                        class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center"
+                      >
+                        <a
+                          href="https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-md-primary-600 dark:text-md-primary-400 hover:underline text-sm"
+                          >144 lines</a
+                        >
                       </td>
                     </tr>
                   </tbody>
@@ -1589,32 +1867,75 @@
               </div>
 
               <!-- Deployment Workflow -->
-              <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg">
-                <h3 class="font-semibold text-md-primary-900 dark:text-md-primary-200 mb-2">
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg"
+              >
+                <h3
+                  class="font-semibold text-md-primary-900 dark:text-md-primary-200 mb-2"
+                >
                   🔄 How Template Deployment Works
                 </h3>
-                <ol class="list-decimal list-inside space-y-2 text-md-primary-900 dark:text-md-primary-200 ml-2">
-                  <li>Dockerfile copies <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">.devcontainer/*.template</code> to <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">/usr/local/share/claude-defaults/</code></li>
-                  <li>Init scripts (<code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">init-claude-config.sh</code>, <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">init-codex-config.sh</code>) run at <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">postCreateCommand</code></li>
-                  <li>Templates are copied to user config directories (only if files don't already exist)</li>
-                  <li>User configs persist across container rebuilds via Docker volume mounts</li>
+                <ol
+                  class="list-decimal list-inside space-y-2 text-md-primary-900 dark:text-md-primary-200 ml-2"
+                >
+                  <li>
+                    Dockerfile copies
+                    <code
+                      class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm"
+                      >.devcontainer/*.template</code
+                    >
+                    to
+                    <code
+                      class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm"
+                      >/usr/local/share/claude-defaults/</code
+                    >
+                  </li>
+                  <li>
+                    Init scripts (<code
+                      class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm"
+                      >init-claude-config.sh</code
+                    >,
+                    <code
+                      class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm"
+                      >init-codex-config.sh</code
+                    >) run at
+                    <code
+                      class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm"
+                      >postCreateCommand</code
+                    >
+                  </li>
+                  <li>
+                    Templates are copied to user config directories (only if
+                    files don't already exist)
+                  </li>
+                  <li>
+                    User configs persist across container rebuilds via Docker
+                    volume mounts
+                  </li>
                 </ol>
               </div>
 
               <!-- Key Content Snippets -->
-              <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+              <h3
+                class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white"
+              >
                 🔑 Key Configuration Highlights
               </h3>
 
               <!-- config.toml -->
               <div class="mb-6">
-                <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                <h4
+                  class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+                >
                   config.toml.template (Codex CLI)
                 </h4>
-                <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mb-3 rounded-r-lg">
+                <div
+                  class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mb-3 rounded-r-lg"
+                >
                   <p class="text-md-error-900 dark:text-md-error-200 text-sm">
-                    <strong>⚠️ Critical:</strong> Disables Landlock sandbox (not supported in Docker's LinuxKit kernel).
-                    Security is provided by Docker isolation instead.
+                    <strong>⚠️ Critical:</strong> Disables Landlock sandbox (not
+                    supported in Docker's LinuxKit kernel). Security is provided
+                    by Docker isolation instead.
                   </p>
                 </div>
                 <div class="code-block-wrapper">
@@ -1624,7 +1945,9 @@
                   >
                     Copy
                   </button>
-                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-toml">model = "gpt-5"
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-toml">model = "gpt-5"
 model_reasoning_effort = "medium"
 
 # CRITICAL: Disable Landlock sandbox (not supported in Docker)
@@ -1643,13 +1966,20 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
 
               <!-- settings.json -->
               <div class="mb-6">
-                <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                <h4
+                  class="text-xl font-semibold mb-3 text-gray-900 dark:text-white"
+                >
                   settings.json.template (Claude Code)
                 </h4>
-                <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-3 rounded-r-lg">
-                  <p class="text-md-tertiary-900 dark:text-md-tertiary-200 text-sm">
-                    <strong>✨ Features:</strong> Enables OpenTelemetry metrics export, session start hooks,
-                    and optimizes Claude Code performance settings.
+                <div
+                  class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-3 rounded-r-lg"
+                >
+                  <p
+                    class="text-md-tertiary-900 dark:text-md-tertiary-200 text-sm"
+                  >
+                    <strong>✨ Features:</strong> Enables OpenTelemetry metrics
+                    export, session start hooks, and optimizes Claude Code
+                    performance settings.
                   </p>
                 </div>
                 <div class="code-block-wrapper">
@@ -1659,7 +1989,9 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                   >
                     Copy
                   </button>
-                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  ><code class="language-json">{
   "dangerously_skip_permissions": true,
   "verbose": true,
   "hooks": {
@@ -1682,14 +2014,43 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
 
               <!-- Quick Reference -->
               <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg">
-                <h4 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+                <h4
+                  class="text-lg font-semibold mb-3 text-gray-900 dark:text-white"
+                >
                   📋 Quick Reference
                 </h4>
                 <ul class="space-y-2 text-gray-700 dark:text-gray-300">
-                  <li><strong>View templates in container:</strong> <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">ls -la /usr/local/share/claude-defaults/</code></li>
-                  <li><strong>Check deployed configs:</strong> <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">ls -la ~/.claude/ ~/.codex/</code></li>
-                  <li><strong>Force redeploy:</strong> Delete config file, then run init script manually</li>
-                  <li><strong>Customize:</strong> Edit deployed files in <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">~/.claude/</code> or <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">~/.codex/</code> (changes persist via volumes)</li>
+                  <li>
+                    <strong>View templates in container:</strong>
+                    <code
+                      class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm"
+                      >ls -la /usr/local/share/claude-defaults/</code
+                    >
+                  </li>
+                  <li>
+                    <strong>Check deployed configs:</strong>
+                    <code
+                      class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm"
+                      >ls -la ~/.claude/ ~/.codex/</code
+                    >
+                  </li>
+                  <li>
+                    <strong>Force redeploy:</strong> Delete config file, then
+                    run init script manually
+                  </li>
+                  <li>
+                    <strong>Customize:</strong> Edit deployed files in
+                    <code
+                      class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm"
+                      >~/.claude/</code
+                    >
+                    or
+                    <code
+                      class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm"
+                      >~/.codex/</code
+                    >
+                    (changes persist via volumes)
+                  </li>
                 </ul>
               </div>
             </div>
@@ -1738,7 +2099,9 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                     prebuilt template repository
                   </a>
                   which already includes a ready-to-use
-                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">.devcontainer</code>
+                  <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded"
+                    >.devcontainer</code
+                  >
                   folder.
                 </p>
               </div>
@@ -7443,9 +7806,10 @@ npm run dev</code></pre>
                   >
                     <li>
                       <strong>Complete volume setup</strong>: All 13 volumes for
-                      full production capabilities - command history, AI
-                      configs (.claude, .codex, .gemini, .opencode), GitHub CLI,
-                      npm global, local bin, cargo (Rust/uv), bun, AWS, wrangler, vercel
+                      full production capabilities - command history, AI configs
+                      (.claude, .codex, .gemini, .opencode), GitHub CLI, npm
+                      global, local bin, cargo (Rust/uv), bun, AWS, wrangler,
+                      vercel
                     </li>
                     <li>
                       <strong>Multiple extensions</strong>: Install all AI
@@ -9884,8 +10248,6 @@ docker system prune -a
       aria-live="polite"
       class="sr-only"
     ></div>
-
-    
 
     <!-- Cloudflare Web Analytics -->
     <script
