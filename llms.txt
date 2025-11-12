@@ -67,33 +67,50 @@
 
 **The "5-Minute Quick Start" below is for experienced users doing throwaway experiments only.** It omits critical production components. Do NOT use it as your default unless user explicitly requests "minimal", "quick experiment", or "throwaway".
 
-**Red flags that you're using the wrong approach:**
-- Your response has no Dockerfile (just devcontainer.json with postCreateCommand)
-- Your response has no init-firewall.sh or security configuration
-- Your response has < 8 volume mounts
-- Your response uses postCreateCommand for CLI installations (should be in Dockerfile)
-- Your response omits MCP server configuration
-- Your response has no git hook setup
+**Red flags that you're creating an INCOMPLETE setup (not minimal, BROKEN):**
+- Your response has < 12 files (missing core files or templates)
+- Your response has no Dockerfile (unless user explicitly requested "image-only learning example")
+- Your response has no init scripts (init-firewall.sh, init-claude-config.sh, etc.)
+- Your response has no template files (config.toml, mcp.json, settings.json, session-start.sh)
+- Your response has < 8 volume mounts in devcontainer.json
+- Your response omits MCP server configuration entirely
 
-**When user says "create a devcontainer" or "guide me to setup devcontainer"**, they want the **full production setup**, not the minimal quick start. Only use minimal approach if they explicitly say "minimal", "simple experiment", "just testing", or "throwaway".
+**⚠️ Important Distinction:**
+- **INCOMPLETE** (red flags above) = Missing required files → BROKEN setup
+- **MINIMAL** (acceptable) = All 12 files present, simpler configuration → WORKING setup
+- **PRODUCTION** (recommended) = All 12 files present, full configuration → OPTIMAL setup
+
+**When user says "create a devcontainer" or "guide me to setup devcontainer"**, they want the **production setup** (all 12 files, full config). If they say "minimal" or "simple", generate all 12 files with simpler configuration. Only use image-only example (1 file, incomplete) if they explicitly say "learning" or "throwaway experiment".
 
 **Jump to:** [Production-Ready Setup](#production-ready-setup) | [AI Assistant Guidelines](#ai-assistant-guidelines)
 
 ---
 
-## 5-Minute Quick Start (Minimal - For Experienced Users Only)
+## 5-Minute Quick Start (Image-Only - Learning/Throwaway Only)
 
-> **WARNING FOR AI ASSISTANTS**: This quick start is for experienced users doing throwaway experiments only. It omits critical production components:
+> **CRITICAL FOR AI ASSISTANTS**: This section shows an **INCOMPLETE** setup for learning Docker basics only.
+>
+> **When user requests "minimal" or "simple" devcontainer for production use:**
+> - ✅ Generate ALL 12 files (8 core + 4 templates) - see [Minimal Setup Requirements](#minimal-setup-requirements-checklist)
+> - ✅ Use simpler configuration (basic firewall, fewer MCP servers)
+> - ❌ DO NOT use this image-only example (missing init scripts, templates, security)
+>
+> **This image-only example is ONLY for:**
+> - Learning Docker/devcontainer basics (not production)
+> - 5-minute throwaway experiments (will be deleted)
+> - Testing devcontainer extension works
+>
+> **What's missing from this example:**
+> - No Dockerfile (cannot customize base image)
+> - No init scripts (manual configuration required)
+> - No template files (no MCP servers, Codex will fail)
 > - No network firewall (security risk)
-> - No MCP server configuration (limited Claude functionality)
 > - No git branch protection (accidental commits to main)
-> - No Codex sandbox fix (will fail in container)
-> - Limited volume persistence (loses tool configs)
 >
-> **When to use this:** Learning Docker basics, 5-minute experiments, disposable environments
-> **When NOT to use:** Any real project, team environments, production work
->
-> **AI Assistants:** Use Production-Ready Setup instead unless user explicitly requests "minimal", "quick experiment", or "throwaway"
+> **AI Assistants Decision Rule:**
+> - User says "learning" or "throwaway" → Use this image-only example
+> - User says "minimal" or "simple" or "production" → Generate ALL 12 files (minimal config)
+> - When in doubt → Always use Production-Ready Setup with all 12 files
 
 **Already have Docker + VS Code + Dev Containers extension?** Jump straight in:
 
@@ -135,6 +152,66 @@ code .
 **Don't have prerequisites?** [Jump to Prerequisites](#prerequisites)
 
 **Want to understand before doing?** [Read "What Are Development Containers?"](#what-are-development-containers)
+
+---
+
+## Minimal Setup Requirements Checklist
+
+> **FOR AI ASSISTANTS**: When user requests "minimal" or "simple" devcontainer, generate ALL files listed below. "Minimal" means simpler CONFIGURATION (basic firewall, fewer MCP servers), NOT fewer files.
+
+### Required Files (12 Total)
+
+**Core Files (8 required):**
+1. ✅ `devcontainer.json` - Container configuration with 8+ volume mounts minimum
+2. ✅ `Dockerfile` - Base image customization (node:22 + system packages)
+3. ✅ `init-firewall.sh` - Network security (even if simplified for minimal)
+4. ✅ `init-claude-config.sh` - Claude Code configuration deployment
+5. ✅ `init-codex-config.sh` - Codex CLI configuration deployment
+6. ✅ `init-python.sh` - Python environment setup
+7. ✅ `init-claude-hooks.sh` - Session validation hook deployment
+8. ✅ `setup-git-hooks.sh` - Git branch protection (even if warning-only for minimal)
+
+**Template Files (4 required):**
+9. ✅ `config.toml.template` - Codex CLI config (52 lines from repository)
+10. ✅ `mcp.json.template` - MCP servers config (16 lines from repository)
+11. ✅ `settings.json.template` - Claude Code settings (32 lines from repository)
+12. ✅ `session-start.sh.template` - Environment validation hook (144 lines from repository)
+
+### Minimal vs Production Configuration Differences
+
+| Component | Minimal Configuration | Production Configuration |
+|-----------|----------------------|--------------------------|
+| **Files** | 12 files (8 core + 4 templates) ✅ | 12 files (8 core + 4 templates) ✅ |
+| **Volume Mounts** | 8 minimum (bashhistory, .claude, .codex, .gemini, .opencode, .config/gh, .npm-global, .local) | 13 full (minimal 8 + .cargo, .bun, .aws, .wrangler, .vercel) |
+| **Firewall** | Basic allowlist only (ports 80, 443, 53) | Default-deny + comprehensive allowlist + logging |
+| **MCP Servers** | 2 servers (context7, cf-docs) | 3 servers (+ chrome-devtools) |
+| **Git Hooks** | Warning-only (allows commits to main with warning) | Blocking (prevents commits to main/master) |
+| **Python Setup** | Basic Python 3.x available | Pinned Python 3.14 via uv with update-alternatives |
+| **OpenTelemetry** | Optional (commented out in settings.json) | Optional (commented out in settings.json) |
+
+### Decision Rule for AI Assistants
+
+```
+User Request → AI Action
+-------------   -----------
+"minimal" OR "simple" OR "basic"     → Generate ALL 12 files with minimal config
+"production" OR "complete" OR "full" → Generate ALL 12 files with production config
+"learning" OR "throwaway" OR "test"  → Show image-only example (1 file, incomplete)
+UNCLEAR or AMBIGUOUS                 → Ask user to clarify, default to production config
+
+NEVER generate < 12 files for "minimal" (that's incomplete, not minimal)
+```
+
+### Common Mistakes to Avoid
+
+❌ **WRONG**: User asked for "minimal", so I'll create just devcontainer.json
+✅ **RIGHT**: User asked for "minimal", so I'll create 12 files with simpler configuration
+
+❌ **WRONG**: User asked for "simple", so I'll skip template files
+✅ **RIGHT**: User asked for "simple", so I'll use all templates with fewer MCP servers
+
+❌ **WRONG**: "Minimal" means no Dockerfile, use `image: "node:22"`
+✅ **RIGHT**: "Minimal" has Dockerfile with basic packages (not full production set)
 
 ---
 
@@ -9604,6 +9681,70 @@ RUN mkdir -p /home/node/.npm-global && chown -R node:node /home/node/.npm-global
 **Decision rule**: If user requests template file → Fetch exact contents from repository (NEVER fabricate minimal version)
 
 **Reference**: See "CRITICAL: Template File Integrity" section at top of document for detailed instructions
+
+---
+
+#### Misinterpretation #11: "Minimal" Means Skip Required Files
+
+[NO] **Wrong**: User requested "minimal" or "simple" setup, so I'll generate only devcontainer.json (or skip init scripts, or omit template files) to make it simpler
+
+[YES] **Right**: User requested "minimal" setup, so I'll generate ALL 12 files (8 core + 4 templates) with simpler CONFIGURATION (basic firewall, fewer MCP servers, warning-only git hooks)
+
+**Why it matters**: "Minimal" refers to configuration complexity, NOT file count. Skipping files creates an incomplete/broken setup:
+- **No Dockerfile** → Cannot customize base image, install system packages
+- **No init scripts** → Manual configuration required, templates not deployed
+- **No template files** → No MCP servers (Claude limited), Codex fails (no sandbox fix)
+- **No firewall script** → Security risk, even if simplified firewall is acceptable
+- **No git hooks** → Accidental commits to main/master branch
+
+**Real-world failure example (Claude web):**
+```
+User: "Create 5-minute minimal Multi-AI setup"
+
+Claude (WRONG): "I'll create just devcontainer.json with basic fields"
+Result: No Dockerfile, no init scripts, no templates
+→ Codex fails with Landlock error (no config.toml with sandbox fix)
+→ Claude Code has no MCP servers (no mcp.json)
+→ No session validation (no hooks)
+→ Incomplete, not minimal
+
+Claude (CORRECT): "I'll create 12 files with minimal configuration"
+Result: All files present, simpler config
+→ Codex works (config.toml.template deployed)
+→ Claude has MCP servers (mcp.json.template deployed)
+→ Session validates properly (session-start.sh.template)
+→ Minimal but complete
+```
+
+**What "minimal" actually means:**
+
+| Component | Minimal Configuration | Production Configuration |
+|-----------|----------------------|--------------------------|
+| **File count** | 12 files ✅ (SAME) | 12 files ✅ (SAME) |
+| **Dockerfile** | Basic packages only | Full production packages |
+| **Firewall** | Simple allowlist | Default-deny + logging |
+| **MCP servers** | 2 servers | 3 servers |
+| **Git hooks** | Warning-only | Blocking |
+| **Volumes** | 8 minimum | 13 full |
+
+**What to do instead**:
+1. **Always generate ALL 12 files** - Never skip core files or templates
+2. **Adjust configuration detail** - Simpler firewall rules, fewer MCP servers
+3. **Reference "Minimal Setup Requirements"** - See [Minimal Setup Requirements Checklist](#minimal-setup-requirements-checklist)
+4. **Ask clarifying questions** - If user says "minimal", confirm: "I'll create 12 files with simpler config - is that what you want?"
+
+**Common patterns that indicate WRONG interpretation**:
+- "User wants minimal, so I'll skip Dockerfile" → NO, include Dockerfile with basic packages
+- "User wants simple, so I'll omit template files" → NO, include all 4 templates
+- "User wants quick, so I'll generate just devcontainer.json" → NO, generate all 12 files
+- "Minimal means less files" → NO, minimal means simpler configuration in same files
+
+**Decision rule**:
+- User says "minimal" OR "simple" OR "basic" → Generate 12 files with minimal config
+- User says "learning" OR "throwaway" OR "5-minute test" → Offer image-only example (1 file, incomplete)
+- When in doubt → Always generate all 12 files (default to production config)
+
+**Reference**: See [Minimal Setup Requirements Checklist](#minimal-setup-requirements-checklist) for complete file list and configuration differences
 
 ---
 
