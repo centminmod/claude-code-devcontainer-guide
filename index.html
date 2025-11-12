@@ -186,7 +186,7 @@
         --code-title: #c7c5ff;
         --code-name: #7dd3fc;
         --code-comment: #a6b4c2;
-        color-scheme: light;
+        color-scheme: light dark;
       }
       .dark:root {
         --bg: #0b0f19;
@@ -835,6 +835,7 @@
               id="darkModeToggle"
               class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               aria-label="Toggle dark mode"
+              aria-pressed="false"
             >
               <svg
                 id="sunIcon"
@@ -1078,28 +1079,29 @@
         <main id="main-content" class="flex-1 min-w-0">
           <!-- Hero Section -->
           <div
-            class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 md:p-12 text-white shadow-xl mb-8 animate-fade-in"
+            class="rounded-2xl p-8 md:p-12 shadow-xl mb-8 animate-fade-in relative overflow-hidden bg-white text-gray-900 dark:text-white dark:bg-gradient-to-br dark:from-primary dark:to-secondary"
           >
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            <div class="relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Dev Containers Guide
-            </h1>
-            <p class="text-xl md:text-2xl text-purple-100 mb-6">
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-700 dark:text-purple-100 mb-6">
               Your complete beginner-friendly guide to development containers
               with Claude Code
             </p>
             <div class="flex flex-wrap gap-4">
               <span
-                class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium"
+                class="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-900 dark:bg-white/20 dark:text-white"
               >
                 ⚡ Fast Setup
               </span>
               <span
-                class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium"
+                class="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-900 dark:bg-white/20 dark:text-white"
               >
                 🔒 Isolated Environment
               </span>
               <span
-                class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium"
+                class="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-900 dark:bg-white/20 dark:text-white"
               >
                 🔄 Reproducible
               </span>
@@ -1512,7 +1514,7 @@
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
                   "",
                   "⚠️ CRITICAL: ALL complexity levels generate the SAME 12 files (8 core + 4 templates).",
-                  'The difference is CONFIGURATION detail (volumes, firewall complexity, MCP servers), NOT file count.',
+                  "The difference is CONFIGURATION detail (volumes, firewall complexity, MCP servers), NOT file count.",
                   '"Minimal" does NOT mean skip files - it means simpler configuration in the same 12 files.',
                   "",
                   "Step 2 - Generate ALL these files in `.devcontainer/` (required for ALL complexity levels):",
@@ -1575,7 +1577,7 @@
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
                   "",
                   "⚠️ CRITICAL: ALL complexity levels generate ALL required core files + provider-specific templates.",
-                  'The difference is CONFIGURATION detail (volumes, firewall complexity), NOT file count.',
+                  "The difference is CONFIGURATION detail (volumes, firewall complexity), NOT file count.",
                   '"Minimal" does NOT mean skip files - it means simpler configuration in the same files.',
                   "",
                   "Step 2 - Generate ALL these files in `.devcontainer/` (required for ALL complexity levels):",
@@ -4937,6 +4939,7 @@ args = [
 "chrome-devtools-mcp@latest",
 "--executablePath=/usr/bin/chromium",
 "--headless",
+"--isolated",
 "--chromeArg=--no-sandbox",
 "--chromeArg=--disable-setuid-sandbox",
 "--chromeArg=--disable-dev-shm-usage"

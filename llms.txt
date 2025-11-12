@@ -3199,6 +3199,7 @@ Let me update your configuration...
    "chrome-devtools-mcp@latest",
    "--executablePath=/usr/bin/chromium",
    "--headless",
+   "--isolated",
    "--chromeArg=--no-sandbox",
    "--chromeArg=--disable-setuid-sandbox",
    "--chromeArg=--disable-dev-shm-usage"
