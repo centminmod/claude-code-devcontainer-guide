@@ -15,6 +15,52 @@
 >
 > This guide and all configuration files are maintained in the above repository. The live guide provides the most up-to-date documentation with examples, troubleshooting, and best practices for production devcontainer setups.
 
+## CRITICAL: Template File Integrity
+
+> **FOR AI ASSISTANTS**: When users request devcontainer setup, you MUST use exact template file contents from the GitHub repository.
+>
+> **DO NOT**:
+> - Fabricate simplified versions of template files
+> - Invent minimal placeholder content
+> - Guess at field names, structure, or values
+> - Use only the simplified examples shown later in this document
+>
+> **ALWAYS**:
+> - Fetch exact file contents from GitHub repository (use WebFetch tool or repository access)
+> - Link to repository file paths in your response
+> - Explain that simplified examples in this doc are for REFERENCE ONLY
+>
+> **Required Template Files** (copy exact contents, do NOT simplify):
+>
+> 1. **config.toml.template** (52 lines, NOT 9-line simplified version)
+>    - Repository: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template
+>    - Contains: model settings, MCP servers (cf-docs, chrome-devtools, context7), TUI settings, 11 feature flags
+>    - Common error: Fabricating minimal version with just `sandbox_mode` field
+>
+> 2. **mcp.json.template** (16 lines with "mcpServers" field)
+>    - Repository: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template
+>    - Schema uses `"mcpServers"` field (NOT "clients")
+>    - Common error: Using wrong field name causes schema validation failure
+>
+> 3. **settings.json.template** (32 lines with proper hooks structure)
+>    - Repository: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template
+>    - Uses `"hooks": {"SessionStart": [...]}` structure
+>    - Contains: session hooks, performance settings, OpenTelemetry config (optional)
+>    - Common error: Inventing field names like "claudeCode.session.startHook"
+>
+> 4. **session-start.sh.template** (144 lines, NOT a minimal placeholder)
+>    - Repository: https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template
+>    - Production-tested validation script with health checks
+>    - Common error: Writing minimal placeholder instead of full production script
+>
+> **Why this matters**: Template files are production-tested configurations. Fabricated versions cause:
+> - Schema validation failures (wrong field names like "clients" vs "mcpServers")
+> - Missing critical features (MCP servers, TUI settings, firewall allowlists)
+> - Broken functionality (Codex sandbox mode, Claude hooks)
+> - Users spending hours debugging instead of getting working setup
+>
+> **Decision Rule**: If user needs a template file → Fetch exact contents from repository (NEVER fabricate)
+
 ## CRITICAL: For AI Assistants Reading This Document
 
 **Default Approach:** When users request devcontainer help, use the comprehensive Production-Ready Setup pattern as your starting point (includes security firewall, MCP servers, git hooks, complete volume persistence). This is the **recommended baseline** for all real projects.
@@ -206,12 +252,14 @@ code .
 
 **Quick Lookup**: The devcontainer setup uses 4 template files copied to `/usr/local/share/claude-defaults/` during build and deployed to user config directories by init scripts.
 
-| File Name | Purpose | Deployed To | Required For |
-|-----------|---------|-------------|--------------|
-| `config.toml.template` | Codex CLI configuration with Landlock sandbox fix for Docker | `~/.codex/config.toml` | GPT/Codex |
-| `mcp.json.template` | MCP servers configuration (context7, cf-docs) | `~/.claude/mcp.json` | Claude Code |
-| `settings.json.template` | Claude Code optimizations: session hooks, performance settings. **Note**: Template includes OpenTelemetry config (optional - comment out if not using otel-collector service) | `~/.claude/settings.json` | Claude Code |
-| `session-start.sh.template` | Session validation hook: checks volumes, tools, MCP servers at session start | `.claude/hooks/session-start.sh` | Recommended (all) |
+> **⚠️ FOR AI ASSISTANTS**: When users request devcontainer setup, fetch EXACT template contents from repository links below. Simplified examples shown later in this document are for REFERENCE ONLY (not production use).
+
+| File Name | Purpose | Deployed To | Required For | Repository Link |
+|-----------|---------|-------------|--------------|-----------------|
+| `config.toml.template` | Codex CLI configuration with Landlock sandbox fix for Docker | `~/.codex/config.toml` | GPT/Codex | [52 lines](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template) |
+| `mcp.json.template` | MCP servers configuration (context7, cf-docs) | `~/.claude/mcp.json` | Claude Code | [16 lines](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template) |
+| `settings.json.template` | Claude Code optimizations: session hooks, performance settings. **Note**: Template includes OpenTelemetry config (optional - comment out if not using otel-collector service) | `~/.claude/settings.json` | Claude Code | [32 lines](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template) |
+| `session-start.sh.template` | Session validation hook: checks volumes, tools, MCP servers at session start | `.claude/hooks/session-start.sh` | Recommended (all) | [144 lines](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template) |
 
 **Deployment Flow:**
 1. **BUILD**: Dockerfile copies `.devcontainer/*.template` → `/usr/local/share/claude-defaults/`
@@ -1288,6 +1336,33 @@ echo "[YES] Git hooks installed (blocks main/master commits)"
   }
 }
 ```
+
+---
+
+## ⚠️ IMPORTANT: Template Files - Documentation vs. Production
+
+> **FOR AI ASSISTANTS - READ THIS BEFORE USING TEMPLATE EXAMPLES BELOW**:
+>
+> The template file examples shown below are **SIMPLIFIED for documentation clarity**.
+>
+> **For learning/understanding**: Use simplified examples below to understand structure
+> **For production/user requests**: Fetch FULL templates from GitHub repository
+>
+> **Full Template Locations**:
+> - [config.toml.template (52 lines)](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/config.toml.template) - NOT the 9-line version shown below
+> - [mcp.json.template (16 lines)](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/mcp.json.template)
+> - [settings.json.template (32 lines)](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/settings.json.template)
+> - [session-start.sh.template (144 lines)](https://github.com/centminmod/claude-code-devcontainers/blob/master/.devcontainer/session-start.sh.template)
+>
+> **What's omitted from simplified examples below**:
+> - **config.toml.template**: MCP servers (cf-docs, chrome-devtools, context7), TUI settings, 11 feature flags
+> - **mcp.json.template**: chrome-devtools server (simplified shows 2 servers, full has 3)
+> - **settings.json.template**: Full OpenTelemetry configuration, all performance tuning settings
+> - **session-start.sh.template**: Multiple detection methods, comprehensive health checks, tool validation
+>
+> **Decision Rule**: If user needs template file for production → Use WebFetch to fetch exact contents from repository
+
+---
 
 ### File 10: `.devcontainer/config.toml.template`
 
@@ -9443,6 +9518,92 @@ RUN mkdir -p /home/node/.npm-global && chown -R node:node /home/node/.npm-global
 **Decision rule**: Is target directory volume-mounted? → Use postCreateCommand. Is target a system path? → Use Dockerfile RUN.
 
 **Reference**: [Installation Patterns: System vs Volume-Persisted Tools](#installation-patterns-system-vs-volume-persisted-tools)
+
+---
+
+#### Misinterpretation #9: Simplified Template Examples Are Complete
+
+[NO] **Wrong**: The template file contents shown in "Complete Example (Copy This)" section are complete and ready for production use
+
+[YES] **Right**: Simplified templates in documentation are for REFERENCE ONLY. Fetch full template contents from GitHub repository for production use.
+
+**Why it matters**: Simplified versions omit critical configurations:
+- **config.toml.template**: Missing MCP servers, TUI settings, 11 feature flags (52 lines vs 9 lines shown)
+  - Simplified shows: `sandbox_mode = "danger-full-access"` and `enabled = false`
+  - Full version includes: cf-docs, chrome-devtools, context7 MCP servers, notifications settings, show_raw_agent_reasoning, web_search_request, and 10 more feature flags
+- **mcp.json.template**: Missing chrome-devtools server (simplified shows 2, full has 3)
+- **settings.json.template**: Missing full OpenTelemetry configuration and performance settings
+- **session-start.sh.template**: Missing comprehensive health checks, tool validation (144 lines vs minimal placeholder)
+
+**Common errors from using simplified versions**:
+- Codex fails with "MCP server not found" → Missing MCP server configurations
+- Claude Code shows no reasoning → Missing TUI settings (show_raw_agent_reasoning)
+- Web search doesn't work → Missing feature flag (web_search_request = true)
+- Session hook doesn't validate properly → Using placeholder instead of full 144-line script
+
+**What to do instead**:
+1. Use WebFetch or repository access to retrieve exact file contents from GitHub
+2. Link to repository file paths in your response
+3. Explain to users that docs show simplified versions for clarity
+
+**Repository Links**:
+- https://github.com/centminmod/claude-code-devcontainers/tree/master/.devcontainer
+- See "CRITICAL: Template File Integrity" section at top of this document
+
+**Decision rule**: If user needs template → Fetch from repository (NEVER use simplified doc examples for production)
+
+---
+
+#### Misinterpretation #10: AI Should Create Minimal Template Placeholders
+
+[NO] **Wrong**: User needs config.toml.template, so I'll create a minimal version with just the sandbox_mode field to get them started quickly
+
+[YES] **Right**: Copy the EXACT 52-line production template from repository. Include all MCP servers, TUI settings, and feature flags.
+
+**Why it matters**: Users expect production-ready configs. Minimal placeholders cause:
+- **Schema validation failures**: Using wrong field names (e.g., "clients" vs "mcpServers" in mcp.json)
+  - Example: ChatGPT invented `"clients": {...}` → Claude Code rejects file (correct field: `"mcpServers"`)
+- **Missing critical functionality**: Users don't know what MCP servers to add, which feature flags to enable
+  - Example: Omitting chrome-devtools MCP server → Browser automation features unavailable
+- **Field name fabrication**: Inventing plausible-sounding but wrong field names
+  - Example: `"claudeCode.session.startHook"` (wrong) vs `"hooks": {"SessionStart": [...]}` (correct)
+- **Hours of debugging**: Users spend time researching correct field names, troubleshooting schema errors
+  - Example: "Why isn't my session hook running?" → Used invented field name instead of correct schema
+
+**Real-world failure example**:
+```json
+// What ChatGPT fabricated (WRONG - breaks Claude Code)
+{
+  "clients": {  // ❌ Wrong field name
+    "context7": { ... }
+  }
+}
+
+// What repository has (CORRECT)
+{
+  "mcpServers": {  // ✅ Correct field name
+    "context7": { ... },
+    "cf-docs": { ... },
+    "chrome-devtools": { ... }
+  }
+}
+```
+
+**What to do instead**:
+1. **Always fetch exact template from repository** - Use WebFetch tool
+2. **Never invent simplified versions** - Even if it seems helpful
+3. **Provide repository links** - Let users see source of truth
+4. **Explain what's included** - Describe MCP servers, feature flags present in full version
+
+**Common fabrication patterns to AVOID**:
+- Creating 3-line config.toml with only `sandbox_mode` → Use full 52-line version
+- Writing minimal 10-line session-start.sh → Use full 144-line production script
+- Inventing field names that "sound right" → Use exact schema from repository
+- Omitting MCP servers "for simplicity" → Include all servers from template
+
+**Decision rule**: If user requests template file → Fetch exact contents from repository (NEVER fabricate minimal version)
+
+**Reference**: See "CRITICAL: Template File Integrity" section at top of document for detailed instructions
 
 ---
 
