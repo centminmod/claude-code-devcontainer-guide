@@ -24,7 +24,7 @@
 **Red flags that you're using the wrong approach:**
 - Your response has no Dockerfile (just devcontainer.json with postCreateCommand)
 - Your response has no init-firewall.sh or security configuration
-- Your response has < 6 volume mounts
+- Your response has < 8 volume mounts
 - Your response uses postCreateCommand for CLI installations (should be in Dockerfile)
 - Your response omits MCP server configuration
 - Your response has no git hook setup
@@ -72,10 +72,11 @@ cat > .devcontainer/devcontainer.json << 'EOF'
   "source=claude-${devcontainerId},target=/home/node/.claude,type=volume",
   "source=codex-config-${devcontainerId},target=/home/node/.codex,type=volume",
   "source=gemini-config-${devcontainerId},target=/home/node/.gemini,type=volume",
+  "source=opencode-config-${devcontainerId},target=/home/node/.opencode,type=volume",
   "source=ghub-config-${devcontainerId},target=/home/node/.config/gh,type=volume",
-  "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume"
+  "source=npm-global-${devcontainerId},target=/home/node/.npm-global,type=volume",
+  "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume"
   // Add cloud tools: "source=aws-config-${devcontainerId},target=/home/node/.aws,type=volume"
-  // Add cloud tools: "source=local-bin-${devcontainerId},target=/home/node/.local,type=volume"
   // Add cloud tools: "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume"
   // Add Vercel: "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
  ]
@@ -209,7 +210,7 @@ code .
 |-----------|---------|-------------|--------------|
 | `config.toml.template` | Codex CLI configuration with Landlock sandbox fix for Docker | `~/.codex/config.toml` | GPT/Codex |
 | `mcp.json.template` | MCP servers configuration (context7, cf-docs) | `~/.claude/mcp.json` | Claude Code |
-| `settings.json.template` | Claude Code optimizations: OpenTelemetry, session hooks, performance settings | `~/.claude/settings.json` | Claude Code |
+| `settings.json.template` | Claude Code optimizations: session hooks, performance settings. **Note**: Template includes OpenTelemetry config (optional - comment out if not using otel-collector service) | `~/.claude/settings.json` | Claude Code |
 | `session-start.sh.template` | Session validation hook: checks volumes, tools, MCP servers at session start | `.claude/hooks/session-start.sh` | Recommended (all) |
 
 **Deployment Flow:**
@@ -598,7 +599,7 @@ Below is a complete, production-ready devcontainer configuration with all securi
     "source=wrangler-config-${devcontainerId},target=/home/node/.wrangler,type=volume",
     "source=vercel-config-${devcontainerId},target=/home/node/.vercel,type=volume"
   ],
-  // Volume count: 12 (keep in sync with HTML guide)
+  // Volume count: 13 (keep in sync with HTML guide)
   // Critical: npm-global → .npm-global (NOT npm-cache → .npm)
   "postCreateCommand": "npm install -g npm@latest && npm install -g @anthropic-ai/claude-code@latest && npm install -g @openai/codex && npm install -g @google/gemini-cli && npm install -g wrangler@latest && npm install -g vercel@latest && /usr/local/bin/init-claude-config.sh && /usr/local/bin/init-codex-config.sh && /usr/local/bin/init-python.sh && /usr/local/bin/init-claude-hooks.sh",
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh && bash ${containerWorkspaceFolder}/.devcontainer/setup-git-hooks.sh",
@@ -860,7 +861,7 @@ echo "[YES] Claude Code hooks setup complete"
 
 **Key Features**:
 - Multi-method devcontainer detection (REMOTE_CONTAINERS_IPC, CODESPACES, /.dockerenv, cgroups)
-- Validates 12 volume mounts (.claude, .codex, .gemini, .opencode, etc.)
+- Validates 13 volume mounts (.claude, .codex, .gemini, .opencode, etc.)
 - Checks MCP server configuration from mcp.json
 - Verifies tool availability (claude, codex, gemini, opencode, gh, aws, uv)
 - Displays network configuration and OpenTelemetry endpoint
@@ -1382,7 +1383,7 @@ enabled = false
 [YES] **MCP Servers**: context7 (SSE), cf-docs (SSE), chrome-devtools (stdio)
 [YES] **Multi-AI**: Claude Code, OpenAI Codex, Google Gemini CLI, OpenCode
 [YES] **Git Safety**: Pre-commit hooks block main/master commits
-[YES] **Volume Persistence**: 12 volumes for configs (.claude, .codex, .gemini, .opencode, .aws, .ssh, etc.)
+[YES] **Volume Persistence**: 13 volumes for configs (.claude, .codex, .gemini, .opencode, .aws, .ssh, etc.)
 [YES] **Production Tools**: Python 3.14 (via uv), bun, AWS CLI, gh, wrangler, vercel
 [YES] **Codex Fix**: sandbox_mode = "danger-full-access" in config.toml (required for containers)
 [YES] **Non-root User**: Runs as `node` user (security best practice)
@@ -9625,7 +9626,7 @@ If you see any of these in your configuration, you're NOT production-ready:
 [NO] **No init-firewall.sh file** → No network security
 [NO] **No mcp.json template** → Claude Code won't have MCP servers
 [NO] **No git hook setup script** → Can commit directly to main/master
-[NO] **<6 volume mounts** → Configuration will be lost on rebuild
+[NO] **<8 volume mounts** → Configuration will be lost on rebuild
 [NO] **postCreateCommand has npm install commands** → Tools lost on rebuild
 [NO] **remoteUser: "root"** → Security risk (should be non-root user)
 [NO] **No --cap-add flags in runArgs** → Firewall won't work
@@ -9959,7 +9960,7 @@ claude --verbose
 
 **Why**: User didn't say "throwaway" or "skip security". Real project = production approach.
 
-**Red Flag**: If your response has no Dockerfile or <6 volumes, you chose wrong.
+**Red Flag**: If your response has no Dockerfile or <8 volumes, you chose wrong.
 
 **Reference**: [Common Misinterpretations](#common-misinterpretations-for-ai-assistants)
 

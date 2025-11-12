@@ -1363,16 +1363,16 @@
                   '',
                   'Step 1 - Ask me to choose:',
                   'a) Complexity level:',
-                  '   - "5-Minute Minimal" (6 volumes, basic setup, quick experiments)',
-                  '   - "Production-Ready" (12+ volumes, recommended for most projects)',
-                  '   - "Complete Example" (all features from llms.txt lines 505-885, full production)',
+                  '   - "5-Minute Minimal" (8 volumes, basic setup, quick experiments)',
+                  '   - "Production-Ready" (13 volumes, recommended for most projects)',
+                  '   - "Complete Example" (all features from llms.txt lines 505-885, full production with 13 volumes)',
                   'b) Output format:',
                   '   - "Complete files" (full file contents, ready to copy-paste)',
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
                   '',
                   'Step 2 - Generate these files in `.devcontainer/`:',
                   'Core files:',
-                  '- devcontainer.json (use Production-Ready structure with 12+ volume mounts)',
+                  '- devcontainer.json (use Production-Ready structure with 13 volume mounts for full production, or 8 for minimal)',
                   '- Dockerfile (node:22 base with all init scripts)',
                   '- init-firewall.sh',
                   '- init-claude-config.sh',
@@ -1397,7 +1397,7 @@
                   'Verification checklist after generation:',
                   '✓ 8 core files in .devcontainer/',
                   '✓ 4 template files present',
-                  '✓ 12+ volume mounts in devcontainer.json',
+                  '✓ 8 volume mounts (minimal) or 13 volume mounts (production) in devcontainer.json',
                   '✓ All init scripts referenced in postCreateCommand',
                   '✓ All template files copied in Dockerfile'
                 ]);
@@ -1413,9 +1413,9 @@
                   'Step 1 - Ask me to choose:',
                   'a) Which provider: Claude | GPT (Codex) | Gemini | OpenCode',
                   'b) Complexity level:',
-                  '   - "5-Minute Minimal" (6 volumes, basic setup, quick experiments)',
-                  '   - "Production-Ready" (12+ volumes, recommended for most projects)',
-                  '   - "Complete Example" (all features from llms.txt lines 505-885, full production)',
+                  '   - "5-Minute Minimal" (8 volumes, basic setup, quick experiments)',
+                  '   - "Production-Ready" (13 volumes, recommended for most projects)',
+                  '   - "Complete Example" (all features from llms.txt lines 505-885, full production with 13 volumes)',
                   'c) Output format:',
                   '   - "Complete files" (full file contents, ready to copy-paste)',
                   '   - "Patch-style diffs" (git-style diffs showing changes)',
@@ -1516,7 +1516,7 @@
                         <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">settings.json.template</code>
                       </td>
                       <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
-                        Claude Code optimizations: OpenTelemetry, session hooks, performance settings
+                        Claude Code optimizations: session hooks, performance settings. <strong>Note:</strong> Template includes OpenTelemetry config (optional - comment out if not using otel-collector service)
                       </td>
                       <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
                         <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.claude/settings.json</code>
@@ -7397,10 +7397,10 @@ npm run dev</code></pre>
                     class="list-disc list-inside space-y-1 text-purple-800 dark:text-purple-300 text-sm"
                   >
                     <li>
-                      <strong>Complete volume setup</strong>: All 8 volumes for
+                      <strong>Complete volume setup</strong>: All 13 volumes for
                       full production capabilities - command history, AI
-                      configs, GitHub CLI, npm global tools, cargo (Rust/uv),
-                      and bun runtime
+                      configs (.claude, .codex, .gemini, .opencode), GitHub CLI,
+                      npm global, local bin, cargo (Rust/uv), bun, AWS, wrangler, vercel
                     </li>
                     <li>
                       <strong>Multiple extensions</strong>: Install all AI
