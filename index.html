@@ -918,6 +918,13 @@
               </li>
               <li>
                 <a
+                  href="#template-files"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >Template Files Reference</a
+                >
+              </li>
+              <li>
+                <a
                   href="#introduction"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Introduction</a
@@ -1122,6 +1129,78 @@
             </div>
           </div>
 
+          <!-- Introduction -->
+          <section
+            id="introduction"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+              👋 Welcome!
+            </h2>
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                This guide will teach you everything you need to know about
+                development containers (devcontainers) for Claude Code. Whether
+                you're a complete beginner or looking to refine your setup,
+                you're in the right place. The guide was created from all my own
+                experiences and collected context documentation used to create
+                my own dev containers and will be continually updated as my
+                development and experience progresses. If you like this guide
+                and find it useful, consider
+                <a
+                  href="https://www.buymeacoffee.com/georgeliu"
+                  class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >buying me a coffee</a
+                >
+                to support my work.
+              </p>
+              <div
+                class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg"
+              >
+                <p
+                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
+                >
+                  📚 What You'll Learn:
+                </p>
+                <ul
+                  class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300"
+                >
+                  <li>What dev containers are and how they work</li>
+                  <li>Setting up a React project with dev containers</li>
+                  <li>Setting up a Python project with dev containers</li>
+                  <li>Setting up a Next.js application with dev containers</li>
+                  <li>Configuring multiple AI assistants in one container</li>
+                  <li>Troubleshooting common issues</li>
+                </ul>
+              </div>
+              <div
+                class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 my-6 rounded-r-lg"
+              >
+                <p
+                  class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
+                >
+                  💡 Pro Tip for AI Users:
+                </p>
+                <p class="text-md-tertiary-800 dark:text-md-tertiary-300">
+                  You can provide
+                  <a
+                    href="https://claude-devcontainers.centminmod.com/llms.txt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline hover:text-green-600 dark:hover:text-green-400"
+                  >
+                    this comprehensive llms.txt guide
+                  </a>
+                  to AI assistants like Claude to help with dev container
+                  creation and usage. It contains detailed examples and best
+                  practices!
+                </p>
+              </div>
+            </div>
+          </section>
+
           <!-- AI Copy Prompts (moved to top) -->
           <section
             id="ai-prompts"
@@ -1274,103 +1353,292 @@
                   if($u) $u.href  = 'https://cursor.com/link/prompt?text=' + encodeURIComponent(prompt);
                 }
                 wire('multi', [
-                  'Read https://claude-devcontainers.centminmod.com/llms.txt.',
-                  'Optional: You may also fork https://github.com/centminmod/claude-code-devcontainers which already includes a ready-to-use `.devcontainer/` template.',
+                  'Read BOTH documentation sources:',
+                  '1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference',
+                  '2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples',
                   '',
-                  'Task: Using that llms.txt as the source of truth, help me create the VS Code Dev Container files for this repository exactly as the guide’s Multi‑AI dev container example specifies.',
+                  'Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.',
+                  '',
+                  'Task: Help me create VS Code Dev Container files for a Multi-AI setup (Claude + GPT + Gemini + OpenCode).',
+                  '',
+                  'Step 1 - Ask me to choose complexity level:',
+                  '- "5-Minute Minimal" (6 volumes, basic setup, quick experiments)',
+                  '- "Production-Ready" (12+ volumes, recommended for most projects)',
+                  '- "Complete Example" (all features from llms.txt lines 505-885, full production)',
+                  '',
+                  'Step 2 - Generate these files in `.devcontainer/`:',
+                  'Core files:',
+                  '- devcontainer.json (use Production-Ready structure with 12+ volume mounts)',
+                  '- Dockerfile (node:22 base with all init scripts)',
+                  '- init-firewall.sh',
+                  '- init-claude-config.sh',
+                  '- init-codex-config.sh',
+                  '- init-python.sh',
+                  '- init-claude-hooks.sh',
+                  '- setup-git-hooks.sh',
+                  '',
+                  'Template files (REQUIRED - copy these exactly):',
+                  '- config.toml.template (Codex CLI config with sandbox fix)',
+                  '- mcp.json.template (MCP servers: context7, cf-docs)',
+                  '- settings.json.template (Claude optimizations + OpenTelemetry)',
+                  '- session-start.sh.template (Environment validation hook)',
                   '',
                   'Requirements:',
-                  '- Generate a complete `.devcontainer/` with the multi‑AI layout supporting Claude, GPT, and Gemini.',
-                  '- Include `devcontainer.json`, any needed `Dockerfile`(s), features, `postCreateCommand` scripts, recommended extensions, and env vars.',
-                  '- Follow the conventions, names, and structure from llms.txt; do not invent alternatives.',
-                  '- Output changes as patch-style diffs with exact file paths and final contents.',
-                  '- If anything is ambiguous, ask concise follow‑up questions before proceeding.'
+                  '- Follow the exact structure from llms.txt "Complete Example" section (lines 505-885)',
+                  '- Include ALL Multi-AI extensions (Claude, OpenAI, Gemini, OpenCode, Copilot)',
+                  '- Dockerfile must copy templates to /usr/local/share/claude-defaults/',
+                  '- Use exact file names and structure from the Complete Example',
+                  '- Output as patch-style diffs with complete file contents',
+                  '',
+                  'Verification checklist after generation:',
+                  '✓ 8 core files in .devcontainer/',
+                  '✓ 4 template files present',
+                  '✓ 12+ volume mounts in devcontainer.json',
+                  '✓ All init scripts referenced in postCreateCommand',
+                  '✓ All template files copied in Dockerfile'
                 ]);
                 wire('single', [
-                  'Read https://claude-devcontainers.centminmod.com/llms.txt.',
-                  'Optional: You may also fork https://github.com/centminmod/claude-code-devcontainers which already includes a ready-to-use `.devcontainer/` template.',
+                  'Read BOTH documentation sources:',
+                  '1. https://claude-devcontainers.centminmod.com/llms.txt - Full technical reference',
+                  '2. https://claude-devcontainers.centminmod.com/ - Interactive HTML guide with visual examples',
                   '',
-                  'Task: Using that llms.txt as the source of truth, help me create the VS Code Dev Container files for this repository for a Single‑AI setup (one provider).',
+                  'Optional: Fork https://github.com/centminmod/claude-code-devcontainers for a ready-to-use template.',
+                  '',
+                  'Task: Help me create VS Code Dev Container files for a Single-AI setup (one provider only).',
+                  '',
+                  'Step 1 - Ask me to choose:',
+                  'a) Which provider: Claude | GPT (Codex) | Gemini | OpenCode',
+                  'b) Which complexity level:',
+                  '   - "5-Minute Minimal" (6 volumes, basic setup, quick experiments)',
+                  '   - "Production-Ready" (12+ volumes, recommended for most projects)',
+                  '   - "Complete Example" (all features from llms.txt lines 505-885, full production)',
+                  '',
+                  'Step 2 - Generate these files in `.devcontainer/`:',
+                  'Core files:',
+                  '- devcontainer.json (use Production-Ready structure, include only chosen provider\'s extensions)',
+                  '- Dockerfile (node:22 base with provider-specific init scripts)',
+                  '- init-firewall.sh (always include)',
+                  '- init-python.sh (always include)',
+                  '- init-claude-hooks.sh (always include)',
+                  '- setup-git-hooks.sh (always include)',
+                  '- init-claude-config.sh (if Claude chosen)',
+                  '- init-codex-config.sh (if GPT/Codex chosen)',
+                  '',
+                  'Template files needed based on provider:',
+                  'Claude: settings.json.template, mcp.json.template, session-start.sh.template',
+                  'GPT/Codex: config.toml.template, session-start.sh.template',
+                  'Gemini: session-start.sh.template',
+                  'OpenCode: session-start.sh.template',
                   '',
                   'Requirements:',
-                  '- Scaffold `.devcontainer/` for a single provider (ask me to pick: Claude OR GPT OR Gemini).',
-                  '- Include `devcontainer.json`, required `Dockerfile`(s) or features, `postCreateCommand`, recommended extensions, and env vars for the chosen provider only.',
-                  '- Follow the conventions and file naming used in llms.txt exactly.',
-                  '- Output changes as patch-style diffs with exact file paths and final contents.',
-                  '- Confirm provider choice and any account-specific env vars before writing files.'
+                  '- Follow the exact structure from llms.txt "Complete Example" section (lines 505-885)',
+                  '- Include ONLY the chosen provider\'s extensions (remove others)',
+                  '- Dockerfile must copy required templates to /usr/local/share/claude-defaults/',
+                  '- Remove volume mounts for unused providers',
+                  '- Output as patch-style diffs with complete file contents',
+                  '',
+                  'Verification checklist after generation:',
+                  '✓ devcontainer.json includes only chosen provider\'s extensions',
+                  '✓ Required template files present for chosen provider',
+                  '✓ Volume mounts match chosen provider',
+                  '✓ Provider-specific init script included',
+                  '✓ Dockerfile copies correct templates'
                 ]);
               })();
             </script>
           </section>
 
-          <!-- Introduction -->
+          <!-- Template Files Reference -->
           <section
-            id="introduction"
+            id="template-files"
             class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
           >
-            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-              👋 Welcome!
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              📄 Template Files Reference
             </h2>
             <div class="prose prose-lg dark:prose-invert max-w-none">
-              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                This guide will teach you everything you need to know about
-                development containers (devcontainers) for Claude Code. Whether
-                you're a complete beginner or looking to refine your setup,
-                you're in the right place. The guide was created from all my own
-                experiences and collected context documentation used to create
-                my own dev containers and will be continually updated as my
-                development and experience progresses. If you like this guide
-                and find it useful, consider
-                <a
-                  href="https://www.buymeacoffee.com/georgeliu"
-                  class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >buying me a coffee</a
-                >
-                to support my work.
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                The devcontainer setup uses 4 template files that are copied to
+                <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">/usr/local/share/claude-defaults/</code>
+                during container build and deployed to user-specific locations by init scripts.
+                These templates ensure consistent configuration across container rebuilds.
               </p>
-              <div
-                class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg"
-              >
-                <p
-                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
-                >
-                  📚 What You'll Learn:
-                </p>
-                <ul
-                  class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300"
-                >
-                  <li>What dev containers are and how they work</li>
-                  <li>Setting up a React project with dev containers</li>
-                  <li>Setting up a Python project with dev containers</li>
-                  <li>Setting up a Next.js application with dev containers</li>
-                  <li>Configuring multiple AI assistants in one container</li>
-                  <li>Troubleshooting common issues</li>
-                </ul>
+
+              <!-- Template Files Table -->
+              <div class="overflow-x-auto mb-8">
+                <table class="min-w-full border-collapse border border-gray-300 dark:border-gray-600">
+                  <thead>
+                    <tr class="bg-gray-100 dark:bg-gray-700">
+                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">File Name</th>
+                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Purpose</th>
+                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-gray-900 dark:text-white font-semibold">Deployed To</th>
+                      <th class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-900 dark:text-white font-semibold">Required?</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-gray-700 dark:text-gray-300">
+                    <tr>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">config.toml.template</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        Codex CLI configuration with Landlock sandbox fix for Docker
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.codex/config.toml</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
+                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">GPT/Codex</span>
+                      </td>
+                    </tr>
+                    <tr class="bg-gray-50 dark:bg-gray-800/50">
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">mcp.json.template</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        MCP servers configuration (context7, cf-docs)
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.claude/mcp.json</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
+                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">Claude</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">settings.json.template</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        Claude Code optimizations: OpenTelemetry, session hooks, performance settings
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">~/.claude/settings.json</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
+                        <span class="inline-block px-3 py-1 bg-md-tertiary-100 dark:bg-md-tertiary-900/30 text-md-tertiary-800 dark:text-md-tertiary-200 rounded-full text-sm font-medium">Claude</span>
+                      </td>
+                    </tr>
+                    <tr class="bg-gray-50 dark:bg-gray-800/50">
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">session-start.sh.template</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        Session validation hook: checks volumes, tools, MCP servers at session start
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3">
+                        <code class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">.claude/hooks/session-start.sh</code>
+                      </td>
+                      <td class="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center">
+                        <span class="inline-block px-3 py-1 bg-md-primary-100 dark:bg-md-primary-900/30 text-md-primary-800 dark:text-md-primary-200 rounded-full text-sm font-medium">Recommended</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div
-                class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 my-6 rounded-r-lg"
-              >
-                <p
-                  class="text-md-tertiary-900 dark:text-md-tertiary-200 font-medium mb-2"
-                >
-                  💡 Pro Tip for AI Users:
-                </p>
-                <p class="text-md-tertiary-800 dark:text-md-tertiary-300">
-                  You can provide
-                  <a
-                    href="https://claude-devcontainers.centminmod.com/llms.txt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="underline hover:text-green-600 dark:hover:text-green-400"
+
+              <!-- Deployment Workflow -->
+              <div class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 mb-6 rounded-r-lg">
+                <h3 class="font-semibold text-md-primary-900 dark:text-md-primary-200 mb-2">
+                  🔄 How Template Deployment Works
+                </h3>
+                <ol class="list-decimal list-inside space-y-2 text-md-primary-900 dark:text-md-primary-200 ml-2">
+                  <li>Dockerfile copies <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">.devcontainer/*.template</code> to <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">/usr/local/share/claude-defaults/</code></li>
+                  <li>Init scripts (<code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">init-claude-config.sh</code>, <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">init-codex-config.sh</code>) run at <code class="px-2 py-1 bg-md-primary-100 dark:bg-md-primary-800 rounded text-sm">postCreateCommand</code></li>
+                  <li>Templates are copied to user config directories (only if files don't already exist)</li>
+                  <li>User configs persist across container rebuilds via Docker volume mounts</li>
+                </ol>
+              </div>
+
+              <!-- Key Content Snippets -->
+              <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+                🔑 Key Configuration Highlights
+              </h3>
+
+              <!-- config.toml -->
+              <div class="mb-6">
+                <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                  config.toml.template (Codex CLI)
+                </h4>
+                <div class="bg-md-error-50 dark:bg-md-error-900/20 border-l-4 border-md-error-500 p-4 mb-3 rounded-r-lg">
+                  <p class="text-md-error-900 dark:text-md-error-200 text-sm">
+                    <strong>⚠️ Critical:</strong> Disables Landlock sandbox (not supported in Docker's LinuxKit kernel).
+                    Security is provided by Docker isolation instead.
+                  </p>
+                </div>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
                   >
-                    this comprehensive llms.txt guide
-                  </a>
-                  to AI assistants like Claude to help with dev container
-                  creation and usage. It contains detailed examples and best
-                  practices!
-                </p>
+                    Copy
+                  </button>
+                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-toml">model = "gpt-5"
+model_reasoning_effort = "medium"
+
+# CRITICAL: Disable Landlock sandbox (not supported in Docker)
+sandbox_mode = "danger-full-access"
+approval_policy = "never"
+
+[mcp_servers.cf-docs]
+command = "npx"
+args = ["-y", "mcp-remote", "https://docs.mcp.cloudflare.com/sse"]
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
+                </div>
+              </div>
+
+              <!-- settings.json -->
+              <div class="mb-6">
+                <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                  settings.json.template (Claude Code)
+                </h4>
+                <div class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 mb-3 rounded-r-lg">
+                  <p class="text-md-tertiary-900 dark:text-md-tertiary-200 text-sm">
+                    <strong>✨ Features:</strong> Enables OpenTelemetry metrics export, session start hooks,
+                    and optimizes Claude Code performance settings.
+                  </p>
+                </div>
+                <div class="code-block-wrapper">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "dangerously_skip_permissions": true,
+  "verbose": true,
+  "hooks": {
+    "SessionStart": [{
+      "hooks": [{
+        "type": "command",
+        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-start.sh"
+      }]
+    }]
+  },
+  "env": {
+    "MAX_MCP_OUTPUT_TOKENS": "60000",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector:4317"
+  }
+}</code></pre>
+                </div>
+              </div>
+
+              <!-- Quick Reference -->
+              <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg">
+                <h4 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+                  📋 Quick Reference
+                </h4>
+                <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                  <li><strong>View templates in container:</strong> <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">ls -la /usr/local/share/claude-defaults/</code></li>
+                  <li><strong>Check deployed configs:</strong> <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">ls -la ~/.claude/ ~/.codex/</code></li>
+                  <li><strong>Force redeploy:</strong> Delete config file, then run init script manually</li>
+                  <li><strong>Customize:</strong> Edit deployed files in <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">~/.claude/</code> or <code class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">~/.codex/</code> (changes persist via volumes)</li>
+                </ul>
               </div>
             </div>
           </section>

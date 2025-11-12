@@ -121,54 +121,55 @@ code .
 2. [5-Minute Quick Start](#5-minute-quick-start-minimal---for-experienced-users-only) [WARNING] Minimal only
 3. [START HERE: Choose Your Path](#start-here-choose-your-path) [START HERE] Navigation
 4. [AI Assistant Guidelines](#ai-assistant-guidelines) **For AI Assistants**
-5. [Production-Ready Setup](#production-ready-setup-recommended-baseline) [CRITICAL] **Recommended Baseline**
-6. [Complete Example (Copy This)](#complete-example-copy-this) [CRITICAL] **All 9 Files**
-7. [Production Readiness Checklist](#production-readiness-checklist) [CRITICAL] **Validation**
+5. [Template Files Reference](#template-files-reference) **Quick Lookup: 4 Required Templates**
+6. [Production-Ready Setup](#production-ready-setup-recommended-baseline) [CRITICAL] **Recommended Baseline**
+7. [Complete Example (Copy This)](#complete-example-copy-this) [CRITICAL] **All 9 Files**
+8. [Production Readiness Checklist](#production-readiness-checklist) [CRITICAL] **Validation**
 
 ### [CRITICAL] ESSENTIAL (Always Include - Not Optional)
-8. [Security Best Practices](#security-best-practices-essential---not-optional) [CRITICAL] Firewall + IPv6
-9. [MCP Server Setup](#mcp-server-setup-essential-for-claude-code) [CRITICAL] Claude Code functionality
-10. [Volume Persistence Patterns](#volume-persistence-patterns-essential) [CRITICAL] Config preservation
-11. [Git Safety and Branch Protection](#git-safety-and-branch-protection) [CRITICAL] Safety hooks
-12. [Common Misinterpretations](#common-misinterpretations-for-ai-assistants) [WARNING] **AI mistakes to avoid**
+9. [Security Best Practices](#security-best-practices-essential---not-optional) [CRITICAL] Firewall + IPv6
+10. [MCP Server Setup](#mcp-server-setup-essential-for-claude-code) [CRITICAL] Claude Code functionality
+11. [Volume Persistence Patterns](#volume-persistence-patterns-essential) [CRITICAL] Config preservation
+12. [Git Safety and Branch Protection](#git-safety-and-branch-protection) [CRITICAL] Safety hooks
+13. [Common Misinterpretations](#common-misinterpretations-for-ai-assistants) [WARNING] **AI mistakes to avoid**
 
 ### [RECOMMENDED] RECOMMENDED (Production Best Practices)
-13. [Multi-AI Configuration](#multi-ai-configuration-recommended) [RECOMMENDED] Claude + Codex + Gemini
-14. [Lifecycle Hooks Explained](#lifecycle-hooks-explained-recommended) [RECOMMENDED] Init scripts
-15. [Platform-Specific Notes](#platform-specific-notes-recommended-reading) [RECOMMENDED] macOS/Windows/Linux
-16. [Step-by-Step: Creating a Devcontainer](#step-by-step-creating-a-devcontainer) [RECOMMENDED] Implementation guide
-17. [Step-by-Step: Managing Devcontainers](#step-by-step-managing-devcontainers) [RECOMMENDED] Maintenance
-18. [Prerequisites](#prerequisites) [RECOMMENDED] System requirements
+14. [Multi-AI Configuration](#multi-ai-configuration-recommended) [RECOMMENDED] Claude + Codex + Gemini
+15. [Lifecycle Hooks Explained](#lifecycle-hooks-explained-recommended) [RECOMMENDED] Init scripts
+16. [Platform-Specific Notes](#platform-specific-notes-recommended-reading) [RECOMMENDED] macOS/Windows/Linux
+17. [Step-by-Step: Creating a Devcontainer](#step-by-step-creating-a-devcontainer) [RECOMMENDED] Implementation guide
+18. [Step-by-Step: Managing Devcontainers](#step-by-step-managing-devcontainers) [RECOMMENDED] Maintenance
+19. [Prerequisites](#prerequisites) [RECOMMENDED] System requirements
 
 ### [OPTIONAL] OPTIONAL (Customization & Understanding)
-19. [What Are Development Containers?](#what-are-development-containers) [OPTIONAL] Intro
-20. [Why Use Development Containers?](#why-use-development-containers) [OPTIONAL] Benefits
-21. [When NOT to Use Devcontainers](#when-not-to-use-devcontainers) [OPTIONAL] Limitations
-22. [Architecture Overview](#architecture-overview) [OPTIONAL] How it works
-23. [Official devcontainer.json Property Reference](#official-devcontainerjson-property-reference) [OPTIONAL] Spec
-24. [Common Stack Examples](#common-stack-examples) [OPTIONAL] Node/Python/Go/Rust
-25. [VS Code Tips & Tricks](#vs-code-tips--tricks) [OPTIONAL] IDE optimization
-26. [Remote Development Platforms](#remote-development-platforms) [OPTIONAL] Codespaces/Gitpod
-27. [Devcontainer CLI Reference](#devcontainer-cli-reference) [OPTIONAL] Command-line tools
-28. [Migration Guides](#migration-guides) [OPTIONAL] Upgrading configs
+20. [What Are Development Containers?](#what-are-development-containers) [OPTIONAL] Intro
+21. [Why Use Development Containers?](#why-use-development-containers) [OPTIONAL] Benefits
+22. [When NOT to Use Devcontainers](#when-not-to-use-devcontainers) [OPTIONAL] Limitations
+23. [Architecture Overview](#architecture-overview) [OPTIONAL] How it works
+24. [Official devcontainer.json Property Reference](#official-devcontainerjson-property-reference) [OPTIONAL] Spec
+25. [Common Stack Examples](#common-stack-examples) [OPTIONAL] Node/Python/Go/Rust
+26. [VS Code Tips & Tricks](#vs-code-tips--tricks) [OPTIONAL] IDE optimization
+27. [Remote Development Platforms](#remote-development-platforms) [OPTIONAL] Codespaces/Gitpod
+28. [Devcontainer CLI Reference](#devcontainer-cli-reference) [OPTIONAL] Command-line tools
+29. [Migration Guides](#migration-guides) [OPTIONAL] Upgrading configs
 
 ### [ADVANCED] ADVANCED (Complex Scenarios)
-29. [AI Decision Trees](#ai-decision-trees) [ADVANCED] **For AI Assistants**
-30. [Multi-Container Patterns (Docker Compose)](#multi-container-patterns-advanced---docker-compose) [ADVANCED] Microservices
-31. [DevContainer Features](#devcontainer-features-advanced---modular-tooling) [ADVANCED] Modular tooling
-32. [Prebuild Images & CI/CD Automation](#prebuild-images--cicd-automation) [ADVANCED] Build optimization
-33. [Creating & Distributing Templates](#creating--distributing-templates) [ADVANCED] Reusable configs
-34. [Resource and Performance Considerations](#resource-and-performance-considerations) [ADVANCED] Optimization
+30. [AI Decision Trees](#ai-decision-trees) [ADVANCED] **For AI Assistants**
+31. [Multi-Container Patterns (Docker Compose)](#multi-container-patterns-advanced---docker-compose) [ADVANCED] Microservices
+32. [DevContainer Features](#devcontainer-features-advanced---modular-tooling) [ADVANCED] Modular tooling
+33. [Prebuild Images & CI/CD Automation](#prebuild-images--cicd-automation) [ADVANCED] Build optimization
+34. [Creating & Distributing Templates](#creating--distributing-templates) [ADVANCED] Reusable configs
+35. [Resource and Performance Considerations](#resource-and-performance-considerations) [ADVANCED] Optimization
 
 ### [TROUBLESHOOTING] TROUBLESHOOTING & REFERENCE
-35. [Step-by-Step Debug Process](#step-by-step-debug-process) [TROUBLESHOOTING] Systematic debugging
-36. [Common Troubleshooting](#common-troubleshooting) [TROUBLESHOOTING] Known issues
-37. [Common Mistakes and Gotchas](#common-mistakes-and-gotchas) [WARNING] Pitfalls
-38. [Frequently Asked Questions](#frequently-asked-questions) [REFERENCE] Q&A
-39. [Quick Reference](#quick-reference) [REFERENCE] Cheat sheet
-40. [AI Assistant Quick Commands](#ai-assistant-quick-commands) **For AI Assistants**
-41. [AI Assistant Discovery Protocol](#ai-assistant-discovery-protocol) **For AI Assistants**
-42. [AI Self-Test: Validate Your Understanding](#ai-self-test-validate-your-understanding) [SELF-TEST] **For AI Assistants**
+36. [Step-by-Step Debug Process](#step-by-step-debug-process) [TROUBLESHOOTING] Systematic debugging
+37. [Common Troubleshooting](#common-troubleshooting) [TROUBLESHOOTING] Known issues
+38. [Common Mistakes and Gotchas](#common-mistakes-and-gotchas) [WARNING] Pitfalls
+39. [Frequently Asked Questions](#frequently-asked-questions) [REFERENCE] Q&A
+40. [Quick Reference](#quick-reference) [REFERENCE] Cheat sheet
+41. [AI Assistant Quick Commands](#ai-assistant-quick-commands) **For AI Assistants**
+42. [AI Assistant Discovery Protocol](#ai-assistant-discovery-protocol) **For AI Assistants**
+43. [AI Self-Test: Validate Your Understanding](#ai-self-test-validate-your-understanding) [SELF-TEST] **For AI Assistants**
 
 ---
 
@@ -197,6 +198,48 @@ code .
 - [OPTIONAL]: Nice to have (understanding & customization)
 - [ADVANCED]: Only when needed (complex scenarios)
 - [TROUBLESHOOTING]: When issues arise
+
+---
+
+## Template Files Reference
+
+**Quick Lookup**: The devcontainer setup uses 4 template files copied to `/usr/local/share/claude-defaults/` during build and deployed to user config directories by init scripts.
+
+| File Name | Purpose | Deployed To | Required For |
+|-----------|---------|-------------|--------------|
+| `config.toml.template` | Codex CLI configuration with Landlock sandbox fix for Docker | `~/.codex/config.toml` | GPT/Codex |
+| `mcp.json.template` | MCP servers configuration (context7, cf-docs) | `~/.claude/mcp.json` | Claude Code |
+| `settings.json.template` | Claude Code optimizations: OpenTelemetry, session hooks, performance settings | `~/.claude/settings.json` | Claude Code |
+| `session-start.sh.template` | Session validation hook: checks volumes, tools, MCP servers at session start | `.claude/hooks/session-start.sh` | Recommended (all) |
+
+**Deployment Flow:**
+1. **BUILD**: Dockerfile copies `.devcontainer/*.template` → `/usr/local/share/claude-defaults/`
+2. **CREATE**: `postCreateCommand` runs init scripts (`init-claude-config.sh`, `init-codex-config.sh`)
+3. **DEPLOY**: Scripts copy templates to user config directories (only if files don't exist)
+4. **PERSIST**: Configs survive container rebuilds via Docker volume mounts
+
+**Key Configuration Highlights:**
+
+`config.toml.template` (Codex CLI):
+- **Critical**: Disables Landlock sandbox (`sandbox_mode = "danger-full-access"`) - not supported in Docker's LinuxKit kernel
+- Security provided by Docker isolation instead
+- Includes MCP servers: cf-docs, chrome-devtools, context7
+
+`settings.json.template` (Claude Code):
+- **Features**: OpenTelemetry metrics export to `http://otel-collector:4317`
+- Session start hook integration
+- Performance settings: `MAX_MCP_OUTPUT_TOKENS=60000`, `BASH_DEFAULT_TIMEOUT_MS=300000`
+
+`mcp.json.template` (Claude Code):
+- MCP servers: context7, cf-docs
+- Environment variable support: `CONTEXT7_API_KEY`
+
+`session-start.sh.template`:
+- Validates devcontainer environment at session start
+- Checks: volumes, tools (claude, codex, gemini, gh), MCP servers, network connectivity
+- Provides immediate feedback on setup health
+
+**Full Details**: See [Complete Example](#complete-example-copy-this) (Files 9-10) and [Multi-AI Configuration](#multi-ai-configuration) sections.
 
 ---
 
