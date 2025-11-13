@@ -592,6 +592,11 @@
         font-family: var(--font-mono);
       }
 
+      /* Add extra top padding to code blocks with language badges */
+      .code-block-wrapper[data-language] pre {
+        padding-top: 2.5rem !important;
+      }
+
       /* Enhanced copy button */
       .copy-button {
         position: absolute;
@@ -654,6 +659,11 @@
           right: 0.75rem;
           /* Always show on mobile since hover doesn't work well */
           opacity: 1;
+        }
+
+        /* Maintain top padding on mobile */
+        .code-block-wrapper[data-language] pre {
+          padding-top: 2.5rem !important;
         }
 
         /* Ensure adequate spacing between badge and button */
