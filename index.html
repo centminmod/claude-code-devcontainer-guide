@@ -72,12 +72,6 @@
       integrity="sha384-H3wUmCndJNBOuIIzcLSr2zLLZYs8PYuw6qKyENk7THEnYQJvOMDBu42P9XsJSRKw"
       crossorigin="anonymous"
     ></script>
-    <script
-      defer
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"
-      integrity="sha384-ZSs6LKr2GoUPDyHrN+rCQgyHL1yUyok5xMniSrgeRG7rUvA6vTmxronM1eZOfjgz"
-      crossorigin="anonymous"
-    ></script>
     <!-- Fonts: Inter (sans), JetBrains Mono (mono) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2198,7 +2192,7 @@
                     by Docker isolation instead.
                   </p>
                 </div>
-                <div class="code-block-wrapper" data-language="toml">
+                <div class="code-block-wrapper" data-language="ini">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -2207,7 +2201,7 @@
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-toml">model = "gpt-5"
+                  ><code class="language-ini">model = "gpt-5"
 model_reasoning_effort = "medium"
 
 # CRITICAL: Disable Landlock sandbox (not supported in Docker)
@@ -5126,7 +5120,7 @@ echo "Claude Code configuration complete"</code></pre>
                   disabling the Landlock sandbox (not supported in LinuxKit
                   kernel):
                 </p>
-                <div class="code-block-wrapper" data-language="toml">
+                <div class="code-block-wrapper" data-language="ini">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5135,7 +5129,7 @@ echo "Claude Code configuration complete"</code></pre>
                   </button>
                   <pre
                     class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                  ><code class="language-toml"># Codex CLI configuration template for Docker containers
+                  ><code class="language-ini"># Codex CLI configuration template for Docker containers
 # Auto-copied to ~/.codex/config.toml by init-codex-config.sh
 
 model = "gpt-5"
@@ -10422,7 +10416,16 @@ docker system prune -a
       });
 
       // Highlight.js initialization
-      hljs.highlightAll();
+      // Wait for hljs to be loaded (scripts are deferred)
+      function initHighlighting() {
+        if (typeof hljs !== 'undefined') {
+          hljs.highlightAll();
+        } else {
+          // Retry after a short delay if hljs not loaded yet
+          setTimeout(initHighlighting, 50);
+        }
+      }
+      initHighlighting();
 
       // Fade-in animation on scroll (skip if reduced motion)
       if (!reduceMotion) {
