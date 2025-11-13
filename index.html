@@ -1575,7 +1575,7 @@
                     id="copy-ai-prompt-multi-v3"
                     type="button"
                     style="
-                      background: var(--brand);
+                      background: var(--brand-text-hover);
                       color: #fff;
                       border: 0;
                       border-radius: 999px;
@@ -1676,7 +1676,7 @@
                     id="copy-ai-prompt-single-v3"
                     type="button"
                     style="
-                      background: var(--brand);
+                      background: var(--brand-text-hover);
                       color: #fff;
                       border: 0;
                       border-radius: 999px;
@@ -2209,7 +2209,7 @@
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-ini">model = "gpt-5"
 model_reasoning_effort = "medium"
 
@@ -2253,7 +2253,7 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "dangerously_skip_permissions": true,
   "verbose": true,
@@ -2420,7 +2420,7 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                   Copy
                 </button>
                 <pre
-                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                 ><code class="language-bash"># Check Docker is running
 docker --version
 docker ps
@@ -2510,7 +2510,7 @@ code --version</code></pre>
                   Copy
                 </button>
                 <pre
-                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                 ><code class="language-bash"># From VS Code Command Palette
 Dev Containers: Open Folder in Container
 
@@ -2935,7 +2935,7 @@ python -V
                 📁 File Structure Example
               </h3>
               <pre
-                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm"
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm" tabindex="0"
               ><code>your-project/
 ├── .devcontainer/
 │   ├── devcontainer.json           # VS Code configuration
@@ -3115,7 +3115,7 @@ python -V
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">"runArgs": [
   "--cap-drop=ALL",                              // Drop all capabilities first
   "--cap-add=NET_ADMIN",                         // Required for iptables/sysctl
@@ -3153,7 +3153,7 @@ python -V
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                   ><code class="language-bash">#!/bin/bash
 set -euo pipefail
 IFS=$'\n\t'
@@ -3590,7 +3590,7 @@ echo "Firewall configured successfully!"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile"># Copy firewall script
 COPY init-firewall.sh /usr/local/bin/
 
@@ -3716,7 +3716,7 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash">#!/bin/bash
 #
 # Setup Git Hooks
@@ -3985,7 +3985,7 @@ echo ""</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># From repository root
 bash .devcontainer/setup-git-hooks.sh</code></pre>
                   </div>
@@ -4042,7 +4042,7 @@ Git hooks have been installed successfully.</pre
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># Switch to main branch
 git checkout main
 
@@ -4095,7 +4095,7 @@ Or for session-based work:
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># Create and switch to feature branch
 git checkout -b feature/test-hook
 
@@ -4153,7 +4153,7 @@ git commit -m "test commit"</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># Check if hook exists and is executable
 ls -la .git/hooks/pre-commit
 
@@ -4171,7 +4171,7 @@ ls -la .git/hooks/pre-commit
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash">bash .devcontainer/setup-git-hooks.sh</code></pre>
                   </div>
                 </div>
@@ -4196,7 +4196,7 @@ ls -la .git/hooks/pre-commit
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># If postStartCommand logs to file
 cat /tmp/git-hooks-install.log</code></pre>
                   </div>
@@ -4240,7 +4240,7 @@ cat /tmp/git-hooks-install.log</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># Test the hook directly
 bash .git/hooks/pre-commit
 
@@ -4270,7 +4270,7 @@ bash .git/hooks/pre-commit
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash">git commit --no-verify -m "your message"</code></pre>
                   </div>
                   <div
@@ -4324,7 +4324,7 @@ bash .git/hooks/pre-commit
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># 1. Switch to master (if not already there)
 git checkout master
 
@@ -4373,7 +4373,7 @@ git status</code></pre>
                         Copy
                       </button>
                       <pre
-                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                       ><code class="language-bash">git checkout -b feature/your-feature-name
 # OR
 git checkout -b session/$(date +%Y%m%d-%H%M)-description</code></pre>
@@ -4410,7 +4410,7 @@ git checkout -b session/$(date +%Y%m%d-%H%M)-description</code></pre>
                         Copy
                       </button>
                       <pre
-                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                        class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                       ><code class="language-bash"># Pull latest changes
 git pull origin master
 
@@ -4460,7 +4460,7 @@ git checkout -b feature/your-feature-name</code></pre>
                             Copy
                           </button>
                           <pre
-                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                           ><code class="language-bash"># Force sync with remote (discards local changes)
 git reset --hard origin/master
 
@@ -4483,7 +4483,7 @@ git status  # Should show "up to date"</code></pre>
                             Copy
                           </button>
                           <pre
-                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                            class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                           ><code class="language-bash"># Option A: Merge (creates merge commit)
 git pull origin master
 
@@ -4541,7 +4541,7 @@ git status</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs" tabindex="0"
                     ><code class="language-bash"># Step-by-step workflow
 git checkout master              # Switch to master
 git fetch origin                 # Download latest info
@@ -4795,7 +4795,7 @@ session/20251029-1600-update-docs</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">#!/bin/bash
 set -euo pipefail
 
@@ -4876,7 +4876,7 @@ echo "Claude Code configuration complete"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "dangerously_skip_permissions": true,
@@ -4923,7 +4923,7 @@ echo "Claude Code configuration complete"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "dangerously_skip_permissions": true,
@@ -5059,7 +5059,7 @@ echo "Claude Code configuration complete"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "mcpServers": {
     "context7": {
@@ -5137,7 +5137,7 @@ echo "Claude Code configuration complete"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-ini"># Codex CLI configuration template for Docker containers
 # Auto-copied to ~/.codex/config.toml by init-codex-config.sh
 
@@ -5246,7 +5246,7 @@ args = ["-y", "@upstash/context7-mcp@latest"]</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">#!/bin/bash
 set -euo pipefail
 
@@ -5330,7 +5330,7 @@ echo "Codex CLI configuration complete"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile"># Switch to root for setup
 USER root
 
@@ -5374,7 +5374,7 @@ USER node</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "postStartCommand": "sudo /usr/local/bin/init-claude-config.sh && sudo /usr/local/bin/init-codex-config.sh && sudo /usr/local/bin/init-firewall.sh"
 }</code></pre>
@@ -5504,7 +5504,7 @@ USER node</code></pre>
                 Copy
               </button>
               <pre
-                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
               ><code class="language-json">{
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "hooks": {
@@ -5700,7 +5700,7 @@ USER node</code></pre>
                 Copy
               </button>
               <pre
-                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
               ><code class="language-bash">#!/bin/bash
 # Claude Code hook deployment script
 set -e
@@ -5770,7 +5770,7 @@ echo "=== Hooks Setup Complete ==="</code></pre>
                 Copy
               </button>
               <pre
-                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
               ><code class="language-bash"># Check for validation errors
 claude /doctor
 
@@ -5961,7 +5961,7 @@ claude /doctor
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">mkdir -p .devcontainer
 cd .devcontainer</code></pre>
                 </div>
@@ -5994,7 +5994,7 @@ cd .devcontainer</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "name": "React Dev Container",
   "build": {
@@ -6153,7 +6153,7 @@ cd .devcontainer</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile"># Start from Node.js 22 base image
 FROM node:22
 
@@ -6342,7 +6342,7 @@ USER node</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Check Node.js version
 node --version  # Should show v20.x.x
 
@@ -6424,7 +6424,7 @@ npm run dev  # or npm start</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "name": "Python Dev Container",
   "build": {
@@ -6535,7 +6535,7 @@ npm run dev  # or npm start</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile"># Start from Node.js 22 base (modern approach with Python 3.14 via uv)
 FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
 
@@ -6667,7 +6667,7 @@ ENV PYTHONUNBUFFERED=1
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-text">flask==3.0.0
 python-dotenv==1.0.0
 requests==2.31.0</code></pre>
@@ -6683,7 +6683,7 @@ requests==2.31.0</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-text">fastapi==0.104.0
 uvicorn[standard]==0.24.0
 python-dotenv==1.0.0
@@ -6718,7 +6718,7 @@ pydantic==2.5.0</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Check Python version
 python --version  # Should show Python 3.14.x
 
@@ -6818,7 +6818,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "name": "Advanced Python Dev Container",
   "build": {
@@ -6955,7 +6955,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile"># Start from Node.js 22 base (modern approach with Python 3.14 via uv)
 FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
 
@@ -7150,7 +7150,7 @@ ENV PYTHONUNBUFFERED=1
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">pip install -r requirements.txt
 pip list</code></pre>
                 </div>
@@ -7165,7 +7165,7 @@ pip list</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">uv pip install -r requirements.txt
 uv pip list</code></pre>
                 </div>
@@ -7218,7 +7218,7 @@ uv pip list</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Verify Python
 python --version  # Should show Python 3.14.x
 
@@ -7282,7 +7282,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                     ><code class="language-dockerfile"># Python 3.14 (current default - managed via uv + init-python.sh)
 FROM mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
 # NOTE: Python 3.14 installed in postCreateCommand via init-python.sh
@@ -7324,7 +7324,7 @@ FROM python:3.11-slim</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                     ><code class="language-bash"># List available Python versions
 uv python list
 
@@ -7426,7 +7426,7 @@ uv python pin 3.13</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">#!/bin/bash
 set -e
 
@@ -7529,7 +7529,7 @@ echo "✅ Python 3.14 configured as default"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code>3.14</code></pre>
                 </div>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
@@ -7544,7 +7544,7 @@ echo "✅ Python 3.14 configured as default"</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Change to Python 3.13
 echo "3.13" > .python-version
 uv python pin 3.13
@@ -7592,7 +7592,7 @@ uv python install 3.13</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">mkdir -p .devcontainer
 cd .devcontainer
 touch devcontainer.json Dockerfile</code></pre>
@@ -7623,7 +7623,7 @@ touch devcontainer.json Dockerfile</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "name": "Next.js Dev Container",
   "build": {
@@ -7766,7 +7766,7 @@ touch devcontainer.json Dockerfile</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile">FROM node:22
 
 # npm CLI packages (Claude Code, Codex, Gemini) installed via postCreateCommand
@@ -7880,7 +7880,7 @@ CMD ["sleep", "infinity"]</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Check Node.js version
 node --version  # Should show v20.x.x
 
@@ -7996,7 +7996,7 @@ npm run dev</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-json">{
   "name": "Multi-AI Dev Container",
   "build": {
@@ -8152,7 +8152,7 @@ npm run dev</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-dockerfile">FROM node:22
 
 ARG TZ
@@ -8387,7 +8387,7 @@ USER node</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Authenticate Claude Code
 # Claude /login slash command
 /login
@@ -8484,7 +8484,7 @@ echo '{"apiKey": "YOUR_GOOGLE_API_KEY"}' > ~/.gemini/settings.json</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Check Claude Code
 claude --version
 
@@ -8904,7 +8904,7 @@ vercel --version
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                     ><code class="language-bash">export ANTHROPIC_API_KEY=YOUR_ANTHROPIC_API_KEY
 opencode config set provider anthropic
 opencode config set apiKey YOUR_ANTHROPIC_API_KEY</code></pre>
@@ -8920,7 +8920,7 @@ opencode config set apiKey YOUR_ANTHROPIC_API_KEY</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                     ><code class="language-bash">export OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 opencode config set provider openai</code></pre>
                   </div>
@@ -8935,7 +8935,7 @@ opencode config set provider openai</code></pre>
                       Copy
                     </button>
                     <pre
-                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                      class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                     ><code class="language-bash">export GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
 opencode config set provider google</code></pre>
                   </div>
@@ -8963,7 +8963,7 @@ opencode config set provider google</code></pre>
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash">opencode config list
 opencode --version</code></pre>
                 </div>
@@ -9139,11 +9139,11 @@ opencode --version</code></pre>
               <p class="text-sm text-gray-700 dark:text-gray-300">
                 <strong>Need more details?</strong> See the comprehensive GitHub
                 CLI documentation in
-                <a href="../README.md" class="text-primary hover:underline"
+                <a href="../README.md" class="text-primary underline"
                   >README.md</a
                 >
                 or
-                <a href="./llms.txt" class="text-primary hover:underline"
+                <a href="./llms.txt" class="text-primary underline"
                   >llms.txt</a
                 >
                 for alternative authentication methods, troubleshooting, and
@@ -9989,7 +9989,7 @@ su - node -c "mkdir -p /home/node/.config/test"
                     Copy
                   </button>
                   <pre
-                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto" tabindex="0"
                   ><code class="language-bash"># Check Docker is running
 docker ps
 
