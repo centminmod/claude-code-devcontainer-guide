@@ -170,6 +170,8 @@
         --muted: #5f6673; /* Improved from #6b7280 for WCAG AA (4.5:1) contrast */
         --brand: #10a37f;
         --brand-strong: #0e8e70;
+        --brand-text: #0a6b4f; /* Darker brand for text on light backgrounds - WCAG AA compliant (4.67:1) */
+        --brand-text-hover: #085a41; /* Even darker for hover state (5.6:1) */
         --accent: #0b5fff;
         --focus: 0 0 0 3px rgba(11, 95, 255, 0.35);
         --code-bg: #0f172a; /* editor-like dark bg */
@@ -198,6 +200,8 @@
         --muted: #9ca3af;
         --brand: #10a37f;
         --brand-strong: #10a37f;
+        --brand-text: #1fd4a0; /* Lighter brand for text on dark backgrounds - WCAG AA compliant */
+        --brand-text-hover: #2ce8b3; /* Even lighter for hover state */
         --accent: #5b8aff;
         --focus: 0 0 0 3px rgba(16, 163, 127, 0.4);
         --code-bg: #0f1d33; /* slightly lighter than page for separation */
@@ -276,8 +280,7 @@
       }
 
       /* Buttons that used 'bg-primary/secondary' now use brand */
-      .bg-primary,
-      .text-primary {
+      .bg-primary {
         background-color: var(--brand) !important;
         color: #fff !important;
       }
@@ -285,8 +288,12 @@
         background-color: var(--brand-strong) !important;
       }
       .text-primary {
-        color: var(--brand) !important;
+        color: var(--brand-text) !important;
         background: none !important;
+      }
+      .text-secondary,
+      .hover\:text-secondary:hover {
+        color: var(--brand-text-hover) !important;
       }
 
       /* Map common Tailwind gray utilities to new tokens (scoped overrides) */
@@ -1543,6 +1550,7 @@
                 <textarea
                   id="ai-prompt-text-multi-v3"
                   rows="8"
+                  aria-label="Multi-AI Dev Container Prompt"
                   style="
                     width: 100%;
                     font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
@@ -1643,6 +1651,7 @@
                 <textarea
                   id="ai-prompt-text-single-v3"
                   rows="8"
+                  aria-label="Single-AI Dev Container Prompt"
                   style="
                     width: 100%;
                     font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
@@ -8504,6 +8513,8 @@ vercel --version
                   <img
                     src="claude-devcontainer-demo-1-800px.png"
                     alt="Terminal screenshot showing successful version checks for Claude Code, OpenCode, Codex, Gemini, Wrangler, gh CLI, AWS CLI, and Vercel CLIs"
+                    width="800"
+                    height="408"
                     class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                     loading="lazy"
                     decoding="async"
@@ -8630,6 +8641,8 @@ vercel --version
                 <img
                   src="claude-code-login-1.png"
                   alt="Claude Code login screen showing /login command with options to select Claude account with subscription or Anthropic Console account"
+                  width="1918"
+                  height="912"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                   loading="lazy"
                   decoding="async"
@@ -8710,6 +8723,8 @@ vercel --version
                 <img
                   src="codex-cli-login-1.png"
                   alt="Codex CLI authentication screen showing local login server on localhost:1455 with OpenAI OAuth URL"
+                  width="1876"
+                  height="502"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                   loading="lazy"
                   decoding="async"
@@ -8791,6 +8806,8 @@ vercel --version
                 <img
                   src="gemini-cli-login-1.png"
                   alt="Gemini CLI authentication screen showing /auth command with options: Login with Google, Use Gemini API Key, or Vertex AI"
+                  width="1836"
+                  height="1692"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                   loading="lazy"
                   decoding="async"
@@ -9214,6 +9231,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-1.png"
                 alt="Claude Code receiving request to summarize llms.txt file and coordinate with other AI models"
+                width="1690"
+                height="1806"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
@@ -9231,6 +9250,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-2.png"
                 alt="Claude Code invoking Codex CLI to get OpenAI's perspective on the llms.txt summary"
+                width="1992"
+                height="1958"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
@@ -9247,6 +9268,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-3.png"
                 alt="Claude Code invoking Gemini CLI to get Google's perspective on the llms.txt summary"
+                width="1968"
+                height="2544"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
@@ -9263,6 +9286,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-4.png"
                 alt="Claude Code analyzing and comparing the responses from Codex and Gemini"
+                width="1954"
+                height="2560"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
@@ -9279,6 +9304,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-5.png"
                 alt="Claude providing detailed comparison of each model's strengths and approach to the task"
+                width="1942"
+                height="2550"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
@@ -9296,6 +9323,8 @@ opencode --version</code></pre>
               <img
                 src="screenshot-multi-ai-dev-container-demo-6.png"
                 alt="Claude's final summary and recommendations based on multi-model evaluation"
+                width="1984"
+                height="1616"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
                 loading="lazy"
                 decoding="async"
