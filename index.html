@@ -43,31 +43,37 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
       integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp"
       crossorigin="anonymous"
     ></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"
       integrity="sha384-OqfnIfpOmAlErKRs2a525ZcwLuZ8Z1x8hPdIwBcMtHkJBbHnpJ6wX5/LVzASHkD5"
       crossorigin="anonymous"
     ></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"
       integrity="sha384-RbRhXcXx5VHUdUaC5R0oV+XBXA5GhkaVCUzK8xN19K3FmtWSHyGVgulK92XnhBsI"
       crossorigin="anonymous"
     ></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"
       integrity="sha384-FWJTgPmIGm1+zpNhubuHRC/ulS1UK7hAZ7qiUUmKD8yGfPcn5ZXYBd2qRgi6L8Tu"
       crossorigin="anonymous"
     ></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"
       integrity="sha384-H3wUmCndJNBOuIIzcLSr2zLLZYs8PYuw6qKyENk7THEnYQJvOMDBu42P9XsJSRKw"
       crossorigin="anonymous"
     ></script>
     <script
+      defer
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"
       integrity="sha384-ZSs6LKr2GoUPDyHrN+rCQgyHL1yUyok5xMniSrgeRG7rUvA6vTmxronM1eZOfjgz"
       crossorigin="anonymous"
@@ -167,7 +173,7 @@
         --border: #e5e7eb;
         --text-1: #0b0f19;
         --text-2: #374151;
-        --muted: #6b7280;
+        --muted: #5f6673; /* Improved from #6b7280 for WCAG AA (4.5:1) contrast */
         --brand: #10a37f;
         --brand-strong: #0e8e70;
         --accent: #0b5fff;
@@ -546,6 +552,26 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
       }
 
+      /* Loading state for code blocks before syntax highlighting */
+      pre code:not(.hljs) {
+        opacity: 0.6;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      pre code.hljs {
+        opacity: 1;
+        animation: none;
+      }
+
       /* Language badge */
       .code-block-wrapper[data-language]::before {
         content: attr(data-language);
@@ -564,6 +590,11 @@
         color: var(--code-fg);
         z-index: 10;
         font-family: var(--font-mono);
+      }
+
+      /* Add extra top padding to code blocks with language badges */
+      .code-block-wrapper[data-language] pre {
+        padding-top: 2.5rem !important;
       }
 
       /* Enhanced copy button */
@@ -612,6 +643,33 @@
 
       .copy-button.copied {
         background: rgba(16, 185, 129, 0.9);
+      }
+
+      /* Mobile responsive layout for code blocks */
+      @media (max-width: 640px) {
+        .code-block-wrapper[data-language]::before {
+          font-size: 0.65rem;
+          padding: 0.2rem 0.5rem;
+          left: 0.75rem;
+        }
+
+        .copy-button {
+          padding: 0.4rem 0.75rem;
+          font-size: 0.75rem;
+          right: 0.75rem;
+          /* Always show on mobile since hover doesn't work well */
+          opacity: 1;
+        }
+
+        /* Maintain top padding on mobile */
+        .code-block-wrapper[data-language] pre {
+          padding-top: 2.5rem !important;
+        }
+
+        /* Ensure adequate spacing between badge and button */
+        .code-block-wrapper {
+          min-height: 3.5rem;
+        }
       }
 
       /* Enhanced callout/alert system */
@@ -909,6 +967,30 @@
         white-space: nowrap;
         border: 0;
       }
+
+      /* Mobile menu slide-in animation */
+      @media (max-width: 768px) {
+        #tocSidebar {
+          position: fixed;
+          top: 64px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: var(--surface-1);
+          z-index: 40;
+          transform: translateX(-100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow-y: auto;
+        }
+
+        #tocSidebar.mobile-open {
+          transform: translateX(0);
+        }
+
+        #tocSidebar:not(.mobile-open) {
+          display: block !important; /* Override hidden class for animation */
+        }
+      }
     </style>
   </head>
   <body
@@ -1129,6 +1211,13 @@
               </li>
               <li>
                 <a
+                  href="#prerequisites"
+                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >Prerequisites</a
+                >
+              </li>
+              <li>
+                <a
                   href="#quick-start"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >Quick Start</a
@@ -1153,13 +1242,6 @@
                   href="#when-not-to-use"
                   class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >When NOT to Use</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#prerequisites"
-                  class="toc-link block py-1 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >Prerequisites</a
                 >
               </li>
               <li>
@@ -2116,7 +2198,7 @@
                     by Docker isolation instead.
                   </p>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="toml">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -2160,7 +2242,7 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                     performance settings.
                   </p>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -2230,6 +2312,118 @@ args = ["-y", "chrome-devtools-mcp@latest", ...]</code></pre>
                     (changes persist via volumes)
                   </li>
                 </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Prerequisites -->
+          <section
+            id="prerequisites"
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              📋 Prerequisites
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">
+              Let's get your development environment ready. You'll need these
+              three tools:
+            </p>
+
+            <div class="space-y-4 mb-6">
+              <div
+                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
+                >
+                  1. VS Code
+                </h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-2">
+                  The editor that will connect to your containers.
+                </p>
+                <a
+                  href="https://code.visualstudio.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:text-secondary underline"
+                >
+                  Download VS Code →
+                </a>
+              </div>
+
+              <div
+                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
+                >
+                  2. Docker Desktop
+                </h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-2">
+                  The engine that runs containers.
+                </p>
+                <a
+                  href="https://www.docker.com/products/docker-desktop"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:text-secondary underline"
+                >
+                  Download Docker Desktop →
+                </a>
+                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Note:</strong> Windows users need WSL2 enabled first.
+                </div>
+              </div>
+
+              <div
+                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
+                >
+                  3. Dev Containers Extension
+                </h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-2">
+                  VS Code extension to manage dev containers.
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  Install from VS Code: Press
+                  <kbd
+                    class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                    >Cmd+Shift+X</kbd
+                  >
+                  (Mac) or
+                  <kbd
+                    class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+                    >Ctrl+Shift+X</kbd
+                  >
+                  (Windows/Linux), search "Dev Containers", and click Install.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+              <h3 class="font-semibold mb-3 text-gray-900 dark:text-white">
+                ✓ Verify Installation
+              </h3>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                Run these commands in your terminal:
+              </p>
+              <div class="code-block-wrapper" data-language="bash">
+                <button
+                  class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                  aria-label="Copy code"
+                >
+                  Copy
+                </button>
+                <pre
+                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                ><code class="language-bash"># Check Docker is running
+docker --version
+docker ps
+
+# Check VS Code is installed
+code --version</code></pre>
               </div>
             </div>
           </section>
@@ -2660,118 +2854,6 @@ python -V
             </p>
           </section>
 
-          <!-- Prerequisites -->
-          <section
-            id="prerequisites"
-            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-          >
-            <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-              📋 Prerequisites
-            </h2>
-            <p class="text-gray-700 dark:text-gray-300 mb-6">
-              Let's get your development environment ready. You'll need these
-              three tools:
-            </p>
-
-            <div class="space-y-4 mb-6">
-              <div
-                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-              >
-                <h3
-                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
-                >
-                  1. VS Code
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-2">
-                  The editor that will connect to your containers.
-                </p>
-                <a
-                  href="https://code.visualstudio.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary hover:text-secondary underline"
-                >
-                  Download VS Code →
-                </a>
-              </div>
-
-              <div
-                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-              >
-                <h3
-                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
-                >
-                  2. Docker Desktop
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-2">
-                  The engine that runs containers.
-                </p>
-                <a
-                  href="https://www.docker.com/products/docker-desktop"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-primary hover:text-secondary underline"
-                >
-                  Download Docker Desktop →
-                </a>
-                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  <strong>Note:</strong> Windows users need WSL2 enabled first.
-                </div>
-              </div>
-
-              <div
-                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-              >
-                <h3
-                  class="font-semibold text-lg mb-2 text-gray-900 dark:text-white"
-                >
-                  3. Dev Containers Extension
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-2">
-                  VS Code extension to manage dev containers.
-                </p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                  Install from VS Code: Press
-                  <kbd
-                    class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
-                    >Cmd+Shift+X</kbd
-                  >
-                  (Mac) or
-                  <kbd
-                    class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs"
-                    >Ctrl+Shift+X</kbd
-                  >
-                  (Windows/Linux), search "Dev Containers", and click Install.
-                </p>
-              </div>
-            </div>
-
-            <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
-              <h3 class="font-semibold mb-3 text-gray-900 dark:text-white">
-                ✓ Verify Installation
-              </h3>
-              <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                Run these commands in your terminal:
-              </p>
-              <div class="code-block-wrapper">
-                <button
-                  class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
-                  aria-label="Copy code"
-                >
-                  Copy
-                </button>
-                <pre
-                  class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
-                ><code class="language-bash"># Check Docker is running
-docker --version
-docker ps
-
-# Check VS Code is installed
-code --version</code></pre>
-              </div>
-            </div>
-          </section>
-
           <!-- Architecture -->
           <section
             id="architecture"
@@ -3022,7 +3104,7 @@ code --version</code></pre>
                   Add these <code>runArgs</code> to grant minimal capabilities
                   needed for firewall management with three-layer IPv6 security:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -3060,7 +3142,7 @@ code --version</code></pre>
                   <code>.devcontainer/</code> directory. It will be copied to
                   <code>/usr/local/bin/</code> during container build:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -3497,7 +3579,7 @@ echo "Firewall configured successfully!"</code></pre>
                   Add these lines to your Dockerfile to install the script and
                   configure sudo:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -3623,7 +3705,7 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
                     Create
                     <code>.devcontainer/setup-git-hooks.sh</code>:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -3892,7 +3974,7 @@ echo ""</code></pre>
                     If automatic installation is not set up, run manually after
                     cloning or rebuilding:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -3949,7 +4031,7 @@ Git hooks have been installed successfully.</pre
                   >
                     Test 1: Verify hook blocks commits to main
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4002,7 +4084,7 @@ Or for session-based work:
                   >
                     Test 2: Verify hook allows commits to feature branches
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4060,7 +4142,7 @@ git commit -m "test commit"</code></pre>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                     Verify the hook is installed and executable:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4103,7 +4185,7 @@ ls -la .git/hooks/pre-commit
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                     Check the installation log (if configured):
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4147,7 +4229,7 @@ cat /tmp/git-hooks-install.log</code></pre>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                     You can run the hook script directly to verify it works:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4177,7 +4259,7 @@ bash .git/hooks/pre-commit
                     If you absolutely must commit to main/master (not
                     recommended):
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4231,7 +4313,7 @@ bash .git/hooks/pre-commit
                   >
                     Step 1: Check Your Sync Status
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4280,7 +4362,7 @@ git status</code></pre>
                     >
                       → Safe to proceed! Create your branch:
                     </p>
-                    <div class="code-block-wrapper">
+                    <div class="code-block-wrapper" data-language="bash">
                       <button
                         class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                         aria-label="Copy code"
@@ -4317,7 +4399,7 @@ git checkout -b session/$(date +%Y%m%d-%H%M)-description</code></pre>
                     >
                       → Pull first, then verify:
                     </p>
-                    <div class="code-block-wrapper">
+                    <div class="code-block-wrapper" data-language="bash">
                       <button
                         class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                         aria-label="Copy code"
@@ -4367,7 +4449,7 @@ git checkout -b feature/your-feature-name</code></pre>
                           Option 1: If you have NO local commits on master
                           (safe):
                         </p>
-                        <div class="code-block-wrapper">
+                        <div class="code-block-wrapper" data-language="bash">
                           <button
                             class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                             aria-label="Copy code"
@@ -4390,7 +4472,7 @@ git status  # Should show "up to date"</code></pre>
                         >
                           Option 2: If you have local commits to preserve:
                         </p>
-                        <div class="code-block-wrapper">
+                        <div class="code-block-wrapper" data-language="bash">
                           <button
                             class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                             aria-label="Copy code"
@@ -4448,7 +4530,7 @@ git status</code></pre>
                   >
                     Complete Workflow: From Master to New Branch
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -4486,7 +4568,7 @@ git branch --show-current        # Verify: "feature/new-api"
                   >
                     Feature Branches (long-term work)
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <pre
                       class="bg-gray-800 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs"
                     ><code>feature/add-authentication
@@ -4783,7 +4865,7 @@ echo "Claude Code configuration complete"</code></pre>
                 >
                   Basic Configuration (Recommended)
                 </h5>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -4830,7 +4912,7 @@ echo "Claude Code configuration complete"</code></pre>
                   Use this version if you have OpenTelemetry infrastructure
                   (otel-collector service):
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -4966,7 +5048,7 @@ echo "Claude Code configuration complete"</code></pre>
                   MCP configuration with stdio transport using npx for package
                   execution:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5044,7 +5126,7 @@ echo "Claude Code configuration complete"</code></pre>
                   disabling the Landlock sandbox (not supported in LinuxKit
                   kernel):
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="toml">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5153,7 +5235,7 @@ args = ["-y", "@upstash/context7-mcp@latest"]</code></pre>
                   This script automatically configures Codex CLI on container
                   startup:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5237,7 +5319,7 @@ echo "Codex CLI configuration complete"</code></pre>
                   Add these sections to your Dockerfile to enable automatic
                   configuration:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5281,7 +5363,7 @@ USER node</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Run all initialization scripts on container startup:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5411,7 +5493,7 @@ USER node</code></pre>
               Add this to your <code>~/.claude/settings.json</code> (user-level)
               or <code>.claude/settings.json</code> (workspace-level):
             </p>
-            <div class="code-block-wrapper">
+            <div class="code-block-wrapper" data-language="json">
               <button
                 class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                 aria-label="Copy code"
@@ -5677,7 +5759,7 @@ echo "=== Hooks Setup Complete ==="</code></pre>
             <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
               To verify your hook configuration is correct:
             </p>
-            <div class="code-block-wrapper">
+            <div class="code-block-wrapper" data-language="bash">
               <button
                 class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                 aria-label="Copy code"
@@ -5868,7 +5950,7 @@ claude /doctor
                     Create the .devcontainer directory
                   </h3>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -5901,7 +5983,7 @@ cd .devcontainer</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   This file configures VS Code's connection to the container:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6060,7 +6142,7 @@ cd .devcontainer</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   This defines what gets installed in your container:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6249,7 +6331,7 @@ USER node</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Once connected, open the integrated terminal and verify:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6331,7 +6413,7 @@ npm run dev  # or npm start</code></pre>
                     Create devcontainer.json for Python
                   </h3>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6442,7 +6524,7 @@ npm run dev  # or npm start</code></pre>
                     Create Dockerfile for Python
                   </h3>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6574,7 +6656,7 @@ ENV PYTHONUNBUFFERED=1
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   List your Python dependencies (example for Flask):
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="text">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6590,7 +6672,7 @@ requests==2.31.0</code></pre>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
                   Or for FastAPI:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="text">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6625,7 +6707,7 @@ pydantic==2.5.0</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   After reopening in container, test in the terminal:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6725,7 +6807,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     Create devcontainer.json
                   </h3>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -6862,7 +6944,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     Create Dockerfile (Advanced)
                   </h3>
                 </div>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7057,7 +7139,7 @@ ENV PYTHONUNBUFFERED=1
                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
                   <strong>Using traditional pip:</strong>
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7072,7 +7154,7 @@ pip list</code></pre>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 mb-2">
                   <strong>Using uv (10-100x faster):</strong>
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7125,7 +7207,7 @@ uv pip list</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Test all installed tools:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7189,7 +7271,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000</code></pre>
                     Edit the first line of your Dockerfile to use a different
                     Python version:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="dockerfile">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -7231,7 +7313,7 @@ FROM python:3.11-slim</code></pre>
                     With uv, you can install and switch between multiple Python
                     versions WITHOUT rebuilding the container:
                   </p>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button
                       class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                       aria-label="Copy code"
@@ -7333,7 +7415,7 @@ uv python pin 3.13</code></pre>
                   >
                   volume:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7436,7 +7518,7 @@ echo "✅ Python 3.14 configured as default"</code></pre>
                   >
                   file to pin the Python version for the project:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7499,7 +7581,7 @@ uv python install 3.13</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   In your Next.js project root, create the directory and files:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7530,7 +7612,7 @@ touch devcontainer.json Dockerfile</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Add this configuration optimized for Next.js development:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7673,7 +7755,7 @@ touch devcontainer.json Dockerfile</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Use Node.js 22 LTS for optimal Next.js performance:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7787,7 +7869,7 @@ CMD ["sleep", "infinity"]</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Once connected, verify everything is working:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -7903,7 +7985,7 @@ npm run dev</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Configure all three AI extensions with separate volume mounts:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="json">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -8059,7 +8141,7 @@ npm run dev</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   Install all three CLI tools globally:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="dockerfile">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -8294,7 +8376,7 @@ USER node</code></pre>
                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
                   After the container builds, authenticate each AI service:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -8391,7 +8473,7 @@ echo '{"apiKey": "YOUR_GOOGLE_API_KEY"}' > ~/.gemini/settings.json</code></pre>
                   Test that all three AI assistants are properly installed and
                   configured:
                 </p>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -8798,7 +8880,7 @@ vercel --version
                   <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
                     Option 1: Anthropic (Claude)
                   </h4>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button class="copy-button" aria-label="Copy code">
                       Copy
                     </button>
@@ -8814,7 +8896,7 @@ opencode config set apiKey YOUR_ANTHROPIC_API_KEY</code></pre>
                   <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
                     Option 2: OpenAI
                   </h4>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button class="copy-button" aria-label="Copy code">
                       Copy
                     </button>
@@ -8829,7 +8911,7 @@ opencode config set provider openai</code></pre>
                   <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
                     Option 3: Google (Gemini)
                   </h4>
-                  <div class="code-block-wrapper">
+                  <div class="code-block-wrapper" data-language="bash">
                     <button class="copy-button" aria-label="Copy code">
                       Copy
                     </button>
@@ -8857,7 +8939,7 @@ opencode config set provider google</code></pre>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">
                   Verify Configuration
                 </h4>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button class="copy-button" aria-label="Copy code">
                     Copy
                   </button>
@@ -9856,7 +9938,7 @@ su - node -c "mkdir -p /home/node/.config/test"
                 >
                   💡 Quick Debug Commands
                 </h3>
-                <div class="code-block-wrapper">
+                <div class="code-block-wrapper" data-language="bash">
                   <button
                     class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
                     aria-label="Copy code"
@@ -10233,12 +10315,35 @@ docker system prune -a
       const tocSidebar = document.getElementById("tocSidebar");
 
       mobileMenuToggle.addEventListener("click", () => {
-        tocSidebar.classList.toggle("hidden");
-        tocSidebar.classList.toggle("block");
+        tocSidebar.classList.toggle("mobile-open");
         const expanded =
           mobileMenuToggle.getAttribute("aria-expanded") === "true";
         mobileMenuToggle.setAttribute("aria-expanded", String(!expanded));
       });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          const isClickInsideMenu = tocSidebar.contains(e.target);
+          const isClickOnToggle = mobileMenuToggle.contains(e.target);
+          if (!isClickInsideMenu && !isClickOnToggle && tocSidebar.classList.contains("mobile-open")) {
+            tocSidebar.classList.remove("mobile-open");
+            mobileMenuToggle.setAttribute("aria-expanded", "false");
+          }
+        }
+      });
+
+      // Handle URL hash navigation on initial page load
+      if (window.location.hash) {
+        // Small delay to ensure page is fully rendered
+        setTimeout(() => {
+          const targetId = window.location.hash.slice(1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+          }
+        }, 100);
+      }
 
       // Smooth scroll for TOC links
       document.querySelectorAll(".toc-link").forEach((link) => {
@@ -10257,8 +10362,9 @@ docker system prune -a
             // persist hash for deep-linking/back/forward
             history.replaceState(null, "", `#${targetId}`);
             // Close mobile menu if open
-            if (window.innerWidth < 768) {
-              tocSidebar.classList.add("hidden");
+            if (window.innerWidth <= 768 && tocSidebar.classList.contains("mobile-open")) {
+              tocSidebar.classList.remove("mobile-open");
+              mobileMenuToggle.setAttribute("aria-expanded", "false");
             }
           }
         });
@@ -10393,8 +10499,9 @@ docker system prune -a
 
         // Press 'Escape' to close mobile menu or help panel
         if (e.key === "Escape") {
-          if (window.innerWidth < 768) {
-            tocSidebar.classList.add("hidden");
+          if (window.innerWidth <= 768 && tocSidebar.classList.contains("mobile-open")) {
+            tocSidebar.classList.remove("mobile-open");
+            mobileMenuToggle.setAttribute("aria-expanded", "false");
           }
           if (helpVisible) {
             helpVisible = false;
