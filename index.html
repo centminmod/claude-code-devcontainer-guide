@@ -8505,6 +8505,8 @@ vercel --version
                     src="claude-devcontainer-demo-1-800px.png"
                     alt="Terminal screenshot showing successful version checks for Claude Code, OpenCode, Codex, Gemini, Wrangler, gh CLI, AWS CLI, and Vercel CLIs"
                     class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <p
                     class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -8629,6 +8631,8 @@ vercel --version
                   src="claude-code-login-1.png"
                   alt="Claude Code login screen showing /login command with options to select Claude account with subscription or Anthropic Console account"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <p
                   class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -8707,6 +8711,8 @@ vercel --version
                   src="codex-cli-login-1.png"
                   alt="Codex CLI authentication screen showing local login server on localhost:1455 with OpenAI OAuth URL"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <p
                   class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -8786,6 +8792,8 @@ vercel --version
                   src="gemini-cli-login-1.png"
                   alt="Gemini CLI authentication screen showing /auth command with options: Login with Google, Use Gemini API Key, or Vertex AI"
                   class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <p
                   class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9207,6 +9215,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-1.png"
                 alt="Claude Code receiving request to summarize llms.txt file and coordinate with other AI models"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9222,6 +9232,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-2.png"
                 alt="Claude Code invoking Codex CLI to get OpenAI's perspective on the llms.txt summary"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9236,6 +9248,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-3.png"
                 alt="Claude Code invoking Gemini CLI to get Google's perspective on the llms.txt summary"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9250,6 +9264,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-4.png"
                 alt="Claude Code analyzing and comparing the responses from Codex and Gemini"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9264,6 +9280,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-5.png"
                 alt="Claude providing detailed comparison of each model's strengths and approach to the task"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -9279,6 +9297,8 @@ opencode --version</code></pre>
                 src="screenshot-multi-ai-dev-container-demo-6.png"
                 alt="Claude's final summary and recommendations based on multi-model evaluation"
                 class="rounded-lg border border-gray-300 dark:border-gray-600 shadow-md w-full max-w-3xl mx-auto"
+                loading="lazy"
+                decoding="async"
               />
               <p
                 class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2 italic"
@@ -10537,6 +10557,79 @@ docker system prune -a
       aria-live="polite"
       class="sr-only"
     ></div>
+
+    <!-- Enhanced Lazy Loading with IntersectionObserver -->
+    <script>
+      // Enhanced lazy loading for images with fade-in effect
+      // This provides better control and visual feedback for image loading
+      (function () {
+        // Only run if IntersectionObserver is supported
+        if (!("IntersectionObserver" in window)) {
+          return; // Fall back to native lazy loading
+        }
+
+        // Add CSS for fade-in effect
+        const style = document.createElement("style");
+        style.textContent = `
+          img[loading="lazy"] {
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+          }
+          img[loading="lazy"].loaded {
+            opacity: 1;
+          }
+        `;
+        document.head.appendChild(style);
+
+        // Configure IntersectionObserver for lazy images
+        const imageObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+
+                // Add loaded class when image finishes loading
+                if (img.complete) {
+                  img.classList.add("loaded");
+                } else {
+                  img.addEventListener("load", () => {
+                    img.classList.add("loaded");
+                  });
+                }
+
+                // Stop observing this image
+                observer.unobserve(img);
+              }
+            });
+          },
+          {
+            // Start loading images slightly before they enter viewport
+            rootMargin: "50px 0px",
+            threshold: 0.01,
+          }
+        );
+
+        // Wait for DOM to be ready
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initLazyLoading);
+        } else {
+          initLazyLoading();
+        }
+
+        function initLazyLoading() {
+          // Observe all lazy-loaded images
+          const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+          lazyImages.forEach((img) => {
+            // If image is already loaded (cached), show it immediately
+            if (img.complete) {
+              img.classList.add("loaded");
+            } else {
+              imageObserver.observe(img);
+            }
+          });
+        }
+      })();
+    </script>
 
     <!-- Cloudflare Web Analytics -->
     <script
