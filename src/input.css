@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom tokens and component styles are kept in index.html's inline <style>.
+ * This file exists so Tailwind can generate the utility classes referenced
+ * in the HTML without loading the Tailwind CDN script at runtime.
+ */
+
