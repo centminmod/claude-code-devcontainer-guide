@@ -92,6 +92,67 @@
         }
       })();
     </script>
+
+    <style>
+      /* Back to top button */
+      #backToTop {
+        position: fixed;
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        right: max(1rem, env(safe-area-inset-right));
+        opacity: 0;
+        transform: translateY(100px);
+        transition: opacity 0.3s, transform 0.3s;
+        z-index: 40;
+        will-change: transform, opacity;
+      }
+      @media (max-width: 640px) {
+        #backToTop {
+          bottom: max(0.75rem, env(safe-area-inset-bottom));
+          right: max(0.75rem, env(safe-area-inset-right));
+        }
+      }
+      #backToTop.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Keyboard shortcuts help */
+      #keyboardHelp {
+        position: fixed;
+        bottom: 6rem;
+        right: 2rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.3s;
+        z-index: 40;
+        pointer-events: none;
+      }
+      #keyboardHelp.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+      .dark #keyboardHelp {
+        background: #1f2937;
+        border-color: #374151;
+      }
+
+      /* Scroll progress bar */
+      #scrollProgress {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(to right, #6366f1, #8b5cf6);
+        transform-origin: left;
+        z-index: 49;
+      }
+    </style>
   </head>
 
   <body
@@ -112,7 +173,7 @@
     <!-- Back to Top Button -->
     <button
       id="backToTop"
-      class="fixed bottom-8 right-8 p-3 rounded-full bg-primary hover:bg-secondary text-white shadow-lg transition-all opacity-0 invisible z-40"
+      class="bg-primary hover:bg-secondary text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl"
       aria-label="Back to top"
     >
       <svg
@@ -134,17 +195,13 @@
     <!-- Keyboard Help Popup -->
     <div
       id="keyboardHelp"
-      class="fixed bottom-24 right-8 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-2xl p-6 z-50 opacity-0 invisible transition-all"
+      class="text-sm"
       role="dialog"
-      aria-labelledby="keyboard-help-title"
-      aria-hidden="true"
+      aria-label="Keyboard shortcuts"
     >
-      <h3
-        id="keyboard-help-title"
-        class="font-semibold mb-3 text-gray-900 dark:text-white"
-      >
-        ⌨️ Keyboard Shortcuts
-      </h3>
+      <div class="font-semibold mb-2 text-gray-900 dark:text-white">
+        Keyboard Shortcuts
+      </div>
       <div class="space-y-1 text-gray-700 dark:text-gray-300">
         <div>
           <kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs"
