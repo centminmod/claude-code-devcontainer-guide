@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Troubleshooting - Claude Code Dev Containers Guide</title>
+    <meta
+      name="description"
+      content="Troubleshooting guide for development containers with Claude Code - solutions to common issues and errors"
+    />
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Troubleshooting - Claude Code Dev Containers Guide"
+    />
+    <meta
+      property="og:description"
+      content="Solutions to common development container issues with Claude Code"
+    />
+    <meta property="og:site_name" content="Claude Code Documentation" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dev Containers Troubleshooting" />
+    <meta
+      name="twitter:description"
+      content="Fix common dev container issues and errors"
+    />
+
+    <!-- Theme Color - Material Design 3 -->
+    <meta
+      name="theme-color"
+      content="#10A37F"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0B0F19"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="stylesheet" href="guide.css" />
+    <!-- Syntax highlighting (Highlight.js) -->
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+      integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"
+      integrity="sha384-OqfnIfpOmAlErKRs2a525ZcwLuZ8Z1x8hPdIwBcMtHkJBbHnpJ6wX5/LVzASHkD5"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"
+      integrity="sha384-RbRhXcXx5VHUdUaC5R0oV+XBXA5GhkaVCUzK8xN19K3FmtWSHyGVgulK92XnhBsI"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"
+      integrity="sha384-FWJTgPmIGm1+zpNhubuHRC/ulS1UK7hAZ7qiUUmKD8yGfPcn5ZXYBd2qRgi6L8Tu"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"
+      integrity="sha384-H3wUmCndJNBOuIIzcLSr2zLLZYs8PYuw6qKyENk7THEnYQJvOMDBu42P9XsJSRKw"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Fonts: Inter (sans), JetBrains Mono (mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Initialize dark mode before page renders to avoid flash -->
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        if (theme === "dark" || (!theme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+  </head>
+
+  <body
+    class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-theme"
+  >
+    <!-- Scroll Progress Bar -->
+    <div
+      id="scrollProgress"
+      class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary to-secondary z-50 transition-all"
+      style="width: 0%"
+      role="progressbar"
+      aria-label="Page scroll progress"
+      aria-valuenow="0"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    ></div>
+
+    <!-- Back to Top Button -->
+    <button
+      id="backToTop"
+      class="fixed bottom-8 right-8 p-3 rounded-full bg-primary hover:bg-secondary text-white shadow-lg transition-all opacity-0 invisible z-40"
+      aria-label="Back to top"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"
+        />
+      </svg>
+    </button>
+
+    <!-- Keyboard Help Popup -->
+    <div
+      id="keyboardHelp"
+      class="fixed bottom-24 right-8 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-2xl p-6 z-50 opacity-0 invisible transition-all"
+      role="dialog"
+      aria-labelledby="keyboard-help-title"
+      aria-hidden="true"
+    >
+      <h3
+        id="keyboard-help-title"
+        class="font-semibold mb-3 text-gray-900 dark:text-white"
+      >
+        ⌨️ Keyboard Shortcuts
+      </h3>
+      <div class="space-y-1 text-gray-700 dark:text-gray-300">
+        <div>
+          <kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+            >T</kbd
+          >
+          Toggle dark mode
+        </div>
+        <div>
+          <kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+            >?</kbd
+          >
+          Show/hide this help
+        </div>
+        <div>
+          <kbd class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs"
+            >Esc</kbd
+          >
+          Close mobile menu
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="sticky top-0 z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 shadow-sm transition-theme"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center gap-3">
+            <svg
+              class="w-8 h-8 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+              />
+            </svg>
+            <div class="flex flex-col">
+              <h1
+                class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+              >
+                Claude Code Dev Containers
+              </h1>
+              <p class="text-xs text-gray-600 dark:text-gray-400">
+                Troubleshooting Guide
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <a
+              href="https://www.buymeacoffee.com/georgeliu"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hidden sm:block hover:opacity-80 transition-opacity"
+              aria-label="Buy me a coffee"
+            >
+              <img
+                src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png"
+                alt="Buy Me A Coffee"
+                style="height: 40px !important; width: 145px !important"
+              />
+            </a>
+            <button
+              id="darkModeToggle"
+              class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              aria-label="Toggle dark mode"
+              aria-pressed="false"
+            >
+              <svg
+                id="sunIcon"
+                class="w-5 h-5 hidden dark:block"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <svg
+                id="moonIcon"
+                class="w-5 h-5 block dark:hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            </button>
+            <button
+              id="mobileMenuToggle"
+              class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+              aria-label="Toggle mobile menu"
+              aria-controls="tocSidebar"
+              aria-expanded="false"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Sidebar Navigation -->
+        <aside id="tocSidebar" class="hidden md:block md:w-64 flex-shrink-0">
+          <nav
+            class="sticky top-24 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+            aria-label="Page navigation"
+          >
+            <h2
+              class="font-semibold text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4"
+            >
+              Navigation
+            </h2>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="index.html"
+                  class="flex items-center gap-2 py-2 px-3 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
+                  </svg>
+                  Back to Main Guide
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 min-w-0">
+          <!-- Page Title -->
+          <div
+            class="relative overflow-hidden bg-gradient-to-br from-brand via-brand-700 to-accent-600 dark:from-brand-600 dark:via-brand-700 dark:to-accent-700 rounded-2xl p-8 md:p-12 mb-8 shadow-2xl animate-fade-in"
+          >
+            <div class="relative z-10">
+              <h1
+                class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
+              >
+                🔧 Troubleshooting
+              </h1>
+              <p class="text-xl text-white/90 leading-relaxed">
+                Solutions to common development container issues and errors
+              </p>
+            </div>
+          </div>
+
+          <!-- Troubleshooting Content -->
+          <section
+            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <div class="space-y-6">
+              <div
+                class="border border-red-200 dark:border-red-800 rounded-lg p-6 bg-red-50 dark:bg-red-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-red-900 dark:text-red-200"
+                >
+                  ❌ Error: "Cannot connect to Docker daemon"
+                </h3>
+                <p class="text-red-800 dark:text-red-300 mb-3">
+                  <strong>Cause:</strong> Docker Desktop isn't running.
+                </p>
+                <p class="text-red-800 dark:text-red-300 mb-2">
+                  <strong>Solution:</strong>
+                </p>
+                <ol
+                  class="list-decimal list-inside text-sm text-red-700 dark:text-red-300 space-y-1"
+                >
+                  <li>Start Docker Desktop from your Applications folder</li>
+                  <li>
+                    Wait for the whale icon in your menu bar/system tray to show
+                    it's running
+                  </li>
+                  <li>
+                    Retry in VS Code: Cmd+Shift+P → "Dev Containers: Rebuild
+                    Container"
+                  </li>
+                </ol>
+              </div>
+
+              <div
+                class="border border-orange-200 dark:border-orange-800 rounded-lg p-6 bg-orange-50 dark:bg-orange-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-orange-900 dark:text-orange-200"
+                >
+                  ❌ Error: "Command not found" (npm, python, etc.)
+                </h3>
+                <p class="text-orange-800 dark:text-orange-300 mb-3">
+                  <strong>Cause:</strong> Tool not installed in the container,
+                  or PATH not set correctly.
+                </p>
+                <p class="text-orange-800 dark:text-orange-300 mb-2">
+                  <strong>Solution:</strong>
+                </p>
+                <ol
+                  class="list-decimal list-inside text-sm text-orange-700 dark:text-orange-300 space-y-1"
+                >
+                  <li>
+                    Check your Dockerfile has the correct base image (e.g.,
+                    <code>FROM node:22</code>)
+                  </li>
+                  <li>
+                    Rebuild the container: Cmd+Shift+P → "Dev Containers:
+                    Rebuild Container"
+                  </li>
+                  <li>
+                    If still failing, check you're using the correct terminal
+                    (should say "Dev Container" in bottom-left)
+                  </li>
+                </ol>
+              </div>
+
+              <div
+                class="border border-yellow-200 dark:border-yellow-800 rounded-lg p-6 bg-md-error-50 dark:bg-md-error-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-md-error-900 dark:text-md-error-200"
+                >
+                  ⚠️ Container is very slow
+                </h3>
+                <p class="text-md-error-800 dark:text-md-error-300 mb-3">
+                  <strong>Cause:</strong> Docker performance issues, especially
+                  on Mac/Windows.
+                </p>
+                <p class="text-md-error-800 dark:text-md-error-300 mb-2">
+                  <strong>Solutions:</strong>
+                </p>
+                <ul
+                  class="list-disc list-inside text-sm text-yellow-700 dark:text-yellow-300 space-y-1"
+                >
+                  <li>
+                    <strong>Mac:</strong> Enable VirtioFS in Docker Desktop →
+                    Settings → Experimental Features
+                  </li>
+                  <li>
+                    <strong>Windows:</strong> Ensure project is in WSL2
+                    filesystem, not /mnt/c/
+                  </li>
+                  <li>
+                    Use named volumes for node_modules: Add to mounts:
+                    <code
+                      >"source=node-modules,target=/workspace/node_modules,type=volume"</code
+                    >
+                  </li>
+                  <li>
+                    Create .dockerignore file to exclude node_modules, .git from
+                    build context
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                class="border border-md-primary-200 dark:border-md-primary-800 rounded-lg p-6 bg-md-primary-50 dark:bg-md-primary-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-md-primary-900 dark:text-md-primary-200"
+                >
+                  ℹ️ Port already in use
+                </h3>
+                <p class="text-md-primary-800 dark:text-md-primary-300 mb-3">
+                  <strong>Cause:</strong> Another process is using the port
+                  (e.g., 3000, 5000).
+                </p>
+                <p class="text-md-primary-800 dark:text-md-primary-300 mb-2">
+                  <strong>Solutions:</strong>
+                </p>
+                <ol
+                  class="list-decimal list-inside text-sm text-md-primary-700 dark:text-md-primary-300 space-y-1"
+                >
+                  <li>
+                    Find what's using the port:
+                    <code>lsof -i :3000</code> (Mac/Linux) or
+                    <code>netstat -ano | findstr :3000</code> (Windows)
+                  </li>
+                  <li>Kill the process or change your app's port</li>
+                  <li>
+                    Update forwardPorts in devcontainer.json to match new port
+                  </li>
+                </ol>
+              </div>
+
+              <div
+                class="border border-purple-200 dark:border-purple-800 rounded-lg p-6 bg-purple-50 dark:bg-purple-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-purple-900 dark:text-purple-200"
+                >
+                  ❌ Codex CLI: Landlock Sandbox Error
+                </h3>
+
+                <div
+                  class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200"
+                >
+                  <p class="mb-1">
+                    thread 'main' panicked at
+                    linux-sandbox/src/linux_run_main.rs:30:9:
+                  </p>
+                  <p>error running landlock: Sandbox(LandlockRestrict)</p>
+                </div>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-3">
+                  <strong>Cause:</strong> Docker's LinuxKit kernel doesn't
+                  support Landlock (Linux security module). This is a known
+                  limitation of containerized environments.
+                </p>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-2">
+                  <strong>Solution:</strong> Disable Codex sandboxing (safe in
+                  containers):
+                </p>
+
+                <div
+                  class="bg-purple-100 dark:bg-purple-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-purple-700 dark:text-purple-300 mb-2 font-semibold"
+                  >
+                    ~/.codex/config.toml
+                  </p>
+                  <pre
+                    class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto"
+                  ><code>sandbox_mode = "danger-full-access"
+approval_policy = "never"</code></pre>
+                </div>
+
+                <div
+                  class="bg-green-100 dark:bg-green-900/30 rounded-lg p-3 mb-3"
+                >
+                  <p class="text-sm text-green-800 dark:text-green-300 mb-2">
+                    <strong>✅ Why This Is Safe:</strong>
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-green-700 dark:text-green-300 space-y-1"
+                  >
+                    <li>Docker container provides process isolation</li>
+                    <li>Network firewall restricts connections</li>
+                    <li>Non-root user execution (node)</li>
+                    <li>OpenAI's official recommendation for Docker</li>
+                  </ul>
+                </div>
+
+                <p class="text-purple-800 dark:text-purple-300 mb-2 text-sm">
+                  <strong>Verify it works:</strong>
+                </p>
+                <pre
+                  class="text-xs bg-purple-900 dark:bg-black text-purple-100 p-3 rounded overflow-x-auto mb-3"
+                ><code>codex --version
+codex exec "echo 'Hello from Codex'"</code></pre>
+
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r"
+                >
+                  <p class="text-xs text-blue-800 dark:text-blue-300">
+                    <strong>📝 Note:</strong> This repository's devcontainer
+                    automatically applies this fix via
+                    <code>init-codex-config.sh</code>. Configuration persists
+                    across container rebuilds.
+                  </p>
+                </div>
+
+                <div
+                  class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-r mt-4"
+                >
+                  <p
+                    class="text-sm font-bold text-red-900 dark:text-red-200 mb-2"
+                  >
+                    ⚠️ IMPORTANT: VSCode Extension Limitation
+                  </p>
+                  <p class="text-xs text-red-800 dark:text-red-300 mb-3">
+                    The above configuration
+                    <strong>only works for Codex CLI</strong>, not the VSCode
+                    extension.
+                  </p>
+
+                  <div class="bg-red-100 dark:bg-red-900/40 rounded p-3 mb-3">
+                    <p
+                      class="text-xs font-semibold text-red-900 dark:text-red-200 mb-2"
+                    >
+                      VSCode Extension Issue:
+                    </p>
+                    <ul
+                      class="list-disc list-inside text-xs text-red-800 dark:text-red-300 space-y-1"
+                    >
+                      <li>
+                        Extension ignores <code>sandbox_mode</code> in
+                        config.toml
+                      </li>
+                      <li>
+                        Only reads <code>model</code> and
+                        <code>model_reasoning_effort</code>
+                      </li>
+                      <li>
+                        Always tries to use Landlock sandbox (fails in Docker)
+                      </li>
+                      <li>
+                        Tracked as
+                        <a
+                          href="https://github.com/openai/codex/issues/5041"
+                          class="underline hover:text-red-600"
+                          >GitHub Issue #5041</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div
+                    class="bg-green-100 dark:bg-green-900/40 rounded p-3 mb-3"
+                  >
+                    <p
+                      class="text-xs font-semibold text-green-900 dark:text-green-200 mb-2"
+                    >
+                      ✅ Workaround:
+                    </p>
+                    <p class="text-xs text-green-800 dark:text-green-300 mb-1">
+                      Use <strong>Codex CLI</strong> instead of VSCode
+                      extension:
+                    </p>
+                    <pre
+                      class="text-xs bg-green-900 dark:bg-black text-green-100 p-2 rounded mt-1"
+                    ><code>codex exec "your prompt here"</code></pre>
+                  </div>
+
+                  <div class="bg-yellow-100 dark:bg-yellow-900/40 rounded p-3">
+                    <p class="text-xs text-yellow-800 dark:text-yellow-300">
+                      <strong>Status:</strong> OpenAI is working on adding
+                      config.toml support to the extension. No ETA available.
+                      CLI works perfectly.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="border border-orange-200 dark:border-orange-800 rounded-lg p-6 bg-orange-50 dark:bg-orange-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-orange-900 dark:text-orange-200"
+                >
+                  ❌ OpenCode: TUI Crashes When Loading Models
+                </h3>
+
+                <div
+                  class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200"
+                >
+                  <p class="mb-1">
+                    TypeError: undefined is not an object (evaluating
+                    'flat().length')
+                  </p>
+                  <p>
+                    at &lt;anonymous&gt;
+                    (src/cli/cmd/tui/ui/dialog-select.tsx:49:49)
+                  </p>
+                </div>
+
+                <p class="text-orange-800 dark:text-orange-300 mb-3">
+                  <strong>Cause:</strong> OpenCode's auth.json contains provider
+                  configurations incompatible with AI SDK v5. The
+                  cloudflare-workers-ai provider doesn't support specification
+                  v2 required by SDK v5, and expired OAuth tokens
+                  (github-copilot) return undefined when queried, causing the
+                  dialog component to crash when attempting to flatten provider
+                  data.
+                </p>
+
+                <p class="text-orange-800 dark:text-orange-300 mb-2">
+                  <strong>Solution:</strong>
+                </p>
+
+                <div class="space-y-3">
+                  <div
+                    class="bg-orange-100 dark:bg-orange-900/40 rounded-lg p-4"
+                  >
+                    <p
+                      class="text-sm text-orange-700 dark:text-orange-300 mb-2 font-semibold"
+                    >
+                      1. Backup current configuration
+                    </p>
+                    <pre
+                      class="text-xs bg-orange-900 dark:bg-black text-orange-100 p-3 rounded overflow-x-auto"
+                    ><code>cp ~/.local/share/opencode/auth.json \
+   ~/.local/share/opencode/auth.json.backup</code></pre>
+                  </div>
+
+                  <div
+                    class="bg-orange-100 dark:bg-orange-900/40 rounded-lg p-4"
+                  >
+                    <p
+                      class="text-sm text-orange-700 dark:text-orange-300 mb-2 font-semibold"
+                    >
+                      2. Remove incompatible providers from auth.json
+                    </p>
+                    <pre
+                      class="text-xs bg-orange-900 dark:bg-black text-orange-100 p-3 rounded overflow-x-auto mb-2"
+                    ><code>nano ~/.local/share/opencode/auth.json</code></pre>
+                    <p class="text-xs text-orange-700 dark:text-orange-300">
+                      Keep only: anthropic, openrouter, nvidia, openai, google
+                    </p>
+                  </div>
+
+                  <div
+                    class="bg-orange-100 dark:bg-orange-900/40 rounded-lg p-4"
+                  >
+                    <p
+                      class="text-sm text-orange-700 dark:text-orange-300 mb-2 font-semibold"
+                    >
+                      3. Clear stale cache
+                    </p>
+                    <pre
+                      class="text-xs bg-orange-900 dark:bg-black text-orange-100 p-3 rounded overflow-x-auto"
+                    ><code>rm -rf ~/.cache/opencode/*</code></pre>
+                  </div>
+
+                  <div
+                    class="bg-orange-100 dark:bg-orange-900/40 rounded-lg p-4"
+                  >
+                    <p
+                      class="text-sm text-orange-700 dark:text-orange-300 mb-2 font-semibold"
+                    >
+                      4. Verify operation
+                    </p>
+                    <pre
+                      class="text-xs bg-orange-900 dark:bg-black text-orange-100 p-3 rounded overflow-x-auto"
+                    ><code>opencode models  # Should display 180+ models
+opencode         # TUI should start without errors</code></pre>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r mt-4"
+                >
+                  <p
+                    class="text-xs font-semibold text-blue-900 dark:text-blue-200 mb-2"
+                  >
+                    💡 Why This Works
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-blue-800 dark:text-blue-300 space-y-1"
+                  >
+                    <li>
+                      Removes provider entries that return undefined when
+                      queried
+                    </li>
+                    <li>
+                      Clears cached model metadata referencing removed providers
+                    </li>
+                    <li>
+                      Allows OpenCode to rebuild provider list from scratch
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 p-3 rounded-r mt-3"
+                >
+                  <p
+                    class="text-xs font-semibold text-green-900 dark:text-green-200 mb-2"
+                  >
+                    ✅ Compatible Providers
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-green-800 dark:text-green-300 space-y-1"
+                  >
+                    <li>anthropic, openai, google (primary providers)</li>
+                    <li>openrouter, nvidia (third-party aggregators)</li>
+                  </ul>
+                </div>
+
+                <div
+                  class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-3 rounded-r mt-3"
+                >
+                  <p
+                    class="text-xs font-semibold text-red-900 dark:text-red-200 mb-2"
+                  >
+                    ❌ Known Incompatible Providers
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-red-800 dark:text-red-300 space-y-1"
+                  >
+                    <li>cloudflare-workers-ai (doesn't support AI SDK v5)</li>
+                    <li>
+                      requesty (similar SDK incompatibility -
+                      <a
+                        href="https://github.com/sst/opencode/issues/2468"
+                        class="underline hover:text-red-600"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Issue #2468</a
+                      >)
+                    </li>
+                    <li>
+                      github-copilot (OAuth flow incompatible with
+                      devcontainers)
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="bg-yellow-50 dark:bg-yellow-900/40 border-l-4 border-yellow-500 p-3 rounded-r mt-3"
+                >
+                  <p
+                    class="text-xs font-semibold text-yellow-900 dark:text-yellow-200 mb-2"
+                  >
+                    🔧 Prevention Tips
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-yellow-800 dark:text-yellow-300 space-y-1"
+                  >
+                    <li>
+                      Only authenticate with actively maintained providers
+                    </li>
+                    <li>
+                      Periodically review auth.json and remove unused/expired
+                      providers
+                    </li>
+                    <li>
+                      Keep OpenCode updated:
+                      <code>npm update -g @opencode-ai/opencode</code>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div
+                class="border border-teal-200 dark:border-teal-800 rounded-lg p-6 bg-teal-50 dark:bg-teal-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-teal-900 dark:text-teal-200"
+                >
+                  ❌ Docker Build: Permission Denied in .config Directory
+                </h3>
+
+                <div
+                  class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4 mb-4 font-mono text-xs text-red-800 dark:text-red-200"
+                >
+                  <p class="mb-1">
+                    mkdir: cannot create directory '/home/node/.config/fish':
+                    Permission denied
+                  </p>
+                  <p>ERROR: command failed: mkdir -p /home/node/.config/fish</p>
+                </div>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-3">
+                  <strong>Cause:</strong> Setting ownership on a subdirectory
+                  (like <code>.config/gh</code>) instead of the parent directory
+                  (<code>.config</code>) leaves the parent owned by root. When
+                  installers (uv, fish, zsh) try to create their own
+                  subdirectories, they fail due to permission errors.
+                </p>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-2">
+                  <strong>Root Cause Explanation:</strong>
+                </p>
+                <ul
+                  class="list-disc list-inside text-sm text-teal-700 dark:text-teal-300 space-y-1 mb-4"
+                >
+                  <li>
+                    <code>mkdir -p /home/node/.config/gh</code> creates both
+                    parent and subdirectory
+                  </li>
+                  <li>
+                    Parent directory <code>.config</code> is owned by root
+                  </li>
+                  <li>
+                    <code>chown</code> on subdirectory only affects that
+                    subdirectory
+                  </li>
+                  <li>
+                    Later installers cannot create new subdirectories in
+                    root-owned parent
+                  </li>
+                </ul>
+
+                <div
+                  class="bg-teal-100 dark:bg-teal-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-teal-700 dark:text-teal-300 mb-2 font-semibold"
+                  >
+                    ❌ Incorrect (in Dockerfile):
+                  </p>
+                  <pre
+                    class="text-xs bg-teal-900 dark:bg-black text-teal-100 p-3 rounded overflow-x-auto"
+                  ><code>RUN mkdir -p /home/node/.config/gh /home/node/.claude && \
+  chown -R node:node /home/node/.config/gh  # Only owns subdirectory!</code></pre>
+                </div>
+
+                <div
+                  class="bg-green-100 dark:bg-green-900/40 rounded-lg p-4 mb-3"
+                >
+                  <p
+                    class="text-sm text-green-700 dark:text-green-300 mb-2 font-semibold"
+                  >
+                    ✅ Correct (in Dockerfile):
+                  </p>
+                  <pre
+                    class="text-xs bg-green-900 dark:bg-black text-green-100 p-3 rounded overflow-x-auto"
+                  ><code>RUN mkdir -p /home/node/.config/gh /home/node/.claude && \
+  chown -R node:node /home/node/.config  # Owns entire .config tree!</code></pre>
+                </div>
+
+                <div
+                  class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-3 rounded-r mb-3"
+                >
+                  <p class="text-xs text-blue-800 dark:text-blue-300">
+                    <strong>💡 Pattern to remember:</strong>
+                  </p>
+                  <ul
+                    class="list-disc list-inside text-xs text-blue-700 dark:text-blue-300 space-y-1 mt-2"
+                  >
+                    <li>
+                      ❌ <code>chown -R user /path/parent/child</code> (only
+                      owns child)
+                    </li>
+                    <li>
+                      ✅ <code>chown -R user /path/parent</code> (owns parent +
+                      all children)
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="text-teal-800 dark:text-teal-300 mb-2 text-sm">
+                  <strong>Verification commands:</strong>
+                </p>
+                <pre
+                  class="text-xs bg-teal-900 dark:bg-black text-teal-100 p-3 rounded overflow-x-auto mb-3"
+                ><code># Check parent directory ownership
+ls -ld /home/node/.config
+# Should show: drwxr-xr-x node node
+
+# Test creating new subdirectory as node user
+su - node -c "mkdir -p /home/node/.config/test"
+# Should succeed without permission errors</code></pre>
+
+                <div
+                  class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-3 rounded-r"
+                >
+                  <p class="text-xs text-yellow-800 dark:text-yellow-300">
+                    <strong>⚠️ When you see this:</strong> Permission errors
+                    during RUN commands that create files in
+                    <code>~/.config</code>, installers like uv/fish/zsh failing,
+                    or build succeeding up to a point then failing on config
+                    directory creation.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="border border-md-tertiary-200 dark:border-md-tertiary-800 rounded-lg p-6 bg-md-tertiary-50 dark:bg-md-tertiary-900/20"
+              >
+                <h3
+                  class="font-semibold text-lg mb-2 text-md-tertiary-900 dark:text-md-tertiary-200"
+                >
+                  💡 Quick Debug Commands
+                </h3>
+                <div class="code-block-wrapper" data-language="bash">
+                  <button
+                    class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs"
+                    aria-label="Copy code"
+                  >
+                    Copy
+                  </button>
+                  <pre
+                    class="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto"
+                    tabindex="0"
+                  ><code class="language-bash"># Check Docker is running
+docker ps
+
+# Check container logs
+docker logs &lt;container-name&gt;
+
+# View Docker disk usage
+docker system df
+
+# Clean up unused images/containers (frees space)
+docker system prune -a
+
+# Restart Docker Desktop
+# Mac: Click whale icon → Quit → Relaunch
+# Windows: Right-click whale icon → Quit → Relaunch</code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer
+            class="text-center text-gray-600 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-700 pt-8 mt-12"
+          >
+            <div class="flex flex-col items-center gap-6 mb-6">
+              <div>
+                <p
+                  class="text-base font-medium text-gray-700 dark:text-gray-300 mb-3"
+                >
+                  ☕ Enjoying this guide?
+                </p>
+                <a
+                  href="https://www.buymeacoffee.com/georgeliu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block hover:scale-105 transition-transform"
+                  aria-label="Buy me a coffee"
+                >
+                  <img
+                    src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png"
+                    alt="Buy Me A Coffee"
+                    style="height: 60px !important; width: 217px !important"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+              <p>
+                Created by
+                <a
+                  href="https://github.com/centminmod"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:text-secondary underline font-medium"
+                  >George Liu</a
+                >
+                for Claude Code users
+              </p>
+              <p class="mt-2 text-gray-500 dark:text-gray-500">
+                Last updated: October 2025
+              </p>
+              <p class="mt-2">
+                Found an issue?
+                <a
+                  href="https://github.com/centminmod/claude-code-devcontainer-guide"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:text-secondary underline"
+                  >Report it on GitHub</a
+                >
+              </p>
+            </div>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      // Dark mode toggle with system preference detection
+      const darkModeToggle = document.getElementById("darkModeToggle");
+      const html = document.documentElement;
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      // Function to set dark mode
+      function setDarkMode(isDark) {
+        html.classList.toggle("dark", isDark);
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        // reflect toggle state for a11y
+        if (darkModeToggle)
+          darkModeToggle.setAttribute("aria-pressed", String(isDark));
+      }
+
+      darkModeToggle.addEventListener("click", () => {
+        const isDark = !html.classList.contains("dark");
+        setDarkMode(isDark);
+      });
+
+      // Mobile menu toggle
+      const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+      const tocSidebar = document.getElementById("tocSidebar");
+
+      mobileMenuToggle.addEventListener("click", () => {
+        tocSidebar.classList.toggle("mobile-open");
+        const expanded =
+          mobileMenuToggle.getAttribute("aria-expanded") === "true";
+        mobileMenuToggle.setAttribute("aria-expanded", String(!expanded));
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          const isClickInsideMenu = tocSidebar.contains(e.target);
+          const isClickOnToggle = mobileMenuToggle.contains(e.target);
+          if (
+            !isClickInsideMenu &&
+            !isClickOnToggle &&
+            tocSidebar.classList.contains("mobile-open")
+          ) {
+            tocSidebar.classList.remove("mobile-open");
+            mobileMenuToggle.setAttribute("aria-expanded", "false");
+          }
+        }
+      });
+
+      // Copy code button functionality
+      document.querySelectorAll(".copy-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const codeBlock = button.nextElementSibling.querySelector("code");
+          const text = codeBlock.textContent;
+
+          navigator.clipboard.writeText(text).then(() => {
+            const originalText = button.textContent;
+            button.textContent = "Copied!";
+            button.classList.add("bg-green-600");
+            const live = document.getElementById("copy-status");
+            if (live) live.textContent = "Code copied to clipboard";
+
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.classList.remove("bg-green-600");
+            }, 2000);
+          });
+        });
+      });
+
+      // Syntax highlighting (Highlight.js)
+      try {
+        if (typeof hljs !== "undefined") {
+          hljs.highlightAll();
+        }
+      } catch (e) {
+        // ignore if HLJS failed to load
+      }
+
+      // Back to top button functionality
+      const backToTopButton = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.classList.add("show");
+        } else {
+          backToTopButton.classList.remove("show");
+        }
+      });
+
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: reduceMotion ? "auto" : "smooth",
+        });
+      });
+
+      // Scroll progress bar
+      const scrollProgress = document.getElementById("scrollProgress");
+
+      window.addEventListener("scroll", () => {
+        const windowHeight =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        const scrolled = (window.pageYOffset / windowHeight) * 100;
+        scrollProgress.style.width = scrolled + "%";
+      });
+
+      // Keyboard navigation improvements
+      const keyboardHelp = document.getElementById("keyboardHelp");
+      if (keyboardHelp) {
+        keyboardHelp.setAttribute("role", "dialog");
+        keyboardHelp.setAttribute("aria-modal", "false");
+        keyboardHelp.setAttribute("aria-hidden", "true");
+      }
+      let helpVisible = false;
+
+      document.addEventListener("keydown", (e) => {
+        // Ignore if typing in input/textarea
+        const isTyping =
+          e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA";
+
+        // Press '?' to toggle keyboard help
+        if (e.key === "?" && !e.ctrlKey && !e.metaKey && !isTyping) {
+          e.preventDefault();
+          helpVisible = !helpVisible;
+          keyboardHelp.classList.toggle("show", helpVisible);
+          keyboardHelp.setAttribute("aria-hidden", String(!helpVisible));
+          keyboardHelp.setAttribute("aria-modal", String(!!helpVisible));
+        }
+
+        // Press 't' to toggle dark mode
+        if (e.key === "t" && !e.ctrlKey && !e.metaKey && !isTyping) {
+          darkModeToggle.click();
+        }
+
+        // Press 'Escape' to close mobile menu or help panel
+        if (e.key === "Escape") {
+          if (
+            window.innerWidth <= 768 &&
+            tocSidebar.classList.contains("mobile-open")
+          ) {
+            tocSidebar.classList.remove("mobile-open");
+            mobileMenuToggle.setAttribute("aria-expanded", "false");
+          }
+          if (helpVisible) {
+            helpVisible = false;
+            keyboardHelp.classList.remove("show");
+            keyboardHelp.setAttribute("aria-hidden", "true");
+            keyboardHelp.setAttribute("aria-modal", "false");
+          }
+        }
+      });
+
+      // Auto-hide keyboard help after 5 seconds
+      let helpTimeout;
+      keyboardHelp.addEventListener("transitionend", () => {
+        if (helpVisible) {
+          clearTimeout(helpTimeout);
+          helpTimeout = setTimeout(() => {
+            helpVisible = false;
+            keyboardHelp.classList.remove("show");
+            keyboardHelp.setAttribute("aria-hidden", "true");
+            keyboardHelp.setAttribute("aria-modal", "false");
+          }, 5000);
+        }
+      });
+    </script>
+
+    <!-- Live region for copy notifications -->
+    <div
+      id="copy-status"
+      role="status"
+      aria-live="polite"
+      class="sr-only"
+    ></div>
+
+    <!-- Cloudflare Web Analytics -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "59e5a9d9fcad49c3b3e54b2493fb9ac1"}'
+    ></script>
+    <!-- End Cloudflare Web Analytics -->
+  </body>
+</html>
