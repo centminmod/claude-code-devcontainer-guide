@@ -6,7 +6,8 @@
     "build": "npm run build:css"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "tailwindcss": "^3.4.17"
   }
 }
-
