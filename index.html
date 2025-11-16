@@ -39,11 +39,19 @@
       media="(prefers-color-scheme: dark)"
     />
 
-    <!-- Preload critical fonts for hero section (LCP optimization) -->
-    <!-- Inter 900 (Black) - Hero title - MOST CRITICAL for LCP -->
+    <!-- Preload critical fonts for above-the-fold content (LCP optimization) -->
+    <!-- Inter 900 (Black) - Hero title - CRITICAL for LCP -->
     <link
       rel="preload"
       href="public/fonts/inter-latin-900-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Inter 700 (Bold) - Introduction title - CRITICAL for LCP -->
+    <link
+      rel="preload"
+      href="public/fonts/inter-latin-700-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -1126,6 +1134,81 @@
         height: 1.25rem;
         flex-shrink: 0;
       }
+
+      /* ========================================
+         Critical CSS for Introduction Section (LCP optimization)
+         ======================================== */
+      .intro-section {
+        margin-bottom: 3rem;
+        background: var(--surface-1);
+        border-radius: 0.5rem;
+        padding: 2rem;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+        border: 1px solid var(--border);
+      }
+
+      .intro-title {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-1);
+      }
+
+      .intro-text {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        color: var(--text-2);
+        line-height: 1.625;
+        margin-bottom: 1.5rem;
+      }
+
+      .intro-link {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .intro-link:hover {
+        text-decoration: underline;
+      }
+
+      .intro-callout {
+        background: rgba(59, 130, 246, 0.05);
+        border-left: 4px solid #3b82f6;
+        padding: 1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+      }
+
+      .dark .intro-callout {
+        background: rgba(59, 130, 246, 0.1);
+      }
+
+      .intro-callout-title {
+        color: #1e40af;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .dark .intro-callout-title {
+        color: #93c5fd;
+      }
+
+      .intro-callout-list {
+        list-style-type: disc;
+        list-style-position: inside;
+        color: #1e3a8a;
+      }
+
+      .dark .intro-callout-list {
+        color: #bfdbfe;
+      }
+
+      .intro-callout-list li {
+        margin-top: 0.25rem;
+      }
     </style>
   </head>
   <body
@@ -1544,52 +1627,42 @@
             </div>
           </div>
 
-          <!-- Introduction -->
-          <section
-            id="introduction"
-            class="mb-12 bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700"
-          >
-            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+          <!-- Introduction - LCP Optimized with Inlined CSS -->
+          <section id="introduction" class="intro-section">
+            <h2 class="intro-title">
               👋 Welcome!
             </h2>
-            <div class="prose prose-lg dark:prose-invert max-w-none">
-              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                This guide will teach you everything you need to know about
-                development containers (devcontainers) for Claude Code. Whether
-                you're a complete beginner or looking to refine your setup,
-                you're in the right place. The guide was created from all my own
-                experiences and collected context documentation used to create
-                my own dev containers and will be continually updated as my
-                development and experience progresses. If you like this guide
-                and find it useful, consider
-                <a
-                  href="https://www.buymeacoffee.com/georgeliu"
-                  class="text-md-primary-600 dark:text-md-primary-400 hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >buying me a coffee</a
-                >
-                to support my work.
-              </p>
-              <div
-                class="bg-md-primary-50 dark:bg-md-primary-900/20 border-l-4 border-md-primary-500 p-4 my-6 rounded-r-lg"
+            <p class="intro-text">
+              This guide will teach you everything you need to know about
+              development containers (devcontainers) for Claude Code. Whether
+              you're a complete beginner or looking to refine your setup,
+              you're in the right place. The guide was created from all my own
+              experiences and collected context documentation used to create
+              my own dev containers and will be continually updated as my
+              development and experience progresses. If you like this guide
+              and find it useful, consider
+              <a
+                href="https://www.buymeacoffee.com/georgeliu"
+                class="intro-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                >buying me a coffee</a
               >
-                <p
-                  class="text-md-primary-900 dark:text-md-primary-200 font-medium mb-2"
-                >
-                  📚 What You'll Learn:
-                </p>
-                <ul
-                  class="list-disc list-inside space-y-1 text-md-primary-800 dark:text-md-primary-300"
-                >
-                  <li>What dev containers are and how they work</li>
-                  <li>Setting up a React project with dev containers</li>
-                  <li>Setting up a Python project with dev containers</li>
-                  <li>Setting up a Next.js application with dev containers</li>
-                  <li>Configuring multiple AI assistants in one container</li>
-                  <li>Troubleshooting common issues</li>
-                </ul>
-              </div>
+              to support my work.
+            </p>
+            <div class="intro-callout">
+              <p class="intro-callout-title">
+                📚 What You'll Learn:
+              </p>
+              <ul class="intro-callout-list">
+                <li>What dev containers are and how they work</li>
+                <li>Setting up a React project with dev containers</li>
+                <li>Setting up a Python project with dev containers</li>
+                <li>Setting up a Next.js application with dev containers</li>
+                <li>Configuring multiple AI assistants in one container</li>
+                <li>Troubleshooting common issues</li>
+              </ul>
+            </div>
               <div
                 class="bg-md-tertiary-50 dark:bg-md-tertiary-900/20 border-l-4 border-md-tertiary-500 p-4 my-6 rounded-r-lg"
               >
