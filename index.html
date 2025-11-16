@@ -38,6 +38,33 @@
       content="#0B0F19"
       media="(prefers-color-scheme: dark)"
     />
+
+    <!-- Preload critical fonts for hero section (LCP optimization) -->
+    <!-- Inter 900 (Black) - Hero title - MOST CRITICAL for LCP -->
+    <link
+      rel="preload"
+      href="public/fonts/inter-latin-900-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Inter 600 (Semibold) - Buttons -->
+    <link
+      rel="preload"
+      href="public/fonts/inter-latin-600-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Inter 500 (Medium) - Badge -->
+    <link
+      rel="preload"
+      href="public/fonts/inter-latin-500-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link rel="stylesheet" href="guide.css" />
     <!-- Syntax highlighting (Highlight.js) -->
